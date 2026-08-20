@@ -845,7 +845,7 @@
 
 <!-- 手機底部分頁列(桌面隱藏):把頂部的分頁 & 面板切換收成單手可按的一排。
      Leverage那格只有讀得到Leverage資料時才出現。 -->
-<nav class="tabbar" id="tabbar" aria-label="主要分頁">
+<nav class="tabbar" id="tabbar" aria-label="Main tabs">
   <button data-go="macro" class="on" aria-label="Market">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M5 20v-8"/><path d="M12 20V5"/><path d="M19 20v-6"/></svg>
     <span>Market</span></button>
@@ -869,8 +869,8 @@
 const IDX_META = {
   "^GSPC": {short:"SPX", full:"S&P 500"},
   "^NDX":  {short:"NDX", full:"Nasdaq 100"},
-  "^SOX":  {short:"SOX", full:"費城半導體"},
-  "^VIX":  {short:"VIX", full:"恐慌溫度計"},
+  "^SOX":  {short:"SOX", full:"Philadelphia Semiconductor"},
+  "^VIX":  {short:"VIX", full:"Fear Index"},
 };
 
 let WL=null, DATA=null;
@@ -914,7 +914,7 @@ function interpret(r){
 
 /* ---------- macro tab ---------- */
 // Demo build: core ETFs render as the wide cards at the top of the Market tab.
-const BIG_HOLD_CARDS = ["SPY", "QQQ", "IWM", "GLD"];   // 依序渲染在Market分頁最頂
+const BIG_HOLD_CARDS = ["SPY", "QQQ", "IWM", "GLD"];   // rendered in this order at the top of the Market tab
 function bigHoldCard(sym){
   const r=DATA[sym];
   const e=(typeof wlEntry==="function")?wlEntry(sym):{s:sym};
@@ -1044,7 +1044,7 @@ function mListHtml(groups){
 function blistHtml(rowsHtml){
   return `<div class="blist">
     <div class="bhead"><span class="c1">TICKER · Price</span>
-      <span class="c2">MA position　5 · 20 · 60 · 120 · 240　●Above ○Below</span>
+      <span class="c2">MA position &nbsp; 5 · 20 · 60 · 120 · 240 &nbsp; ●Above ○Below</span>
       <span class="c3">Status</span></div>
     ${rowsHtml}
   </div>`;
@@ -1072,7 +1072,7 @@ function indexCard(sym){
   const m240=maByK(r,240);
   const yr=(m240&&m240.v!=null)?`<span class="yr ${m240.above?'up':'dn'}"><span class="lbl">vs 240MA </span>${m240.diff>=0?'+':''}${m240.diff.toFixed(1)}%</span>`
                                :`<span class="yr"><span class="lbl">vs 240MA </span>—</span>`;
-  const fb=r.fallback?`<span class="fb">指數免費方案未支援,以 ${r.src} 代替</span>`:"";
+  const fb=r.fallback?`<span class="fb">index not available on the free tier, showing ${r.src} instead</span>`:"";
   const ip=interpret(r);
   const ipHtml=ip?`<div class="interp">↳ ${ip}</div>`:"";
   const X=r.score, Y=r.valid;
@@ -1096,11 +1096,11 @@ function macroLevel(){
   const vixVal=(vix&&!vix.error&&vix.price!=null)?vix.price:null;
   const vixMissing=vixVal==null;
   const vixHigh=vixVal!=null&&vixVal>30;
-  const ndxTag=(ndx&&ndx.fallback)?`(以 ${ndx.src} 代替)`:"";
+  const ndxTag=(ndx&&ndx.fallback)?`(showing ${ndx.src})`:"";
   const vixNote=vixMissing?"(VIX no data)":"";
   let level,msg,why;
   if(vixHigh){ level="red"; msg="De-risk";
-    why=`VIX ${vixVal.toFixed(1)} > 30`+(a240===false?" 且 NDX Below240MA":""); }
+    why=`VIX ${vixVal.toFixed(1)} > 30`+(a240===false?" and NDX below the 240MA":""); }
   else if(a240===null){ level="gray"; msg="No data"; why=`NDX 240MA has not formed yet ${vixNote}`; }
   else if(a240===false){ level="red"; msg="De-risk"; why=`NDX Below240MA 240MA ${ndxTag} ${vixNote}`; }
   else if(a60===null){ level="gray"; msg="No data"; why=`NDX not enough data for the 60MA ${vixNote}`; }
@@ -1127,7 +1127,7 @@ function renderMacro(){
   const btn=(kind,label,n)=>
     `<button class="fbtn${cur===kind?" on":""}" data-filter="${kind}" data-pane="macro"
        aria-pressed="${cur===kind}">${label}<span class="fn">${n}</span></button>`;
-  const bar=`<div class="filterbar" role="group" aria-label="區域篩選">
+  const bar=`<div class="filterbar" role="group" aria-label="Region filter">
     ${btn("all","All",eu.length+tw.length)}
     ${btn("eu","Core ETFs",eu.length)}
     ${btn("tw","Asia",tw.length)}
@@ -1158,7 +1158,7 @@ function buildHoldMaps(){
   HOLD_DN  = new Map(held.map(h=>[h.s, h.dn||h.s]));
 }
 function allTracked(){ return [...(WL.market_holdings||[]), ...(WL.holdings||[]), ...(WL.watch||[])]; }
-function symLabel(s){ return HOLD_SET.has(s) ? `${HOLD_DN.get(s)}(持)` : s; }
+function symLabel(s){ return HOLD_SET.has(s) ? `${HOLD_DN.get(s)} (held)` : s; }
 
 function crossSignals(){
   const bull=[], bear=[];
@@ -1171,7 +1171,7 @@ function crossSignals(){
 }
 function nearSignals(){
   const arr=[];
-  const NM={60:"季",120:"半Y",240:"Y"};
+  const NM={60:"60MA",120:"120MA",240:"240MA"};
   allTracked().forEach(h=>{
     const r=DATA[h.s]; if(!r||r.error||!r.mas) return;
     r.mas.forEach(m=>{ if(m.near===true && m.cross==null && NM[m.k])
@@ -1184,12 +1184,12 @@ function symPlain(s){
   const held=HOLD_SET.has(s);
   const e=(typeof wlEntry==="function")?wlEntry(s):{};
   const name=held?(HOLD_DN.get(s)||s):(e.dn||s);
-  return `<span class="sy${held?"":" wl"}" title="${held?"持有":"Watchlist"}">${name}</span>`;
+  return `<span class="sy${held?"":" wl"}" title="${held?"Held":"Watchlist"}">${name}</span>`;
 }
 // 合併同一Ticker的多條MA,並省略重複的「線」字(5MA+20MA → W/M)
 function mergeSym(arr){
   const map=new Map();
-  arr.forEach(x=>{ if(!map.has(x.s)) map.set(x.s,[]); map.get(x.s).push(x.l.replace("線","")); });
+  arr.forEach(x=>{ if(!map.has(x.s)) map.set(x.s,[]); map.get(x.s).push(x.l.replace("MA","MA")); });
   return [...map.entries()].map(([s,ls])=>`${symPlain(s)} ${ls.join("/")}`);
 }
 function mergeNear(arr){
@@ -1207,13 +1207,13 @@ function vixNoteHtml(){
     else {txt="Calm";col="var(--green)";}
   }
   const tag=txt?`<span class="vixtag" style="background:${col}">${txt}</span>`:"";
-  return `<div class="vixnote"><span class="vixk">◷ VIX 恐慌溫度計</span><b>${val}</b>${tag}</div>`;
+  return `<div class="vixnote"><span class="vixk">◷ VIX Fear Index</span><b>${val}</b>${tag}</div>`;
 }
 // NDX Market方向行: &  VIX 溫度計同款設計,融入訊號卡(取代原獨立紅綠燈卡)
 function ndxNoteHtml(){
   const {level,msg,why}=macroLevel();
   const col=({green:"var(--green)",yellow:"var(--yellow)",red:"var(--red)",gray:"var(--dot-na)"})[level];
-  return `<div class="vixnote" style="flex-wrap:wrap"><span class="vixk">◎ NDX Market方向</span>
+  return `<div class="vixnote" style="flex-wrap:wrap"><span class="vixk">◎ NDX trend</span>
     <span class="vixtag" style="background:${col}">${msg}</span>
     <span style="font-size:11.5px;color:var(--muted)">${why}</span></div>`;
 }
@@ -1241,7 +1241,7 @@ function vixNdxLine(){
 const ADD_LV={60:{n:1,lbl:"60MA"},120:{n:2,lbl:"120MA"},240:{n:3,lbl:"240MA"}};
 // 單一Ticker的Add判定,給卡片標記用(未持有回傳 null)
 function addLevelOf(sym){
-  const held=(WL.market_holdings||[]).some(h=>h.s===sym);   // 加Trim只看Market,Stocks不算
+  const held=(WL.market_holdings||[]).some(h=>h.s===sym);   // Add and Trim only apply to Market holdings, not Stocks
   if(!held) return null;
   const r=DATA[sym];
   if(!r||r.error||!r.mas) return null;
@@ -1263,11 +1263,11 @@ function addBadgeFor(sym){
    門檻依 2026-08 持sh乖To 分布設定,要調整改這裡。 */
 const CUT_TH=[{d:80,n:3},{d:60,n:2},{d:40,n:1}];
 function cutLevelOf(sym){
-  const held=(WL.market_holdings||[]).some(h=>h.s===sym);   // 加Trim只看Market,Stocks不算
+  const held=(WL.market_holdings||[]).some(h=>h.s===sym);   // Add and Trim only apply to Market holdings, not Stocks
   if(!held) return null;
   const r=DATA[sym];
   if(!r||r.error||!r.mas||r.valid===0) return null;
-  if(r.score!==r.valid) return null;                 // 沒AboveAllMA就不是Trim點
+  if(r.score!==r.valid) return null;                 // not above every MA, so not a Trim
   const m=maByK(r,240);
   if(!m||m.v==null) return null;
   const hit=CUT_TH.find(t=>m.diff>=t.d);
@@ -1275,10 +1275,10 @@ function cutLevelOf(sym){
 }
 function cutBadgeFor(sym){
   const c=cutLevelOf(sym);
-  return c?`<span class="cutbadge" title="Above所有MA,240MA乖To  +${c.diff.toFixed(1)}%">Trim ${"●".repeat(c.lv)}</span>`:"";
+  return c?`<span class="cutbadge" title="Above every MA, +${c.diff.toFixed(1)}% over the 240MA">Trim ${"●".repeat(c.lv)}</span>`:"";
 }
 function cutSignals(){
-  const held=(WL.market_holdings||[]);   // 加Trim只看Market,Stocks不算
+  const held=(WL.market_holdings||[]);   // Add and Trim only apply to Market holdings, not Stocks
   return held.map(h=>{
     const c=cutLevelOf(h.s);
     return c?{s:h.s,dn:h.dn||h.s,...c}:null;
@@ -1293,7 +1293,7 @@ function cutSignalsHtml(){
   return `<div class="sigrow addrow"><span class="tag c">Trim ⤒</span><span class="sigtxt">${txt}</span></div>`;
 }
 function addSignals(){
-  const held=(WL.market_holdings||[]);   // 加Trim只看Market,Stocks不算
+  const held=(WL.market_holdings||[]);   // Add and Trim only apply to Market holdings, not Stocks
   const out=[];
   held.forEach(h=>{
     const r=DATA[h.s];
@@ -1301,12 +1301,12 @@ function addSignals(){
     let best=null;
     [60,120,240].forEach(k=>{
       const m=maByK(r,k);
-      if(!m||m.v==null||m.above) return;              // Above就不是Add點
+      if(!m||m.v==null||m.above) return;              // already above it, so not an Add
       if(!best||ADD_LV[k].n>best.lv) best={k,lv:ADD_LV[k].n,lbl:ADD_LV[k].lbl,diff:m.diff};
     });
     if(best) out.push({s:h.s,dn:h.dn||h.s,...best});
   });
-  return out.sort((a,b)=>b.lv-a.lv||a.diff-b.diff);   // 訊號強的在前,同級跌最深的在前
+  return out.sort((a,b)=>b.lv-a.lv||a.diff-b.diff);   // strongest signal first, then deepest drop within the same level
 }
 function addSignalsHtml(){
   const list=addSignals();
@@ -1325,33 +1325,32 @@ let SIGOPEN=false;
 function rulesHtml(){
   const r=(k,v)=>`<tr><td>${k}</td><td>${v}</td></tr>`;
   return `<div class="rules">
-    <div class="rh">進出場訊號 <span>只算持有部位(Market + Stocks),Watchlist還沒進場不談加Trim</span></div>
+    <div class="rh">Entry and exit signals <span>Scored on positions you hold (Market + Stocks). Watchlist names are not scored.</span></div>
     <table>
-      ${r(`<b class="rt-a">Add ⤓</b> ●`,"Below<b>60MA 60MA</b>")}
-      ${r(`<b class="rt-a">Add ⤓</b> ●●`,"Below<b>120MA 120MA</b>")}
-      ${r(`<b class="rt-a">Add ⤓</b> ●●●`,"Below<b>240MA 240MA</b>，跌越深訊號越強")}
-      ${r(`<b class="rt-c">Trim ⤒</b> ● / ●● / ●●●`,"Above<b>All五條MA</b>，且距240MA <b>+40% / +60% / +80%</b>。已回檔BelowMA的不算Trim，那是Add區")}
+      ${r(`<b class="rt-a">Add ⤓</b> ●`,"Below the <b>60MA</b>")}
+      ${r(`<b class="rt-a">Add ⤓</b> ●●`,"Below the <b>120MA</b>")}
+      ${r(`<b class="rt-a">Add ⤓</b> ●●●`,"Below the <b>240MA</b>. The deeper the drop, the stronger the signal.")}
+      ${r(`<b class="rt-c">Trim ⤒</b> ● / ●● / ●●●`,"Above <b>all five MAs</b> and <b>+40% / +60% / +80%</b> over the 240MA. A name that has already dropped below an MA is an Add, not a Trim.")}
     </table>
     <div class="rh">TodayStatus</div>
     <table>
-      ${r("Above ↑ / Below ↓","<b>today剛穿越</b>某條MA(昨天在另一側)，不是「now在上面」")}
-      ${r("Near ≈","距60MA / 120MA / 240MA <b>0.8% 以內</b>，隨時可能穿越")}
+      ${r("Above ↑ / Below ↓","<b>Crossed today</b>. It sat on the other side of that MA yesterday, which is not the same as simply being above it.")}
+      ${r("Near ≈","Within <b>0.8%</b> of the 60MA, 120MA or 240MA. A cross could happen any day.")}
     </table>
-    <div class="rh">Market環境</div>
+    <div class="rh">Market conditions</div>
     <table>
       ${r("NDX Leverage OK","NDX Above60MA & 240MA")}
       ${r("NDX Hold","NDX above the 240MA but under the 60MA")}
-      ${r("NDX De-risk","NDX Below240MA，或 VIX &gt; 30")}
-      ${r("VIX","&lt; 20 Calm · 20 到 30 Elevated · &gt; 30 Alert")}
+      ${r("NDX De-risk","NDX below the 240MA, or VIX &gt; 30")}
+      ${r("VIX","&lt; 20 Calm · 20 to 30 Elevated · &gt; 30 Alert")}
     </table>
-    <div class="rh">卡片上的標記</div>
+    <div class="rh">Card badges</div>
     <table>
-      ${r("2x 2x","每日重設的Leverage產品，長抱有波動耗損，MA訊號要比原型更嚴格看")}
-      ${r("Above n/5 MA","now站在幾條MA之上(5/20/60/120/240)")}
-      ${r("線圖紅點","你的實際Bought點，滑過去看日期、sh數、成交價")}
+      ${r("2x 2x","A daily-reset leveraged fund. Held long it bleeds on volatility, so read its MA signals more strictly than the plain fund.")}
+      ${r("Above n/5 MA","How many of the five MAs price is above (5 / 20 / 60 / 120 / 240).")}
+      ${r("Red dots on the chart","Your own buys. Hover one for the date, share count and price.")}
     </table>
-    <div class="rnote"><b>一個已知的矛盾</b>：NDX 燈號是<b>趨勢跟隨</b>(Below240MA就降Leverage)，AddRules是<b>逆勢承接</b>(Below240MA最該買)。
-      兩者方向相反，同一天可能一個說降Leverage、一個說Add。now的分工想法是：燈號看Leverage部位(2x這種)，加Trim看無Leverage現貨。</div>
+    <div class="rnote"><b>A known contradiction</b>: the NDX light is <b>trend following</b> (below the 240MA means cut leverage), while the Add rule is <b>buying weakness</b> (below the 240MA is the best price). They point opposite ways and can disagree on the same day. The split used here is: the light governs leveraged positions, Add and Trim govern plain holdings.</div>
   </div>`;
 }
 
@@ -1406,21 +1405,21 @@ function signalsHtml(){
   const parts=[];
   if(add.length){
     parts.push("Strongest: "+add.slice(0,2).map(x=>
-      `<b>${x.dn}</b> Below${x.lbl} ${x.diff.toFixed(1)}%`).join("、"));
+      `<b>${x.dn}</b> Below${x.lbl} ${x.diff.toFixed(1)}%`).join(", "));
   }
   if(cut.length){
-    parts.push("Trim："+cut.slice(0,1).map(x=>`<b>${x.dn}</b> 高於240MA +${x.diff.toFixed(0)}%`).join("、"));
+    parts.push("Trim: "+cut.slice(0,1).map(x=>`<b>${x.dn}</b> over the 240MA +${x.diff.toFixed(0)}%`).join(", "));
   }
-  const headline=parts.length?`<div class="sighl">${parts.join("　·　")}</div>`:"";
+  const headline=parts.length?`<div class="sighl">${parts.join(" · ")}</div>`:"";
   const none=(!add.length&&!cut.length&&!bullM.length&&!bearM.length&&!nearM.length);
 
   const row=(cls,lbl,txt)=>txt?`<div class="sigrow"><span class="tag ${cls}">${lbl}</span><span class="sigtxt">${txt}</span></div>`:"";
-  const full=none?`<div class="noneline">Today無訊號</div>`:
+  const full=none?`<div class="noneline">No signals today</div>`:
       addSignalsHtml()+cutSignalsHtml()
       +((add.length||cut.length)&&(bullM.length||bearM.length||nearM.length)?`<div class="sigdiv"></div>`:"")
-      +row("b","Above ↑",bullM.join("、"))
-      +row("s","Below ↓",bearM.join("、"))
-      +row("n","Near ≈",nearM.join("、"));
+      +row("b","Above ↑",bullM.join(", "))
+      +row("s","Below ↓",bearM.join(", "))
+      +row("n","Near ≈",nearM.join(", "));
 
   // 手機:上半段換成兩欄大數字,訊號列只留Add/Above/Below三顆(Near併進More,設計稿 2a)
   const mob=isMobile();
@@ -1458,7 +1457,7 @@ function summaryHtml(list, pane){
   const btn=(kind,label,n)=>
     `<button class="fbtn ${kind}${cur===kind?" on":""}" data-filter="${kind}" data-pane="${pane}"
        aria-pressed="${cur===kind}">${label}<span class="fn">${n}</span></button>`;
-  return `<div class="filterbar" role="group" aria-label="篩選">
+  return `<div class="filterbar" role="group" aria-label="Filter">
     ${btn("all","All",list.length)}
     ${btn("bull","Bullish",bull)}
     ${btn("bear","Bearish",bear)}
@@ -1515,7 +1514,7 @@ function renderStocks(){
   let html=summaryHtml(list,"stocks");
   const f=FILTER.stocks;
   const shown=applyFilter(list,"stocks");
-  const title=FILTER_LBL[f]?`Stocks · ${FILTER_LBL[f]}(${shown.length})`:"Stocks(權重順序)";
+  const title=FILTER_LBL[f]?`Stocks · ${FILTER_LBL[f]}(${shown.length})`:"Stocks · by weight";
   if(isMobile()){
     document.getElementById("stocks").innerHTML = html + mListHtml([{label:"", list:shown}]);
     return;
@@ -1570,7 +1569,7 @@ function renderEarnings(){
     return {date, dt, days:Math.round((dt-today)/864e5), items};
   });
   const upcoming=groups.filter(g=>g.days>=0).sort((a,b)=>a.dt-b.dt);
-  const past=groups.filter(g=>g.days<0).sort((a,b)=>b.dt-a.dt);  // 最近的在前
+  const past=groups.filter(g=>g.days<0).sort((a,b)=>b.dt-a.dt);  // most recent first
   const cardHtml=g=>{
     let badge;
     if(g.days<0){ badge=`<span class="ebadge past">${-g.days} d ago</span>`; }
@@ -1631,7 +1630,7 @@ function rkStress(s){
   const gross=s.gross, mm=+s.maintenance_margin||0, el=+s.excess_liquidity||0, net=s.net, loan=Math.max(s.loan,0);
   return {
     marginCallDrop: gross>mm&&el>0 ? el/(gross-mm) : null,        // To margin call
-    breachDrop: loan>0&&gross>0 ? (net-loan/RK_LIMIT.safeMax)/gross : null, // 碰 20% Alert
+    breachDrop: loan>0&&gross>0 ? (net-loan/RK_LIMIT.safeMax)/gross : null, // hits the 20% alert line
     cushionRatio: net>0 ? el/net : null,                         // Liquidation buffer
     cashBuffer: net>0 ? s.cash/net : null,                       // Cash buffer
   };
@@ -1696,8 +1695,8 @@ function renderRisk(){
           <span class="rkm-pill ${bk}">${bLbl}</span></div>
         <div class="rkm-hero">
           <span class="n">${effTxt}<i>x</i></span>
-          <span class="side">＝ Book <b>${expo.bookRatio!=null?expo.bookRatio.toFixed(1)+"x":"—"}</b>
-            ＋ 2x boost <b>${rkPct(expo.boostRatio)}</b></span>
+          <span class="side">= Book <b>${expo.bookRatio!=null?expo.bookRatio.toFixed(1)+"x":"—"}</b>
+            + 2x boost <b>${rkPct(expo.boostRatio)}</b></span>
         </div>
         <div class="rkm-g">
           <span class="z1" style="width:50%"></span><span class="z2" style="width:25%"></span><span class="z3"></span>
@@ -1773,7 +1772,7 @@ function renderRisk(){
   const hist=snaps.slice(0,5).map((raw,i)=>{ const n=rkNorm(raw); const k=rkBorrowKind(n.borrowRatio);
     return `<tr>
       <td><span class="tname"><span class="tn" style="font-size:13px">${(n.updated_at||"").slice(5)}</span>
-        ${i===0?'<span class="rk-lev" style="background:#f1f3f5;color:#6b7280">最新</span>':""}</span></td>
+        ${i===0?'<span class="rk-lev" style="background:#f1f3f5;color:#6b7280">Latest</span>':""}</span></td>
       <td style="text-align:left"><span class="rk-pill ${rkBadge(k)}">${{safe:"Safe",watch:"Watch",danger:"Danger"}[k]}</span></td>
       <td>${rkPct(n.borrowRatio)}</td>
       <td class="dim">${n.exposureRatio!=null?n.exposureRatio.toFixed(2)+"x":"—"}</td>
@@ -1787,7 +1786,7 @@ function renderRisk(){
     {k:"Excess liquidity",v:+s.excess_liquidity||0,tone:"pos",n:"Excess Liquidity"},
     {k:"Maint. margin",v:+s.maintenance_margin||0,tone:"flat",n:"Maint. Margin"},
     {k:"Buying power",v:+s.buying_power||0,tone:"flat",n:"Buying Power"},
-    {k:"現金",v:s.cash,tone:s.cash<0?"neg":"pos",n:"Cash"},
+    {k:"Cash",v:s.cash,tone:s.cash<0?"neg":"pos",n:"Cash"},
     {k:"Day P/L",v:+s.daily_pnl||0,tone:(+s.daily_pnl||0)<0?"neg":"pos",n:"Daily P&L"},
     {k:"Unrealised P/L",v:+s.unrealized_pnl||0,tone:(+s.unrealized_pnl||0)<0?"neg":"pos",n:"Unrealized"},
     {k:"Total Exposure",v:expo.eff,tone:"flat",n:"× "+(expo.effRatio!=null?expo.effRatio.toFixed(2):"—")},
@@ -1815,7 +1814,7 @@ function renderRisk(){
       <div class="rk-main-left">
         <div class="k" style="font-size:11.5px;color:var(--faint)">Total Exposure</div>
         <div class="rk-expo" style="margin-top:8px">${expo.effRatio!=null?expo.effRatio.toFixed(1)+"x":"—"}</div>
-        <div class="rk-expo-note">Book <b>${expo.bookRatio!=null?expo.bookRatio.toFixed(1)+"x":"—"}</b>　＋2x boost <b>${rkPct(expo.boostRatio)}</b></div>
+        <div class="rk-expo-note">Book <b>${expo.bookRatio!=null?expo.bookRatio.toFixed(1)+"x":"—"}</b>&nbsp; + 2x boost <b>${rkPct(expo.boostRatio)}</b></div>
         <div class="rk-kv">
           <div><div class="kk">Positions</div><div class="vv">${rkMoney(s.gross,"")}</div></div>
           <div><div class="kk">Net Value</div><div class="vv">${rkMoney(s.net,"")}</div></div>
@@ -1824,7 +1823,7 @@ function renderRisk(){
         <div class="rk-gauge-wrap">
           <div class="rk-gauge-top">
             <div class="g-l"><span style="font-size:14px;font-weight:700">Loan Ratio</span><b>${rkPct(s.borrowRatio)}</b><span style="font-size:12px;color:var(--faint)">of net value</span></div>
-            <div class="g-r">To  20% safe line${safeRoom>=0?"left":"已超出"} <b>${rkMoney(Math.abs(safeRoom),cur)}</b></div>
+            <div class="g-r">To  20% safe line${safeRoom>=0?" left":" over"} <b>${rkMoney(Math.abs(safeRoom),cur)}</b></div>
           </div>
           <div class="rk-mark"><div class="m" style="left:${Math.min(fillPct,100)}%;color:#0b7a55">
             <span>now ${rkPct(s.borrowRatio)}</span><span style="font-size:8px">▼</span></div></div>
@@ -1894,7 +1893,7 @@ function renderRisk(){
       <div class="rk-acct">${acctHtml}</div>
     </div>`:""}
 
-    <div class="rk-note">The 20% rule is a buffer, not a guarantee against a margin call.all amounts in ${cur}。Demo data only.</div>
+    <div class="rk-note">The 20% rule is a buffer, not a guarantee against a margin call.all amounts in ${cur}. Demo data only.</div>
   `;
 }
 
@@ -1959,7 +1958,7 @@ function switchTab(t){
 
 /* ---------- 點擊彈窗:走勢線圖 ---------- */
 const RANGE_PTS={ "1D":2, "1W":5, "3M":63, "6M":126, "1Y":252, "3Y":756, "ALL":1e9 };
-const RANGE_LBL={ "1D":"1日", "1W":"1W", "3M":"3M", "6M":"6M", "1Y":"1Y", "ALL":"All" };
+const RANGE_LBL={ "1D":"1D", "1W":"1W", "3M":"3M", "6M":"6M", "1Y":"1Y", "ALL":"All" };
 // 手機只留四個區間(設計稿 1c),短天期在手機上看不出東西
 const RANGE_LBL_M={ "3M":"3M", "6M":"6M", "1Y":"1Y", "3Y":"3Y" };
 let CHART={ sym:null, range:"6M" };
@@ -1988,8 +1987,8 @@ function chartSVG(d,c,cost,buys,avgLine){
   if(avgLine&&cost!=null){ min=Math.min(min,cost); max=Math.max(max,cost); }
   const inBuys=(buys||[]).map(b=>{
     let i=d.indexOf(b.d);
-    if(i<0) i=d.findIndex(x=>x>=b.d);           // Bought日若非交易日,取其後第一個交易日
-    if(i<0||!d.length||b.d<d[0]) return null;    // 不在now顯示區間
+    if(i<0) i=d.findIndex(x=>x>=b.d);           // if the buy date is not a trading day, take the next one
+    if(i<0||!d.length||b.d<d[0]) return null;    // outside the visible range
     return {i, d:b.d, q:b.q, p:(b.p!=null?Number(b.p):c[i])};
   }).filter(Boolean).sort((a,b)=>a.i-b.i);
   inBuys.forEach(b=>{ min=Math.min(min,b.p); max=Math.max(max,b.p); });
@@ -2071,7 +2070,7 @@ function buyHistoryHTML(e,last,cost){
   const avg=cost!=null?cost:(totQ?buys.reduce((a,b)=>a+Number(b.q||0)*Number(b.p||0),0)/totQ:0);
   return `<div class="bhist">
     <div class="bh-head"><span class="bh-t">My Buys</span>
-      <span class="bh-sum">${buys.length}  · 共 ${qFmt(totQ)} sh · avg ${num(avg,2)}</span></div>
+      <span class="bh-sum">${buys.length} buys · ${qFmt(totQ)} sh · avg ${num(avg,2)}</span></div>
     ${rows}</div>`;
 }
 /* ══════ 手機版走勢彈窗的零件(設計稿 1c) ══════ */
@@ -2108,7 +2107,7 @@ function mBuyBlock(e,last,cost){
 }
 
 function maCardsHTML(r){
-  const lab={5:"W 5MA",20:"M 20MA",60:"季 60MA",120:"半Y 120MA",240:"Y 240MA"};
+  const lab={5:"5MA",20:"20MA",60:"60MA",120:"120MA",240:"240MA"};
   // 完稿:格子白底細框,顏色只落在數值;Status(Above/Below/Today穿越)用格底小標籤
   return `<div class="macards">`+[5,20,60,120,240].map(k=>{
     const m=maByK(r,k);
@@ -2136,7 +2135,7 @@ function renderChart(){
   const segs=`<div class="segs">
       ${seg("range",CHART.range,RANGE_LBL)}
     </div>`;
-  const ip=interpret(r);   // Above n/5 改放右下的 sscore,解讀句不再重複帶分數
+  const ip=interpret(r);   // Above n/5 moved to the sscore on the right, so the sentence does not repeat it
   // 持倉成本:彈窗頭顯示now vs Avg cost(cost,或 buys 的平avg)
   const buys=Array.isArray(e.buys)?e.buys:null;
   let cost=(e.cost!=null)?Number(e.cost):null;
@@ -2219,7 +2218,7 @@ function renderRules(){
   document.getElementById("rulesSheet").innerHTML=
     `<div class="shead">
        <div><div class="stitle">How this works</div>
-         <div class="ssub">燈號、AddTrim、卡片標記是怎麼算出來的</div></div>
+         <div class="ssub">How the signals, Add/Trim levels and card badges are worked out</div></div>
        <button class="sclose" id="rulesClose" aria-label="Close">✕</button>
      </div>`+rulesHtml();
 }
@@ -2253,9 +2252,9 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#chartSheet")){
     const rb=e.target.closest("[data-range]"); if(rb){ CHART.range=rb.dataset.range; renderChart(); return; }
     if(e.target.closest("#chartClose")){ closeChart(); return; }
-    return; // 點 sheet 內其他區域不Close
+    return; // clicks inside the sheet do not close it
   }
-  if(e.target.closest("#chartModal")){ closeChart(); return; } // 點背景Close
+  if(e.target.closest("#chartModal")){ closeChart(); return; } // click the backdrop to close
   // 有歷史序列的(sh票列或Market卡)開彈窗線圖,其餘sh票列沿用行內More
   const el=e.target.closest("[data-sym]");
   if(el){
@@ -2270,7 +2269,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeChart(); clo
    線上公開版讀不到那個檔,切換鈕整組隱藏,只剩Stocks,帳戶數字永遠不外流。 */
 if(rkHas()){
   document.getElementById("panelToggle").hidden=false;
-  document.getElementById("tabbarRisk").hidden=false;   // 手機底部列的Leverage格
+  document.getElementById("tabbarRisk").hidden=false;   // Leverage cell in the mobile bottom bar
 }
 
 /* ---------- load（讀取 watchlist.json / data.json,refresh 按鈕重抓同一流程） ---------- */
@@ -2388,7 +2387,7 @@ if("serviceWorker" in navigator && location.protocol!=="file:"){
 
    啟動方式：網址加 ?demo=1，或在 console 打 demoTour()。 */
 (function () {
-  var DOT_MS = 420;         // 圓點顯示時間
+  var DOT_MS = 420;         // how long the touch dot stays visible
   var dot = null;
 
   function showDot(x, y) {
