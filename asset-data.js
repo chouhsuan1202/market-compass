@@ -10,17 +10,17 @@ window.ASSET_DATA = {
  "summary": [
   {
    "label": "淨資產（扣房貸）",
-   "value": "3,301,760",
+   "value": "3,243,794",
    "unit": "TWD",
-   "sub": "≈ 330.2 萬 TWD",
+   "sub": "≈ 324.4 萬 TWD",
    "delta": null,
    "deltaDir": null
   },
   {
    "label": "流動資產（不含房產）",
-   "value": "1,301,760",
+   "value": "1,243,794",
    "unit": "TWD",
-   "sub": "≈ 130.2 萬 TWD",
+   "sub": "≈ 124.4 萬 TWD",
    "delta": null,
    "deltaDir": null
   },
@@ -31,8 +31,8 @@ window.ASSET_DATA = {
   },
   {
    "label": "現金 vs 股票（流動資產）",
-   "value": "36% : 64%",
-   "sub": "現金 468,000 / 股票 833,760 TWD"
+   "value": "33% : 67%",
+   "sub": "現金 410,000 / 股票 833,794 TWD"
   }
  ],
  "donuts": [
@@ -56,12 +56,12 @@ window.ASSET_DATA = {
     },
     {
      "name": "現金",
-     "value": 468000,
+     "value": 410000,
      "color": "#b8bfc9"
     },
     {
      "name": "加密貨幣",
-     "value": 12225,
+     "value": 12259,
      "color": "#5b6270"
     }
    ]
@@ -96,7 +96,7 @@ window.ASSET_DATA = {
     },
     {
      "name": "其他資產",
-     "value": 480225,
+     "value": 422259,
      "color": "#8f97a3"
     }
    ]
@@ -108,67 +108,34 @@ window.ASSET_DATA = {
    "name": "房產淨值",
    "value": 2000000,
    "color": "#d9682f",
-   "pct": 60.6
+   "pct": 61.7
   },
   {
-   "name": "個股帳戶",
-   "value": 437600,
-   "color": "#2f6fed",
-   "pct": 13.3
+   "name": "券商帳戶",
+   "value": 721535,
+   "color": "#7b5cd6",
+   "pct": 22.2
   },
   {
    "name": "定存",
    "value": 350000,
    "color": "#ec6a9c",
-   "pct": 10.6
-  },
-  {
-   "name": "券商 A",
-   "value": 219535,
-   "color": "#7b5cd6",
-   "pct": 6.6
+   "pct": 10.8
   },
   {
    "name": "活存",
    "value": 160000,
    "color": "#9aa4b2",
-   "pct": 4.8
-  },
-  {
-   "name": "券商 B",
-   "value": 122400,
-   "color": "#e08b2f",
-   "pct": 3.7
+   "pct": 4.9
   },
   {
    "name": "加密貨幣",
-   "value": 12225,
+   "value": 12259,
    "color": "#3b82f6",
    "pct": 0.4
   }
  ],
  "holdings": [
-  {
-   "title": "台股 ETF",
-   "rows": [
-    {
-     "tag": "ETF",
-     "name": "元大高息低波",
-     "value": 61550,
-     "pct": 50.3,
-     "sym": "00713.TW",
-     "pctAll": 7.5
-    },
-    {
-     "tag": "ETF",
-     "name": "富邦科技",
-     "value": 60850,
-     "pct": 49.7,
-     "sym": "0052.TW",
-     "pctAll": 7.4
-    }
-   ]
-  },
   {
    "title": "歐股 ETF",
    "rows": [
@@ -176,7 +143,7 @@ window.ASSET_DATA = {
      "tag": "ETF",
      "name": "元大高股息",
      "value": 78600,
-     "pct": 29.2,
+     "pct": 20.1,
      "sym": "0056.TW",
      "pctAll": 9.6
     },
@@ -184,7 +151,7 @@ window.ASSET_DATA = {
      "tag": "ETF",
      "name": "元大S&P500",
      "value": 76750,
-     "pct": 28.5,
+     "pct": 19.6,
      "sym": "00646.TW",
      "pctAll": 9.3
     },
@@ -192,15 +159,31 @@ window.ASSET_DATA = {
      "tag": "ETF",
      "name": "國泰永續高股息",
      "value": 64760,
-     "pct": 24.0,
+     "pct": 16.5,
      "sym": "00878.TW",
      "pctAll": 7.9
     },
     {
      "tag": "ETF",
+     "name": "元大高息低波",
+     "value": 61550,
+     "pct": 15.7,
+     "sym": "00713.TW",
+     "pctAll": 7.5
+    },
+    {
+     "tag": "ETF",
+     "name": "富邦科技",
+     "value": 60850,
+     "pct": 15.5,
+     "sym": "0052.TW",
+     "pctAll": 7.4
+    },
+    {
+     "tag": "ETF",
      "name": "富邦NASDAQ正2",
      "value": 49425,
-     "pct": 18.3,
+     "pct": 12.6,
      "sym": "00670L.TW",
      "pctAll": 6.0
     }
@@ -280,17 +263,17 @@ window.ASSET_DATA = {
   {
    "level": "info",
    "title": "最大單一部位：元大高股息",
-   "body": "78,600 TWD，佔流動資產 6.0%。"
+   "body": "78,600 TWD，佔流動資產 6.3%。"
   },
   {
    "level": "warn",
    "title": "IB 帳戶有融資",
-   "body": "現金餘額 -50,000 TWD（負數＝借券商的錢），持股市值 269,535 TWD，淨值 219,535 TWD。"
+   "body": "現金餘額 -100,000 TWD（負數＝借券商的錢），持股市值 821,535 TWD，淨值 721,535 TWD。"
   },
   {
    "level": "ok",
    "title": "現金水位",
-   "body": "各帳戶現金與借款合計 468,000 TWD，佔流動資產 36.0%。"
+   "body": "各帳戶現金與借款合計 410,000 TWD，佔流動資產 33.0%。"
   }
  ],
  "notesDefault": "這是公開示範版,所有金額都是編的。",
@@ -332,21 +315,21 @@ window.ASSET_DATA = {
   },
   {
    "d": "2026-08-22",
-   "v": 130.2,
+   "v": 124.4,
    "note": "今天(自動)"
   }
  ],
  "holdingsTotal": 821535,
  "leverage": {
-  "exposure": 883185,
-  "liquid": 1301760,
-  "lev": 0.678,
+  "exposure": 883219,
+  "liquid": 1243794,
+  "lev": 0.71,
   "boost": 49425,
   "core": 391935,
-  "corePct": 30.1,
-  "cash": 468000,
-  "cashPct": 36.0,
+  "corePct": 31.5,
+  "cash": 410000,
+  "cashPct": 33.0,
   "single": 429600,
-  "singlePct": 33.0
+  "singlePct": 34.5
  }
 };
