@@ -7,180 +7,132 @@
  ],
  "market_holdings": [
   {
-   "s": "IWDA.AS",
-   "dn": "IWDA",
-   "note": "iShares 全球市場 · 歐元"
+   "s": "0056.TW",
+   "dn": "0056",
+   "note": "元大高股息"
   },
   {
-   "s": "VWCE.DE",
-   "dn": "VWCE",
-   "note": "Vanguard 全世界 · 歐元"
+   "s": "00878.TW",
+   "dn": "00878",
+   "note": "國泰永續高股息"
   },
   {
-   "s": "EMIM.AS",
-   "dn": "EMIM",
-   "note": "新興市場 · 歐元"
+   "s": "00646.TW",
+   "dn": "00646",
+   "note": "元大S&P500"
   },
   {
-   "s": "XDWT.DE",
-   "dn": "XDWT",
-   "note": "全球科技 · 歐元"
+   "s": "0052.TW",
+   "dn": "0052",
+   "note": "富邦科技"
   },
   {
-   "s": "SGLD.AS",
-   "dn": "SGLD",
-   "note": "實體黃金 · 歐元"
+   "s": "00713.TW",
+   "dn": "00713",
+   "note": "元大高息低波"
   },
   {
-   "s": "LVE.PA",
-   "dn": "LVE",
-   "note": "歐洲藍籌 2x · 歐元"
+   "s": "00670L.TW",
+   "dn": "00670L",
+   "note": "富邦NASDAQ正2"
   }
  ],
  "holdings": [
   {
-   "s": "ORCL"
+   "s": "2454.TW"
   },
   {
-   "s": "QCOM"
+   "s": "2308.TW"
   },
   {
-   "s": "ADBE"
+   "s": "2317.TW"
   },
   {
-   "s": "INTC"
+   "s": "2382.TW"
   },
   {
-   "s": "CRM"
+   "s": "2412.TW"
   },
   {
-   "s": "TER"
+   "s": "2881.TW"
   },
   {
-   "s": "VST"
+   "s": "1216.TW"
   },
   {
-   "s": "BRK-B"
+   "s": "2603.TW"
   }
  ],
  "watch": [
   {
-   "s": "NBIS"
+   "s": "3231.TW"
   },
   {
-   "s": "GEV"
+   "s": "2357.TW"
   },
   {
-   "s": "PWR"
+   "s": "6669.TW"
   },
   {
-   "s": "MOD"
+   "s": "2379.TW"
   }
  ],
  "ai_chain": [
   {
    "chain": "上游",
-   "seg": "半導體設備",
-   "syms": [
-    "AMAT",
-    "LRCX",
-    "KLAC",
-    "TER"
-   ]
-  },
-  {
-   "chain": "上游",
-   "seg": "晶圓代工",
-   "syms": [
-    "TSM",
-    "INTC"
-   ]
-  },
-  {
-   "chain": "中游",
    "seg": "晶片設計",
    "syms": [
-    "QCOM",
-    "ARM",
-    "SIMO"
+    "2454.TW",
+    "2379.TW"
    ]
   },
   {
    "chain": "中游",
-   "seg": "伺服器與儲存",
+   "seg": "代工組裝",
    "syms": [
-    "DELL",
-    "SMCI",
-    "STX",
-    "WDC"
+    "2317.TW",
+    "2382.TW",
+    "3231.TW",
+    "6669.TW",
+    "2357.TW"
    ]
   },
   {
    "chain": "中游",
-   "seg": "散熱與供電",
+   "seg": "零組件與電源",
    "syms": [
-    "VRT",
-    "MOD",
-    "NVT",
-    "ETN"
+    "2308.TW"
    ]
   },
   {
    "chain": "下游",
-   "seg": "軟體與雲",
+   "seg": "電信與航運",
    "syms": [
-    "ORCL",
-    "CRM",
-    "ADBE",
-    "TEAM",
-    "NBIS"
+    "2412.TW",
+    "2603.TW"
    ]
   },
   {
    "chain": "下游",
-   "seg": "電力",
+   "seg": "金融與食品",
    "syms": [
-    "VST",
-    "CEG",
-    "GEV"
-   ]
-  },
-  {
-   "chain": "下游",
-   "seg": "電網工程",
-   "syms": [
-    "PWR",
-    "POWL",
-    "FIX"
+    "2881.TW",
+    "1216.TW"
    ]
   }
  ],
  "chain_names": {
-  "ADBE": "Adobe",
-  "AMAT": "應用材料",
-  "CEG": "星座能源",
-  "CRM": "Salesforce",
-  "DELL": "戴爾",
-  "ETN": "伊頓",
-  "FIX": "Comfort Systems",
-  "GEV": "GE Vernova",
-  "INTC": "英特爾",
-  "LRCX": "科林研發",
-  "MOD": "摩丁",
-  "NBIS": "Nebius",
-  "NVT": "nVent",
-  "ORCL": "甲骨文",
-  "POWL": "Powell",
-  "PWR": "Quanta",
-  "QCOM": "高通",
-  "SIMO": "慧榮",
-  "SMCI": "美超微",
-  "STX": "希捷",
-  "TEAM": "Atlassian",
-  "TER": "泰瑞達",
-  "VRT": "Vertiv",
-  "VST": "Vistra",
-  "WDC": "威騰",
-  "KLAC": "科磊"
+  "2454.TW": "聯發科",
+  "2379.TW": "瑞昱",
+  "2317.TW": "鴻海",
+  "2382.TW": "廣達",
+  "3231.TW": "緯創",
+  "6669.TW": "緯穎",
+  "2357.TW": "華碩",
+  "2308.TW": "台達電",
+  "2412.TW": "中華電",
+  "2603.TW": "長榮",
+  "2881.TW": "富邦金",
+  "1216.TW": "統一"
  }
 }

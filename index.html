@@ -610,7 +610,7 @@
 #expensePanel #exTrend .hit{fill:transparent;cursor:pointer;}
 #expensePanel #exTrend circle{cursor:pointer;}
 /* ── 趨勢右上角的年度數字 ── */
-/* 一年只看兩件事:旅行、醫美。點下去才開明細,不再長一張年度卡 */
+/* 示範版沒有年度統計 */
   #expensePanel .ystat{display:flex;gap:26px;}
 #expensePanel .ystat .ys{background:none;border:none;padding:0;margin:0;cursor:pointer;
     font-family:inherit;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
@@ -2011,7 +2011,7 @@ function indexCard(sym){
 const LADDER_BASE = 1.3;                       // 平常站的基準倍率
 const LADDER = [ {dd:30, lev:2.0}, {dd:22.5, lev:1.75}, {dd:15, lev:1.5} ];  // 回落 % 由深到淺
 const LADDER_EPS = 0.05;                       // 實際與目標差距在這個範圍內就算「到位」
-/* 券商 EUR margin 年利率(基準 2.203% + 1.5%,LYNX 對照表 2026-08-12)。利率變了改這裡 */
+/* 券商 TWD margin 年利率(基準 2.203% + 1.5%,LYNX 對照表 2026-08-12)。利率變了改這裡 */
 const RK_MARGIN_RATE = 0.037;
 /* 手機槓桿頁的展開狀態(設計稿 2026-08-17):券商 帳戶明細,預設收起 */
 let RK_IBOPEN=false;
@@ -2108,7 +2108,7 @@ function renderMacro(){
     .map((h,i)=>({h,i}))
     .sort((a,b)=>(rank(a.h)-rank(b.h))||(a.i-b.i))
     .map(x=>bigHoldCard(x.h.s)).join("");
-  const eu=mh.filter(h=>!isTW(h.s)), tw=mh.filter(h=>isTW(h.s));
+  const eu=mh, tw=[];        // 示範版不分區
   // 區域篩選列(全部 / 歐洲大盤 / 台灣大盤)
   const cur=FILTER.macro||"all";
   const btn=(kind,label,n)=>
@@ -2836,8 +2836,8 @@ const RK_SEG={"IWDA":"#12a670","VWCE":"#1d6fd8","SGLD":"#e0a132","LVE":"#d16ba5"
    兩張卡才能共用同一個渲染函式。券商 B目前全是原型(1x),沒有融資。 */
 const IB_SYM={"IWDA":"IWDA.AS","VWCE":"VWCE.DE","SGLD":"SGLD.AS","LVE":"LVE.PA"};
 const YUANTA_META={
-  "EMIM.AS":{name:"新興市場",ticker:"EMIM"},
-  "XDWT.DE":{name:"全球科技",ticker:"XDWT"},
+  "0052.TW":{name:"富邦科技",ticker:"0052"},
+  "00713.TW":{name:"元大高息低波",ticker:"00713"},
 };
 /* 個股(2026-08-20 定案):
    個股卡從資產分析搬到槓桿風險最下面。放在有融資那個帳戶裡的個股也算在這張,
@@ -2934,7 +2934,7 @@ function stockCardHTML(mob){
       <span class="pp num">${(r.value/base*100).toFixed(1)}%</span>
       <span class="ar">${link?"\u203a":""}</span></div>`;
   };
-  const sub=`${b.rows.length} 筆 · ${fmtN(tot)} EUR · 占全帳戶 ${(tot/base*100).toFixed(1)}%`;
+  const sub=`${b.rows.length} 筆 · ${fmtN(tot)} TWD · 占全帳戶 ${(tot/base*100).toFixed(1)}%`;
   if(mob){
     const n=RK_STKOPEN?b.rows.length:6;
     return `<div class="dm-card c2">
@@ -2954,7 +2954,7 @@ function renderRisk(){
   const snaps=rkSnaps();
   if(!snaps.length){ el.innerHTML=`<div class="rk-card">無槓桿資料(本機檔未載入)。</div>`; return; }
   const s=rkNorm(snaps[0]);
-  const cur=s.currency||"EUR";
+  const cur=s.currency||"TWD";
   const expo=rkExpo(s), st=rkStress(s);
   const bk=rkBorrowKind(s.borrowRatio);
   const bLbl={safe:"安全",watch:"注意",danger:"危險"}[bk];
@@ -3214,7 +3214,7 @@ function renderRisk(){
         </div>
         <div class="rk-gauge-wrap">
           <div class="rk-gauge-top">
-            <div class="g-l"><span style="font-size:14px;font-weight:700">借款佔券商 A 淨值</span><b>${rkPct(s.borrowRatio)}</b><span style="font-size:12px;color:var(--faint)">上面那個 6.8% 是佔全帳戶,分母不一樣</span></div>
+            <div class="g-l"><span style="font-size:14px;font-weight:700">借款佔券商 A 淨值</span><b>${rkPct(s.borrowRatio)}</b><span style="font-size:12px;color:var(--faint)">上面那個是佔全帳戶,分母不一樣</span></div>
             <div class="g-r">離 40% 安全線${safeRoom>=0?"還有":"已超出"} <b>${rkMoney(Math.abs(safeRoom),cur)}</b></div>
           </div>
           <div class="rk-mark"><div class="m" style="left:${Math.min(fillPct,100)}%;color:#0b7a55">
@@ -3267,7 +3267,7 @@ function renderRisk(){
       ${allocCard("持倉曝險配置 · 券商 A",cur,H_ETF,cur,
         `融資借款 <b>−${rkMoney(Math.max(s.loan,0),cur)}</b> · 個股列在下面那張卡`,
         levMixHtml(H_ETF))}
-      ${allocCard("持倉曝險配置 · 券商 B","EUR",YT_ETF,"EUR",
+      ${allocCard("持倉曝險配置 · 券商 B","TWD",YT_ETF,"TWD",
         "列可點開線圖。個股列在下面那張卡。",
         levMixHtml(YT_ETF,"這個帳戶沒有開融資"))}
     </div>
@@ -3301,7 +3301,7 @@ function assetPos(sym){
 /* 線圖彈窗裡的「持有市值 / 佔股票部位」一列,只有資產面板有這支才出現 */
 function assetLineHTML(sym){
   const r=assetPos(sym); if(!r) return "";
-  return `<div class="apos num">持有市值 ${r.value.toLocaleString("en-US")} EUR · 佔股票部位 ${r.pctAll}%
+  return `<div class="apos num">持有市值 ${r.value.toLocaleString("en-US")} TWD · 佔股票部位 ${r.pctAll}%
     <button class="aposlink" data-goasset>資產面板 ↗</button></div>`;
 }
 /* 桌面資產頁:持倉兩卡的收合狀態,預設收起(2026-08-16 使用者要求) */
@@ -3337,7 +3337,7 @@ function renderAsset(){
     }).join("");
     // 縮小版(手機)中間不放字,字級跟著縮會糊掉
     const mid=size?"":`<text class="as-cv" x="${cx}" y="${cy-1}">${fmt(total)}</text>
-      <text class="as-cl" x="${cx}" y="${cy+14}">EUR</text>`;
+      <text class="as-cl" x="${cx}" y="${cy+14}">TWD</text>`;
     return `<svg viewBox="0 0 ${S} ${S}" width="${px}" height="${px}" role="img">${paths}${mid}</svg>`;
   }
   /* 甜甜圈卡:游標移到扇形,下面那行就顯示名稱與金額。帳戶那張是用 A.accounts 現場組的,
@@ -3359,7 +3359,7 @@ function renderAsset(){
       const paths=[...card.querySelectorAll("path.sl")];
       const lgs=[...card.querySelectorAll(".lg span")];
       paths.forEach(pa=>pa.addEventListener("mouseenter",()=>{
-        hv.innerHTML=`${pa.dataset.n} · <b>${pa.dataset.v}</b> EUR · ${pa.dataset.p}%`;
+        hv.innerHTML=`${pa.dataset.n} · <b>${pa.dataset.v}</b> TWD · ${pa.dataset.p}%`;
         hv.classList.add("on");
         paths.forEach(q=>q.style.opacity=(q===pa?"1":".25"));
         lgs.forEach(sp=>sp.style.opacity=(sp.dataset.n===pa.dataset.n?"1":".3"));
@@ -3390,7 +3390,7 @@ function renderAsset(){
     return `<div class="as-card as-hold${open?"":" folded"}">
       <div class="as-fold" data-asfold="${i}">
         <h3>${h.title}</h3>
-        <span class="fs num">${h.rows.length} 筆 · ${fmt(tot)} EUR<i>${open?"\u25be":"\u25b8"}</i></span>
+        <span class="fs num">${h.rows.length} 筆 · ${fmt(tot)} TWD<i>${open?"\u25be":"\u25b8"}</i></span>
       </div>
       ${open?`<div class="as-rows">${h.rows.map(rowHtml).join("")}</div>`:""}
     </div>`;
@@ -3524,7 +3524,7 @@ function renderAsset(){
     const prop=Math.max(netVal-liqVal,0);
     const pctOf=(v,b)=>b?(v/b*100):0;
     const legend=(name,v,base,color)=>
-      `<span><i style="background:${color}"></i>${name} ${pctOf(v,base).toFixed(0)}% · ${fmt(v)} EUR</span>`;
+      `<span><i style="background:${color}"></i>${name} ${pctOf(v,base).toFixed(0)}% · ${fmt(v)} TWD</span>`;
     const barOf=segs=>`<div class="ax-bar">${segs.map(x=>
       `<i style="width:${x.w.toFixed(2)}%;background:${x.color}" title="${x.tip}"></i>`).join("")}</div>`;
 
@@ -3567,7 +3567,7 @@ function renderAsset(){
     };
     const splitCard=`<div class="as-card">
       <div class="ax-hd"><h3>資產配置</h3>
-        <span class="ax-sub">淨資產 ${fmt(netVal)} EUR · 流動資產 ${fmt(liqVal)} EUR(不含房產)</span></div>
+        <span class="ax-sub">淨資產 ${fmt(netVal)} TWD · 流動資產 ${fmt(liqVal)} TWD(不含房產)</span></div>
       <div class="ax-dn">${rows.map(miniDonut).join("")}</div>
       <div class="ax-sub" style="margin-top:10px">${A.accountsNote||""}</div>
     </div>`;
@@ -3580,7 +3580,7 @@ function renderAsset(){
         <div class="ax-sub" style="margin-top:2px">${sub}</div>
         <div style="margin-top:12px">${items.map(x=>{
           const p=pctOf(x.value,base);
-          return `<div class="ax-brow" title="${x.name} ${fmt(x.value)} EUR">
+          return `<div class="ax-brow" title="${x.name} ${fmt(x.value)} TWD">
             <span class="n"><i style="background:${x.color}"></i><span>${x.name}</span></span>
             <span class="t"><i style="width:${Math.max(x.value/max*100,p>0?2:0).toFixed(1)}%;background:${x.color}"></i></span>
             <span class="p">${p<1&&p>0?p.toFixed(1):Math.round(p)}%</span></div>`;}).join("")}</div>
@@ -3588,7 +3588,7 @@ function renderAsset(){
     };
     const cls=pick("淨資產類別");
     const twoCards=`<div class="ax-two">
-      ${cls?barList("淨資產類別",`佔淨資產 ${fmt(netVal)} EUR 的比例`,cls.slices,netVal):""}
+      ${cls?barList("淨資產類別",`佔淨資產 ${fmt(netVal)} TWD 的比例`,cls.slices,netVal):""}
       ${barList("帳戶分佈","依金額排序 · 佔淨資產比例",A.accounts||[],netVal)}
     </div>`;
 
@@ -3713,8 +3713,8 @@ let PICK_YEAR=null;      /* 選單目前顯示哪一年,跟實際選中的月份
 let EX_FOCUS=null;       /* 圖例點下去只看某一組(組名),再點一次回到全部 */
 
 const isMobile = () => window.matchMedia("(max-width:720px)").matches;
-const exEur   = n => "€" + Math.round(n).toLocaleString("en-US");
-const exCent  = n => "€" + n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const exEur   = n => "NT$" + Math.round(n).toLocaleString("en-US");
+const exCent  = n => "NT$" + Math.round(n).toLocaleString("en-US");
 const exMonths= () => (window.EXPENSE_DATA ? EXPENSE_DATA.months.slice().sort((a,b)=>a.month<b.month?-1:1) : []);
 const exLabel = m => m.slice(0,4)+"年"+parseInt(m.slice(5),10)+"月";
 const exShort = m => parseInt(m.slice(5),10)+"月";
@@ -3723,7 +3723,7 @@ const exTotal = m => m.transactions.reduce((s,t)=>s+t.amount,0);
 const esc = s => String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 const pctS = (v,base) => base>0 ? Math.round(v/base*100)+"%" : "0%";
 
-/* 六大組(固定帳單、生活費、醫美、旅行、購物娛樂其他、代墊)的順序、顏色、
+/* 各組(固定帳單、生活費、購物娛樂其他、代墊)的順序、顏色、
    need/want/neutral 全部從 expense-data.js 的 groups 讀,這裡一個都不寫死,月結時改資料就好。
    每筆交易靠 t.group 歸組,t.cat 留著當細類 */
 const exGroups   = () => (window.EXPENSE_DATA && EXPENSE_DATA.groups) ? EXPENSE_DATA.groups : [];
@@ -3762,7 +3762,7 @@ function render(){
 
   const i=ms.findIndex(x=>x.month===EXP_MONTH), m=ms[i], prev=ms[i-1];
   const total=exTotal(m), budget=D.fixedBudget;
-  /* 必要(need)= 固定帳單 + 生活費,想要(want)= 醫美 + 旅行 + 購物娛樂其他。
+  /* 必要(need)= 固定帳單 + 生活費,想要(want)= 購物娛樂其他。
      代墊(neutral)兩邊都不算:錢只是先墊出去再收回來,有正有負 */
   const gsums=groupSums(m);
   const needRows=gsums.filter(g=>g.kind==="need");
@@ -3855,7 +3855,7 @@ function render(){
       </div>
     </details>` : "";
 
-  /* ── 這個月多花在哪:想要的三組(醫美、旅行、購物娛樂其他),代墊不進這張卡 ── */
+  /* ── 這個月多花在哪:想要的那幾組,代墊不進這張卡 ── */
   const wants=wantRows.filter(g=>g.v>0.005);
   const maxWant=wants.reduce((a,g)=>Math.max(a,g.v),0)||1;
   /* 明細列的細類用小字掛在 desc 後面,知道這筆是超市還是外食 */
@@ -3899,9 +3899,9 @@ function render(){
   const needBody = g => {
     const tx=m.transactions.filter(t=>t.group===g.key);
     if(tx.some(t=>t.fixed)){
-      const mortgage=tx.filter(t=>t.cat==="Mortgage").reduce((a,t)=>a+t.amount,0);
+      const mortgage=tx.filter(t=>t.cat==="房貸").reduce((a,t)=>a+t.amount,0);
       const hMisc=tx.filter(t=>t.cat==="住房雜費").reduce((a,t)=>a+t.amount,0);
-      const others=tx.filter(t=>t.cat!=="Mortgage" && t.cat!=="住房雜費");
+      const others=tx.filter(t=>t.cat!=="房貸" && t.cat!=="住房雜費");
       const othSum=others.reduce((a,t)=>a+t.amount,0);
       const merged=[], idx={};
       others.forEach(t=>{
@@ -3910,9 +3910,9 @@ function render(){
       });
       const othItems=merged.sort((a,b)=>b.amount-a.amount)
         .map(q=>itemRow(q.n>1?`×${q.n}`:exDay(q.date),q.desc,q.cat,q.src,q.amount)).join("");
-      /* 沒有房貸的月份(例如一月)不列 €0 的空行 */
+      /* 沒有房貸的月份(例如一月)不列 0 的空行 */
       return `<div class="fixsub">
-        ${mortgage>0.005?`<div class="fixline"><span>Mortgage</span><span class="fixv">${exEur(mortgage)}</span></div>`:""}
+        ${mortgage>0.005?`<div class="fixline"><span>房貸</span><span class="fixv">${exEur(mortgage)}</span></div>`:""}
         ${hMisc>0.005?`<div class="fixline"><span>住房雜費</span><span class="fixv">${exEur(hMisc)}</span></div>`:""}
         ${othSum>0.005?`<details class="fixrow sub">
           <summary><span class="nm">其他固定帳單</span><span class="fixv">${exEur(othSum)}</span></summary>
@@ -3927,7 +3927,7 @@ function render(){
       .map(k=>`<div class="fixline"><span>${esc(k)}</span><span class="fixv">${exEur(cm[k])}</span></div>`).join("");
     return `<div class="fixsub">${lines}</div>`;
   };
-  /* 第二列是生活費,右邊金額後面接「/ 預算 €700」:超過預算轉紅,沒超過轉綠。
+  /* 第二列是生活費,右邊金額後面接「/ 預算」:超過預算轉紅,沒超過轉綠。
      預算讀 livingBudget(他訂的目標,不是算出來的),沒設就只顯示金額 */
   const lbud=(D.livingBudget>0)?D.livingBudget:0;
   const needCardRows=needRows.map((g,k)=>{
@@ -3960,13 +3960,13 @@ function render(){
     const abnb=+(m&&m.airbnb)||0;
     const tot=sal+park+abnb;
     const noRul=+inc.netSalaryNoRuling||0;
-    const parts=[`稅後薪資 ${exEur(sal)}`,`停車位 ${exEur(park)}`]
-      .concat(abnb>0?[`Airbnb ${exEur(abnb)}`]:[]).join(" + ");
+    const parts=[`稅後月薪 ${exEur(sal)}`,`兼職 ${exEur(park)}`]
+      .concat(abnb>0?[`其他 ${exEur(abnb)}`]:[]).join(" + ");
     incCard=`
     <section class="card inccard">
       <div class="chead"><h2>月收入</h2><span class="tot">${exEur(tot)}</span></div>
       <div class="csub">${parts}</div>
-      ${noRul?`<div class="incnote">ruling 到期後 <b>${exEur(noRul)}</b></div>`:""}
+      ${noRul?`<div class="incnote">年終另計 <b>${exEur(noRul)}</b></div>`:""}
     </section>`;
   }
   const fixCard=`
@@ -3992,8 +3992,8 @@ function render(){
       on?` style="background:${g.color}1f;border-color:${g.color};color:${g.color}"`:""
     }><i style="background:${g.color}"></i>${esc(g.key)}</button>`;
   }).join("");
-  /* 年度只留旅行與醫美兩個數字,收在標題右邊,點下去才開明細 */
-  const ys=yearStats(ms, EXP_MONTH.slice(0,4));
+  /* 示範版不放年度數字 */
+  const ys={chips:"",modals:""};   // 示範版不放年度統計
   const trend=`
     <section class="card tcard">
       <div class="thead"><h2>每月支出</h2>${ys.chips}</div>
@@ -4045,67 +4045,6 @@ function render(){
   WAS_MOBILE=isMobile();
 }
 
-/* ── 年度的旅行與醫美 ───────────────────────────────────
-   只回兩個數字給趨勢卡的標題列,加兩個預設關起來的明細 popup。
-   年份跟著目前看的月份走,換到 2027 自己就變 2027。 */
-function yearStats(ms, year){
-  const tx=[];
-  ms.filter(x=>x.month.slice(0,4)===year)
-    .forEach(x=>x.transactions.forEach(t=>tx.push(t)));
-
-  const gmap={}; tx.forEach(t=>{ gmap[t.group]=(gmap[t.group]||0)+t.amount; });
-  const gFind=k=>{ const g=exGroups().find(x=>x.key===k);
-    return {key:k,color:g?g.color:"var(--ink)",v:gmap[k]||0}; };
-  /* 旅行組不寫死:從有 trip 標記的交易反推它屬於哪一組 */
-  const tripKey=(tx.find(t=>t.trip)||{}).group||"旅行";
-  const gTrip=gFind(tripKey), gBeauty=gFind("醫美");
-
-  /* 用整個旅行組,不是只看有 trip 標記的:提前訂的機票訂房沒落在旅程區間,
-     但一樣要算進國家統計,否則大數字與底下的國家列會對不起來 */
-  const tripTx=tx.filter(t=>t.group===tripKey);
-  const tsum={}; tripTx.forEach(t=>{ const c=t.country||"其他"; tsum[c]=(tsum[c]||0)+t.amount; });
-  const cs=Object.keys(tsum).sort((a,b)=>tsum[b]-tsum[a]);
-  const nCountry=cs.filter(c=>c!=="交通住宿").length;
-  const tripRows=cs.map(c=>`
-      <div class="yrline"><span class="t">${esc(c)}</span>
-        <span class="a">${exEur(tsum[c])}</span></div>`).join("")
-    || `<div class="yrline"><span class="t">今年還沒出門</span></div>`;
-
-  /* 醫美:照日期排,同商家同一天合併加總 */
-  const bt=tx.filter(t=>t.cat==="醫美").slice().sort((a,b)=>a.date<b.date?-1:1);
-  const bM=[], bIdx={};
-  bt.forEach(t=>{
-    const k=t.date+"|"+t.desc;
-    if(bIdx[k]===undefined){ bIdx[k]=bM.length; bM.push({date:t.date,desc:t.desc,amount:t.amount}); }
-    else bM[bIdx[k]].amount+=t.amount;
-  });
-  const bRows=bM.map(q=>`
-      <div class="yrline"><span class="d">${exDay(q.date)}</span><span class="t">${esc(q.desc)}</span>
-        <span class="a">${exEur(q.amount)}</span></div>`).join("")
-    || `<div class="yrline"><span class="t">今年沒有醫美支出</span></div>`;
-
-  const chip=(id,g)=>`<button type="button" class="ys" data-ys="${id}">
-      <span class="k">${esc(g.key)} ${year}</span>
-      <span class="v" style="color:${g.color}">${exEur(g.v)}</span></button>`;
-
-  const modal=(id,g,sub,rows)=>`
-    <div class="exmask" id="exm-${id}" hidden>
-      <div class="exmodal">
-        <div class="mh"><h3>${esc(g.key)} ${year}</h3>
-          <button type="button" class="x" data-close="1" aria-label="關閉">✕</button></div>
-        <div class="mv" style="color:${g.color}">${exEur(g.v)}</div>
-        <div class="ms">${sub}</div>
-        <div class="mrows">${rows}</div>
-      </div>
-    </div>`;
-
-  return {
-    chips:`<div class="ystat">${chip("trip",gTrip)}${chip("beauty",gBeauty)}</div>`,
-    modals:modal("trip",gTrip,nCountry+" 個國家",tripRows)
-          +modal("beauty",gBeauty,bM.length+" 次",bRows)
-  };
-}
-
 /* ── 趨勢圖:每月一根堆疊柱 + 總額折線 ─────────────────────
    柱子拆出這個月的錢花在哪一層,折線把月與月的總額串起來。
    畫的順序是格線 → 柱子 → 基準虛線 → 折線與點,紅虛線才不會被柱子蓋掉。
@@ -4142,7 +4081,7 @@ function drawTrend(ms){
   [0,.5,1].forEach(f=>{
     const yy=y(maxV*f);
     s+=`<line x1="${padL}" y1="${yy.toFixed(1)}" x2="${W-padR}" y2="${yy.toFixed(1)}" stroke="${f===0?"#d9dce3":"#eceff3"}" stroke-width="1"/>`;
-    s+=`<text class="ax" x="${padL-8}" y="${(yy+4).toFixed(1)}" text-anchor="end">${f===0?"0":"€"+(Math.round(maxV*f/100)/10)+"k"}</text>`;
+    s+=`<text class="ax" x="${padL-8}" y="${(yy+4).toFixed(1)}" text-anchor="end">${f===0?"0":"NT$"+(Math.round(maxV*f/100)/10)+"k"}</text>`;
   });
 
   /* 只有最上面那層收圓角,中間層跟著圓會把堆疊的層次咬破 */
@@ -4281,7 +4220,7 @@ function renderAF(){
   const kpi=(k,v,unit,sub,cls)=>`<div class="as-kpi"><div class="k">${k}</div>
     <div class="v num${cls?" "+cls:""}">${v}${unit?`<span class="u">${unit}</span>`:""}</div>
     <div class="d">${sub||""}</div></div>`;
-  const eur=n=>"€"+Math.round(n).toLocaleString("en-US");
+  const eur=n=>"NT$"+Math.round(n).toLocaleString("en-US");
   // 順序刻意先支出再資產(使用者 2026-08-20):先看花掉多少,再看有多少
   const cells=[];
   if(E){

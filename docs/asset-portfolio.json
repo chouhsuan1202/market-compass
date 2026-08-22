@@ -5,136 +5,136 @@
  "accounts": {
   "ib": {
    "name": "券商 A",
-   "region": "nl",
+   "region": "tw",
    "color": "#7b5cd6",
-   "cash": -1500.0
+   "cash": -100000.0
   },
   "yuanta": {
    "name": "券商 B",
-   "region": "nl",
+   "region": "tw",
    "color": "#e08b2f",
    "cash": 0
   },
   "bux": {
    "name": "個股帳戶",
-   "region": "nl",
+   "region": "tw",
    "color": "#2f6fed",
-   "cash": 180.0
+   "cash": 15000.0
   }
  },
  "holdings": [
   {
    "account": "ib",
-   "sym": "IWDA.AS",
-   "name": "iShares 全球市場",
+   "sym": "0056.TW",
+   "name": "元大高股息",
    "tag": "ETF",
    "group": "etf",
-   "shares": 60
+   "shares": 3000
   },
   {
    "account": "ib",
-   "sym": "VWCE.DE",
-   "name": "Vanguard 全世界",
+   "sym": "00878.TW",
+   "name": "國泰永續高股息",
    "tag": "ETF",
    "group": "etf",
-   "shares": 30
+   "shares": 4000
   },
   {
    "account": "ib",
-   "sym": "SGLD.AS",
-   "name": "實體黃金",
-   "tag": "黃金",
+   "sym": "00646.TW",
+   "name": "元大S&P500",
+   "tag": "ETF",
    "group": "etf",
-   "shares": 8
+   "shares": 2000
   },
   {
    "account": "ib",
-   "sym": "LVE.PA",
-   "name": "歐洲藍籌 2x",
+   "sym": "00670L.TW",
+   "name": "富邦NASDAQ正2",
    "tag": "ETF",
    "group": "etf",
-   "shares": 40,
+   "shares": 500,
    "lev": 2
   },
   {
    "account": "yuanta",
-   "sym": "EMIM.AS",
-   "name": "新興市場",
+   "sym": "0052.TW",
+   "name": "富邦科技",
    "tag": "ETF",
    "group": "etf",
-   "shares": 100
+   "shares": 2000
   },
   {
    "account": "yuanta",
-   "sym": "XDWT.DE",
-   "name": "全球科技",
+   "sym": "00713.TW",
+   "name": "元大高息低波",
    "tag": "ETF",
    "group": "etf",
-   "shares": 20
+   "shares": 2000
   },
   {
    "account": "bux",
-   "sym": "ORCL",
-   "name": "甲骨文",
+   "sym": "2454.TW",
+   "name": "聯發科",
    "tag": "股票",
    "group": "stock",
-   "shares": 12
+   "shares": 30
   },
   {
    "account": "bux",
-   "sym": "QCOM",
-   "name": "高通",
-   "tag": "股票",
-   "group": "stock",
-   "shares": 20
-  },
-  {
-   "account": "bux",
-   "sym": "ADBE",
-   "name": "Adobe",
-   "tag": "股票",
-   "group": "stock",
-   "shares": 8
-  },
-  {
-   "account": "bux",
-   "sym": "INTC",
-   "name": "英特爾",
+   "sym": "2308.TW",
+   "name": "台達電",
    "tag": "股票",
    "group": "stock",
    "shares": 60
   },
   {
    "account": "bux",
-   "sym": "CRM",
-   "name": "Salesforce",
+   "sym": "2317.TW",
+   "name": "鴻海",
    "tag": "股票",
    "group": "stock",
-   "shares": 10
+   "shares": 500
   },
   {
    "account": "bux",
-   "sym": "TER",
-   "name": "泰瑞達",
+   "sym": "2382.TW",
+   "name": "廣達",
    "tag": "股票",
    "group": "stock",
-   "shares": 6
+   "shares": 300
   },
   {
    "account": "bux",
-   "sym": "VST",
-   "name": "Vistra",
+   "sym": "2412.TW",
+   "name": "中華電",
    "tag": "股票",
    "group": "stock",
-   "shares": 15
+   "shares": 800
   },
   {
    "account": "bux",
-   "sym": "BRK-B",
-   "name": "波克夏 B",
+   "sym": "2881.TW",
+   "name": "富邦金",
    "tag": "股票",
    "group": "stock",
-   "shares": 4
+   "shares": 1000
+  },
+  {
+   "account": "bux",
+   "sym": "1216.TW",
+   "name": "統一",
+   "tag": "股票",
+   "group": "stock",
+   "shares": 1000
+  },
+  {
+   "account": "bux",
+   "sym": "2603.TW",
+   "name": "長榮",
+   "tag": "股票",
+   "group": "stock",
+   "shares": 400
   }
  ]
 }
