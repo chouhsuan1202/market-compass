@@ -6,7 +6,7 @@ window.EXPENSE_DATA = {
   "netSalaryNoRuling": 3400,
   "parking": 100
  },
- "updated": "2026-08-21",
+ "updated": "2026-08-22",
  "fixedBudget": 2400,
  "livingBudget": 600,
  "budgetBreakdown": {
@@ -78,153 +78,209 @@ window.EXPENSE_DATA = {
     },
     {
      "date": "2026-01-02",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 22.62,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-03",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 41.85,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-04",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 35.77,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-06",
      "desc": "超市",
      "cat": "生活費",
-     "amount": 89.66,
+     "amount": 62.12,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-01-03",
+     "date": "2026-01-06",
      "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 28.75,
+     "amount": 12.84,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-01-03",
-     "desc": "電影",
+     "date": "2026-01-06",
+     "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 11.6,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-03",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 81.83,
+     "amount": 108.22,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-01-07",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 24.36,
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 87.33,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-08",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 57.76,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-01-10",
-     "desc": "交通",
+     "desc": "超市",
      "cat": "生活費",
-     "amount": 23.2,
+     "amount": 88.63,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-01-11",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 145.13,
+     "date": "2026-01-10",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 7.08,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-01-11",
+     "date": "2026-01-12",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 7.15,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-12",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 4.91,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-12",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 53.61,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-13",
      "desc": "外食",
      "cat": "生活費",
-     "amount": 55.04,
+     "amount": 51.95,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-01-14",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 19.76,
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 7.22,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-01-15",
-     "desc": "咖啡",
+     "desc": "超市",
      "cat": "生活費",
-     "amount": 4.57,
+     "amount": 52.89,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-15",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 56.98,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-01-16",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 37.76,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-22",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 31.84,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-24",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 70.06,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-25",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 10.27,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-26",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 56.77,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-26",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 62.34,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-26",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 10.84,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-27",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 19.36,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-01-27",
      "desc": "咖啡",
      "cat": "生活費",
-     "amount": 4.13,
+     "amount": 5.36,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-18",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 39.06,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-18",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 4.44,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-18",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 35.55,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-19",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 23.69,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-19",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 66.18,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-23",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 22.15,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-23",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 28.11,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-01-26",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 82.87,
      "src": "示範",
      "fixed": false
     }
@@ -292,18 +348,18 @@ window.EXPENSE_DATA = {
      "fixed": true
     },
     {
-     "date": "2026-02-02",
-     "desc": "交通",
+     "date": "2026-02-03",
+     "desc": "外食",
      "cat": "生活費",
-     "amount": 18.26,
+     "amount": 28.73,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-02-05",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 45.28,
+     "date": "2026-02-06",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 26.59,
      "src": "示範",
      "fixed": false
     },
@@ -311,23 +367,15 @@ window.EXPENSE_DATA = {
      "date": "2026-02-06",
      "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 12.85,
+     "amount": 22.99,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-02-06",
-     "desc": "超市",
+     "date": "2026-02-07",
+     "desc": "交通",
      "cat": "生活費",
-     "amount": 64.64,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-06",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 70.23,
+     "amount": 6.27,
      "src": "示範",
      "fixed": false
     },
@@ -335,63 +383,47 @@ window.EXPENSE_DATA = {
      "date": "2026-02-07",
      "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 19.68,
+     "amount": 36.22,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-02-07",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 58.35,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-08",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 48.81,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-08",
      "desc": "超市",
      "cat": "生活費",
-     "amount": 40.81,
+     "amount": 72.19,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-09",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 99.8,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-02-10",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 29.36,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-11",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 33.61,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-11",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 17.63,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-13",
      "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 42.67,
+     "amount": 29.9,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-12",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 22.44,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-14",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 21.75,
      "src": "示範",
      "fixed": false
     },
@@ -399,7 +431,7 @@ window.EXPENSE_DATA = {
      "date": "2026-02-14",
      "desc": "交通",
      "cat": "生活費",
-     "amount": 10.12,
+     "amount": 23.56,
      "src": "示範",
      "fixed": false
     },
@@ -407,15 +439,39 @@ window.EXPENSE_DATA = {
      "date": "2026-02-14",
      "desc": "外食",
      "cat": "生活費",
-     "amount": 14.83,
+     "amount": 20.89,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-15",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 6.05,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-16",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 16.3,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-02-17",
-     "desc": "購物",
+     "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 110.27,
+     "amount": 29.94,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-17",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 12.17,
      "src": "示範",
      "fixed": false
     },
@@ -423,31 +479,39 @@ window.EXPENSE_DATA = {
      "date": "2026-02-18",
      "desc": "咖啡",
      "cat": "生活費",
-     "amount": 4.14,
+     "amount": 8.15,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-02-18",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 24.3,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-20",
      "desc": "交通",
      "cat": "生活費",
-     "amount": 14.13,
+     "amount": 24.28,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-02-20",
-     "desc": "書店",
+     "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 32.4,
+     "amount": 88.9,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-20",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 19.55,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-21",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 20.62,
      "src": "示範",
      "fixed": false
     },
@@ -455,39 +519,39 @@ window.EXPENSE_DATA = {
      "date": "2026-02-21",
      "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 22.63,
+     "amount": 25.69,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-02-22",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 28.14,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-23",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 57.54,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-23",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 28.76,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-02-23",
+     "date": "2026-02-21",
      "desc": "交通",
      "cat": "生活費",
-     "amount": 5.99,
+     "amount": 16.3,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-21",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 32.67,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-23",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 43.75,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-02-24",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 22.73,
      "src": "示範",
      "fixed": false
     },
@@ -495,23 +559,23 @@ window.EXPENSE_DATA = {
      "date": "2026-02-25",
      "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 25.63,
+     "amount": 24.4,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-02-25",
+     "date": "2026-02-27",
      "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 22.75,
+     "amount": 76.73,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-02-26",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 23.58,
+     "date": "2026-02-27",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 25.37,
      "src": "示範",
      "fixed": false
     }
@@ -580,201 +644,97 @@ window.EXPENSE_DATA = {
     },
     {
      "date": "2026-03-02",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 89.75,
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 128.1,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-03-02",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 33.12,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-02",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 19.33,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-02",
+     "date": "2026-03-03",
      "desc": "咖啡",
      "cat": "生活費",
-     "amount": 4.33,
+     "amount": 4.27,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-03-03",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 39.03,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-03",
-     "desc": "外食",
+     "date": "2026-03-08",
+     "desc": "交通",
      "cat": "生活費",
-     "amount": 17.72,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-04",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 22.32,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-04",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 57.61,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-05",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 19.63,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-06",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 24.73,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-06",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 24.52,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-06",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 37.12,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-07",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 28.64,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-07",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 29.48,
+     "amount": 4.45,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-03-09",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 41.72,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-10",
-     "desc": "超市",
+     "desc": "交通",
      "cat": "生活費",
-     "amount": 75.71,
+     "amount": 3.45,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-03-09",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 8.06,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-03-10",
-     "desc": "購物",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 15.99,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-03-10",
+     "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 73.88,
+     "amount": 25.44,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-03-11",
-     "desc": "交通",
+     "desc": "咖啡",
      "cat": "生活費",
-     "amount": 20.04,
+     "amount": 4.64,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-03-12",
+     "date": "2026-03-16",
      "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 26.94,
+     "amount": 36.67,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-03-12",
-     "desc": "咖啡",
-     "cat": "生活費",
-     "amount": 4.52,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-13",
-     "desc": "咖啡",
-     "cat": "生活費",
-     "amount": 4.73,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-15",
+     "date": "2026-03-17",
      "desc": "外食",
      "cat": "生活費",
-     "amount": 51.67,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-15",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 21.5,
+     "amount": 51.39,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-03-18",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 16.96,
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 99.66,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-03-20",
-     "desc": "咖啡",
+     "date": "2026-03-21",
+     "desc": "外食",
      "cat": "生活費",
-     "amount": 7.0,
+     "amount": 35.85,
      "src": "示範",
      "fixed": false
     },
@@ -782,39 +742,47 @@ window.EXPENSE_DATA = {
      "date": "2026-03-21",
      "desc": "咖啡",
      "cat": "生活費",
-     "amount": 4.9,
+     "amount": 8.05,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-03-22",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 57.48,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-03-24",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 24.85,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-03-24",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 36.82,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-03-25",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 131.91,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-26",
-     "desc": "咖啡",
-     "cat": "生活費",
-     "amount": 8.82,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-27",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 53.85,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-03-27",
      "desc": "超市",
      "cat": "生活費",
-     "amount": 64.75,
+     "amount": 42.51,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-03-27",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 35.84,
      "src": "示範",
      "fixed": false
     }
@@ -883,17 +851,25 @@ window.EXPENSE_DATA = {
     },
     {
      "date": "2026-04-02",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 35.39,
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 4.79,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-04-02",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 38.12,
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 64.87,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-03",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 12.26,
      "src": "示範",
      "fixed": false
     },
@@ -901,47 +877,95 @@ window.EXPENSE_DATA = {
      "date": "2026-04-04",
      "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 26.54,
+     "amount": 32.15,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-04",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 13.07,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-04",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 22.33,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-04",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 44.25,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-04",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 4.66,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-04-06",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 115.03,
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 8.51,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-04-07",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 27.18,
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 10.46,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-04-09",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 15.54,
+     "date": "2026-04-08",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 34.8,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-04-10",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 25.34,
+     "date": "2026-04-11",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 20.74,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-04-12",
-     "desc": "咖啡",
+     "desc": "外食",
      "cat": "生活費",
-     "amount": 6.97,
+     "amount": 15.58,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-14",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 24.87,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-14",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 102.61,
      "src": "示範",
      "fixed": false
     },
@@ -949,87 +973,79 @@ window.EXPENSE_DATA = {
      "date": "2026-04-15",
      "desc": "機票",
      "cat": "旅行",
-     "amount": 441.46,
+     "amount": 881.39,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-16",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 37.57,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-16",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 60.05,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-04-18",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 113.46,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-20",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 19.66,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-21",
      "desc": "交通",
      "cat": "生活費",
-     "amount": 13.73,
+     "amount": 15.49,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-04-19",
+     "date": "2026-04-21",
      "desc": "超市",
      "cat": "生活費",
-     "amount": 62.45,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-04-22",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 31.42,
+     "amount": 57.47,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-04-23",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 8.37,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-25",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 99.62,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-04-26",
      "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 25.14,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-04-23",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 105.5,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-04-23",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 13.2,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-04-24",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 44.38,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-04-24",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 26.21,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-04-27",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 10.6,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-04-27",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 39.35,
+     "amount": 22.98,
      "src": "示範",
      "fixed": false
     }
@@ -1098,57 +1114,105 @@ window.EXPENSE_DATA = {
     },
     {
      "date": "2026-05-02",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 5.5,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-02",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 13.39,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-03",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 20.58,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-06",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 10.76,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-07",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 35.98,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-08",
      "desc": "外食",
      "cat": "生活費",
-     "amount": 55.73,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-05-04",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 24.38,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-05-05",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 130.93,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-05-06",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 24.7,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-05-06",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 64.14,
+     "amount": 17.91,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-05-09",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 3.06,
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 11.41,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-05-11",
-     "desc": "超市",
+     "date": "2026-05-09",
+     "desc": "咖啡",
      "cat": "生活費",
-     "amount": 27.42,
+     "amount": 6.46,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-10",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 26.73,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-12",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 4.18,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-12",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 52.8,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-12",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 22.11,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-13",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 6.51,
      "src": "示範",
      "fixed": false
     },
@@ -1156,71 +1220,71 @@ window.EXPENSE_DATA = {
      "date": "2026-05-13",
      "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 27.96,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-05-15",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 15.15,
+     "amount": 22.74,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-05-16",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 54.9,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-05-16",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 44.28,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-05-16",
-     "desc": "外食",
+     "desc": "咖啡",
      "cat": "生活費",
-     "amount": 19.73,
+     "amount": 7.35,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-05-19",
-     "desc": "書店",
+     "date": "2026-05-17",
+     "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 44.09,
+     "amount": 140.9,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-18",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 108.65,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-05-20",
-     "desc": "超市",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 42.84,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-21",
+     "desc": "交通",
      "cat": "生活費",
-     "amount": 26.52,
+     "amount": 22.92,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-05-22",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 57.01,
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 54.03,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-22",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 36.53,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-05-23",
-     "desc": "外食",
+     "desc": "咖啡",
      "cat": "生活費",
-     "amount": 21.47,
+     "amount": 6.7,
      "src": "示範",
      "fixed": false
     },
@@ -1228,15 +1292,55 @@ window.EXPENSE_DATA = {
      "date": "2026-05-24",
      "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 30.36,
+     "amount": 41.59,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-24",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 4.03,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-24",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 24.11,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-24",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 16.08,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-24",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 60.79,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-05-25",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 17.31,
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 37.42,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-05-26",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 12.21,
      "src": "示範",
      "fixed": false
     }
@@ -1304,34 +1408,10 @@ window.EXPENSE_DATA = {
      "fixed": true
     },
     {
-     "date": "2026-06-02",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 64.5,
-     "src": "示範",
-     "fixed": false
-    },
-    {
      "date": "2026-06-03",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 132.99,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-04",
      "desc": "外食",
      "cat": "生活費",
-     "amount": 20.56,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-04",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 43.2,
+     "amount": 45.41,
      "src": "示範",
      "fixed": false
     },
@@ -1339,167 +1419,151 @@ window.EXPENSE_DATA = {
      "date": "2026-06-05",
      "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 54.98,
+     "amount": 116.01,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-06-05",
-     "desc": "超市",
+     "desc": "交通",
      "cat": "生活費",
-     "amount": 33.39,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-06",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 25.52,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-06",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 28.03,
+     "amount": 7.42,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-06-07",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 19.81,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-07",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 54.3,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-08",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 22.36,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-08",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 4.56,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-08",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 23.48,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-08",
      "desc": "咖啡",
      "cat": "生活費",
-     "amount": 6.66,
+     "amount": 8.16,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-06-08",
-     "desc": "外食",
+     "date": "2026-06-14",
+     "desc": "咖啡",
      "cat": "生活費",
-     "amount": 13.2,
+     "amount": 7.88,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-06-08",
-     "desc": "交通",
+     "date": "2026-06-14",
+     "desc": "咖啡",
      "cat": "生活費",
-     "amount": 13.45,
+     "amount": 4.15,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-06-10",
-     "desc": "交通",
+     "date": "2026-06-15",
+     "desc": "超市",
      "cat": "生活費",
-     "amount": 23.93,
+     "amount": 49.39,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-06-12",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 92.67,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-18",
+     "date": "2026-06-16",
      "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 43.11,
+     "amount": 23.36,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-17",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 37.0,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-06-19",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 72.23,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-21",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 32.35,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-21",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 33.92,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-24",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 15.23,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-24",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 52.55,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-06-27",
      "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 21.02,
+     "amount": 10.56,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-20",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 7.31,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-20",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 18.62,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-20",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 79.5,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-20",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 5.49,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-21",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 80.81,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-21",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 126.83,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-22",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 4.16,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-22",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 21.03,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-23",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 103.64,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-06-25",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 29.22,
      "src": "示範",
      "fixed": false
     }
@@ -1567,114 +1631,66 @@ window.EXPENSE_DATA = {
      "fixed": true
     },
     {
-     "date": "2026-07-02",
-     "desc": "咖啡",
-     "cat": "生活費",
-     "amount": 5.53,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-03",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 46.78,
+     "date": "2026-07-05",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 81.95,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-07-05",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 53.73,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-05",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 16.48,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-06",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 75.06,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-08",
-     "desc": "電影",
+     "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 29.69,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-08",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 19.82,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-09",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 4.2,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-11",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 36.37,
+     "amount": 69.69,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-07-12",
-     "desc": "書店",
+     "desc": "電影",
      "cat": "購物娛樂其他",
-     "amount": 15.47,
+     "amount": 20.33,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-07-12",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 19.12,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-07-12",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 57.29,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-07-13",
-     "desc": "咖啡",
-     "cat": "生活費",
-     "amount": 7.7,
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 14.5,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-07-13",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 37.35,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-07-14",
-     "desc": "咖啡",
-     "cat": "生活費",
-     "amount": 4.86,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-14",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 89.01,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-15",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 35.18,
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 114.94,
      "src": "示範",
      "fixed": false
     },
@@ -1682,87 +1698,95 @@ window.EXPENSE_DATA = {
      "date": "2026-07-15",
      "desc": "機票",
      "cat": "旅行",
-     "amount": 849.16,
+     "amount": 606.83,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-07-16",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 86.42,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-16",
-     "desc": "電影",
+     "date": "2026-07-18",
+     "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 29.36,
+     "amount": 60.35,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-07-16",
+     "date": "2026-07-18",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 33.01,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-07-18",
      "desc": "咖啡",
      "cat": "生活費",
-     "amount": 6.66,
+     "amount": 8.05,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-07-16",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 4.47,
+     "date": "2026-07-19",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 13.12,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-07-17",
-     "desc": "超市",
+     "date": "2026-07-19",
+     "desc": "咖啡",
      "cat": "生活費",
-     "amount": 64.13,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-17",
-     "desc": "超市",
-     "cat": "生活費",
-     "amount": 78.62,
+     "amount": 8.28,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-07-22",
-     "desc": "電影",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 47.14,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-07-22",
+     "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 13.47,
+     "amount": 42.65,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-07-22",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 26.09,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-07-23",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 25.45,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-07-24",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 17.68,
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 32.19,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-07-26",
-     "desc": "電影",
+     "desc": "書店",
      "cat": "購物娛樂其他",
-     "amount": 20.85,
+     "amount": 27.64,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-07-27",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 15.48,
      "src": "示範",
      "fixed": false
     }
@@ -1831,134 +1855,86 @@ window.EXPENSE_DATA = {
     },
     {
      "date": "2026-08-03",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 119.16,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-03",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 77.63,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-03",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 130.63,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-03",
-     "desc": "交通",
+     "desc": "超市",
      "cat": "生活費",
-     "amount": 6.74,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-05",
-     "desc": "購物",
-     "cat": "購物娛樂其他",
-     "amount": 100.54,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-05",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 16.21,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-05",
-     "desc": "交通",
-     "cat": "生活費",
-     "amount": 19.72,
+     "amount": 33.77,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-08-06",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 39.05,
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 7.54,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-08-06",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 11.01,
+     "date": "2026-08-07",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 4.43,
      "src": "示範",
      "fixed": false
     },
     {
      "date": "2026-08-08",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 27.35,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-20",
-     "desc": "咖啡",
-     "cat": "生活費",
-     "amount": 7.01,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-23",
-     "desc": "外食",
-     "cat": "生活費",
-     "amount": 21.23,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-23",
-     "desc": "書店",
-     "cat": "購物娛樂其他",
-     "amount": 44.59,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-24",
-     "desc": "電影",
-     "cat": "購物娛樂其他",
-     "amount": 11.13,
-     "src": "示範",
-     "fixed": false
-    },
-    {
-     "date": "2026-08-25",
      "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 83.27,
+     "amount": 98.64,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-08-25",
-     "desc": "外食",
+     "date": "2026-08-08",
+     "desc": "超市",
      "cat": "生活費",
-     "amount": 34.23,
+     "amount": 77.36,
      "src": "示範",
      "fixed": false
     },
     {
-     "date": "2026-08-26",
+     "date": "2026-08-09",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 41.71,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-10",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 5.62,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-11",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 56.34,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-13",
+     "desc": "購物",
+     "cat": "購物娛樂其他",
+     "amount": 59.57,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-13",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 33.75,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-14",
      "desc": "電影",
      "cat": "購物娛樂其他",
      "amount": 18.02,
@@ -1966,10 +1942,90 @@ window.EXPENSE_DATA = {
      "fixed": false
     },
     {
-     "date": "2026-08-27",
+     "date": "2026-08-14",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 26.14,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-17",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 43.63,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-17",
      "desc": "購物",
      "cat": "購物娛樂其他",
-     "amount": 122.17,
+     "amount": 73.37,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-17",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 44.55,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-18",
+     "desc": "書店",
+     "cat": "購物娛樂其他",
+     "amount": 40.44,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-22",
+     "desc": "咖啡",
+     "cat": "生活費",
+     "amount": 5.54,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-22",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 19.13,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-23",
+     "desc": "超市",
+     "cat": "生活費",
+     "amount": 73.83,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-23",
+     "desc": "交通",
+     "cat": "生活費",
+     "amount": 14.16,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-24",
+     "desc": "外食",
+     "cat": "生活費",
+     "amount": 55.41,
+     "src": "示範",
+     "fixed": false
+    },
+    {
+     "date": "2026-08-27",
+     "desc": "電影",
+     "cat": "購物娛樂其他",
+     "amount": 27.18,
      "src": "示範",
      "fixed": false
     }
