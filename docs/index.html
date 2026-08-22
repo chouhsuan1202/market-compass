@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Market Compass</title>
+<title>Market Compass Beta</title>
 <!-- 加到 iPhone 主畫面用:全螢幕、自己的圖示、不出現 Safari 網址列 -->
 <meta name="theme-color" content="#eef0f4">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1287,7 +1287,7 @@
     .dm-stats .k{font-size:11px;color:var(--faint);}
     .dm-stats .v{font-family:var(--num);font-size:13.5px;font-weight:700;
       font-variant-numeric:tabular-nums;}
-    /* 借款比例:跟 IBKR 敞口收在同一張卡 */
+    /* 借款比例:跟 券商 敞口收在同一張卡 */
     .dm-brw{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:12px;}
     .dm-brw .l{font-size:12.5px;color:var(--muted);white-space:nowrap;}
     .dm-brw .l b{font-family:var(--num);font-size:17px;color:var(--ink);margin-left:4px;}
@@ -1701,7 +1701,7 @@
  <div class="shell">
   <header>
     <div class="brandcol">
-      <h1>Market Compass</h1>
+      <h1>Market Compass Beta</h1>
       <div class="sub"><span id="datadate">—</span> 更新</div>
     </div>
     <!-- 兩面板切換:股票面板 / 槓桿風險。槓桿資料是本機檔,線上讀不到就整組隱藏 -->
@@ -1756,7 +1756,7 @@
   <div id="assetPanel" hidden></div>
   <div id="expensePanel" hidden></div>
 
-  <footer>Market Compass · 示範資料</footer>
+  <footer>Market Compass Beta · 示範資料</footer>
   </div>
 </div>
 
@@ -1835,8 +1835,8 @@ function interpret(r){
 }
 
 /* ---------- macro tab ---------- */
-// 大盤分頁最頂的「持有大卡」（全寬,可點開彈窗）。SXRV、SEC0 等歐元 ETF 都用這個。
-const BIG_HOLD_CARDS = ["SXRV.DE", "SEC0.DE", "SXR8.DE", "LQQ.PA"];   // 依序渲染在大盤分頁最頂
+// 大盤分頁最頂的「持有大卡」（全寬,可點開彈窗）。歐元 ETF 都用這個。
+const BIG_HOLD_CARDS = ["IWDA.AS", "VWCE.DE", "EMIM.AS", "XDWT.DE"];   // 依序渲染在大盤分頁最頂
 function bigHoldCard(sym){
   const r=DATA[sym];
   const e=(typeof wlEntry==="function")?wlEntry(sym):{s:sym};
@@ -2007,33 +2007,31 @@ function indexCard(sym){
     ${ipHtml}
   </div>`;
 }
-/* 何星檔位表:NDX 距高點回落越深,目標水位越高。基準水位自己調這裡 */
+/* 檔位表:NDX 距高點回落越深,目標水位越高。基準水位自己調這裡 */
 const LADDER_BASE = 1.3;                       // 平常站的基準倍率
 const LADDER = [ {dd:30, lev:2.0}, {dd:22.5, lev:1.75}, {dd:15, lev:1.5} ];  // 回落 % 由深到淺
 const LADDER_EPS = 0.05;                       // 實際與目標差距在這個範圍內就算「到位」
-/* IBKR EUR margin 年利率(基準 2.203% + 1.5%,LYNX 對照表 2026-08-12)。利率變了改這裡 */
+/* 券商 EUR margin 年利率(基準 2.203% + 1.5%,LYNX 對照表 2026-08-12)。利率變了改這裡 */
 const RK_MARGIN_RATE = 0.037;
-/* 手機槓桿頁的展開狀態(設計稿 2026-08-17):IBKR 帳戶明細,預設收起 */
+/* 手機槓桿頁的展開狀態(設計稿 2026-08-17):券商 帳戶明細,預設收起 */
 let RK_IBOPEN=false;
 /* 槓桿風險頁最下面的備註:我的 to-do。內容跟 Notion「三師開槓紀錄」同步,改這個陣列就好 */
-const RK_TODO_DATE = "2026-08-21";
-/* 手寫待辦。要加就往這個陣列塞 {title, body},會自動接在自動待辦後面繼續編號。
-   body 吃 HTML,可以用 <b>。
-   2026-08-19 清掉的四條(CL2 補到 1.0 倍 / BUX 搬進 IB / 問元大能不能下單正二 / 查李鳳蘭特傷保單)
-   在 Notion 三師開槓紀錄那頁還留著。 */
+const RK_TODO_DATE = "2026-08-22";
+/* 示範用的待辦。要加就往這個陣列塞 {title, body},會自動接在自動待辦後面繼續編號。
+   body 吃 HTML,可以用 <b>。這份是公開示範版,內容全部是編的。 */
 const RK_TODO = [
-  { title:"週一 7:40 到 8:30 買 006208 零股 450 股",
-    body:`零股不收預約單,只能當場下。盤後零股的時間是台北 13:40 到 14:30,`
-      +`換算就是你的早上 7:40 到 8:30。<br>`
-      +`元大 app → 交易 → 下單 → 006208 → 右上切「零股」→ 交易型態選「盤後零股」`
-      +`→ 股數 450 → 價格按「漲」→ 零股買進。` },
-  { title:"下次加正二買 DBPG",
-    body:`ISIN <b>LU0411078552</b>,Xetra 歐元。`
-      +`原因:LQQ 和 CL2 都是 Amundi,同一家發行商。DBPG 是 Xtrackers 的,分散開。` },
-  { title:"11 月底做 Desktop Taxatie,估值到 €410k 就增貸",
-    body:`Desktop Taxatie €110,報告銀行只認 6 個月內的,所以年底再做。`
-      +`估值 ≥ €410k → 增貸 <b>€36k</b> 進 IB 買正二,全帳戶 0.9 → 1.3 倍。`
-      +`月付 €365(4.04%,10 年),Ruling 到期後每月剩 €1,019 扣完還有 €654。沒到就繼續等。` },
+  { title:"每月 1 號對一次帳",
+    body:`打開「支出」分頁,把上個月的每一筆對過。`
+      +`固定帳單金額有變就改 <b>expense-data.js</b>,不然預算線會不準。` },
+  { title:"跌破年線的先不要加碼",
+    body:`「股票面板」裡年線那一格變紅的,先放著觀察。`
+      +`站回年線再進場,這條規則寫死不看心情。` },
+  { title:"曝險超過 1.3 倍就停止買進",
+    body:`看「槓桿風險」最上面那個數字。`
+      +`超過就把多出來的兩倍 ETF 賣回原型,回到基準再說。` },
+  { title:"把持股換成自己的",
+    body:`改 <b>asset-portfolio.json</b> 的股數與代號,`
+      +`再改 <b>asset-balances.json</b> 的現金與房貸,畫面就會跟著變。` },
 ];
 /* To-Do 勾選:勾了只畫刪除線,不會刪掉任何一條,所以不會誤刪。
    狀態存在 localStorage,key 是標題文字。自動待辦的標題會跟著資料變(例如「今日可加碼 6 檔」),
@@ -2053,8 +2051,8 @@ function fmtLev(v){ return (Math.round(v*100)%10===0)?v.toFixed(1):v.toFixed(2);
 
 /* NDX 距高點回落 %:高點取歷史序列裡的最高收盤。序列只回看約兩年,
    所以嚴格說是「資料窗內高點」,不是歷史最高點。
-   指數本身沒有 hist 時(舊 data.json)退回 NDX ETF SXRV.DE 的序列,並標明來源。 */
-const NDX_HIST_PROXY = "SXRV.DE";
+   指數本身沒有 hist 時(舊 data.json)退回全球型 ETF 的序列,並標明來源。 */
+const NDX_HIST_PROXY = "IWDA.AS";
 function ndxDrawdown(){
   // DATA 是 let 宣告的,不能用 window.DATA 判斷(永遠 undefined,檔位會整組失效)
   if(typeof DATA==="undefined"||!DATA) return null;
@@ -2072,12 +2070,12 @@ function ladderTarget(dd){
   return hit?hit.lev:LADDER_BASE;
 }
 /* 全帳戶槓桿口徑(asset_build.py 算好放在 ASSET_DATA.leverage):
-   元大 + BUX + IB + 加密全算,股數沒更新就視為不變,價格每天自動重抓。沒有就回 null。 */
+   所有帳戶加起來算,股數沒更新就視為不變,價格每天自動重抓。沒有就回 null。 */
 function hhLev(){
   const L=window.ASSET_DATA&&ASSET_DATA.leverage;
   return (L&&L.lev!=null&&L.liquid>0)?L:null;
 }
-/* 目前實際倍率:優先用全帳戶口徑;沒有資產資料才退回 IBKR 帳戶的敞口(rkNorm + rkExpo)。 */
+/* 目前實際倍率:優先用全帳戶口徑;沒有資產資料才退回 券商 帳戶的敞口(rkNorm + rkExpo)。 */
 function actualLeverage(){
   const hh=hhLev(); if(hh) return hh.lev;
   const s=rkSnaps()[0]; if(!s) return null;
@@ -2118,21 +2116,20 @@ function renderMacro(){
        aria-pressed="${cur===kind}">${label}<span class="fn">${n}</span></button>`;
   const bar=`<div class="filterbar" role="group" aria-label="區域篩選">
     ${btn("all","全部",eu.length+tw.length)}
-    ${btn("eu","歐洲大盤",eu.length)}
-    ${btn("tw","台灣大盤",tw.length)}
+    ${tw.length?btn("eu","歐洲大盤",eu.length)+btn("tw","台灣大盤",tw.length):""}
   </div>`;
   // 手機版:兩個分區收在同一張清單卡裡,分區標題印在卡內(設計稿 1a)
   if(isMobile()){
     const sortByRank=list=>list.map((h,i)=>({h,i}))
       .sort((a,b)=>(rank(a.h)-rank(b.h))||(a.i-b.i)).map(x=>x.h);
     const groups=[];
-    if(cur!=="tw") groups.push({label:"歐洲大盤", list:sortByRank(eu)});
-    if(cur!=="eu") groups.push({label:"台灣大盤", list:sortByRank(tw)});
+    if(cur!=="tw") groups.push({label:"大盤 ETF", list:sortByRank(eu)});
+    if(cur!=="eu"&&tw.length) groups.push({label:"台灣大盤", list:sortByRank(tw)});
     document.getElementById("macro").innerHTML = bar + mListHtml(groups);
     return;
   }
-  const euBlk=`<div class="blk"><h2>歐洲大盤</h2>${blistHtml(cardsOf(eu))}</div>`;
-  const twBlk=`<div class="blk"><h2>台灣大盤</h2>${blistHtml(cardsOf(tw))}</div>`;
+  const euBlk=`<div class="blk"><h2>大盤 ETF</h2>${blistHtml(cardsOf(eu))}</div>`;
+  const twBlk=tw.length?`<div class="blk"><h2>台灣大盤</h2>${blistHtml(cardsOf(tw))}</div>`:"";
   // NDX 檔位已整合進頂部訊號卡(vixNdxLine / mPulseTop);指數卡不顯示,NDX/VIX 數據仍供檔位判斷用
   document.getElementById("macro").innerHTML =
     bar + (cur==="tw"?"":euBlk) + (cur==="eu"?"":twBlk);
@@ -2330,8 +2327,8 @@ function rulesHtml(){
     <div class="rh">二、大盤跌多深,槓桿站多高</div>
     <table>
       ${ladderRows}
-      ${r("怎麼換",`賣掉原型 ETF 換成正二(00631L)。要換多少 =(目標倍率 − 現在倍率)× 流動資產;用新現金買則減半`)}
-      ${r("錢從哪來",`先賣大盤原型,再賣台積電,最後才動 IB 借款`)}
+      ${r("怎麼換",`賣掉原型 ETF 換成兩倍 ETF。要換多少 =(目標倍率 − 現在倍率)× 流動資產;用新現金買則減半`)}
+      ${r("錢從哪來",`先賣大盤原型,再賣個股,最後才動融資借款`)}
     </table>
     <div class="rh">三、看板上的字</div>
     <table>
@@ -2362,7 +2359,7 @@ function mPulseCells(){
     {k:"NDX 距高點", v:L?`-${L.dd.toFixed(1)}%`:"—", tag:"", tagColor:"",
       sub:L?(L.proxy?`高點取自 ${NDX_HIST_PROXY} 序列`:"資料窗內高點"):"歷史序列尚未產生"},
     {k:"目標檔位", v:L?`${fmtLev(L.target)}x`:"—", tag:"", tagColor:"",
-      sub:(L&&L.act!=null)?`實際 ${fmtLev(L.act)}x · ${L.gapTxt}`:"依何星檔位表"},
+      sub:(L&&L.act!=null)?`實際 ${fmtLev(L.act)}x · ${L.gapTxt}`:"依檔位表"},
     {k:"現金", v:(hh&&hh.cashPct!=null)?`${hh.cashPct.toFixed(0)}%`:"—", tag:"", tagColor:"",
       sub:"還沒進場的錢"},
   ];
@@ -2551,7 +2548,7 @@ function renderStocks(){
 let CHAINF="全部";
 
 /* 一段(上游/中游/下游)的體檢數字。
-   代號跨子分組去重(例:MRVL 同時在晶片設計與光通訊,只算一次),
+   代號跨子分組去重(同一檔出現在兩個子分組時只算一次),
    DATA 沒資料或 error 的略過,分母用實際有資料的支數。
    今日漲跌沿用大卡的算法(hist 末兩筆收盤),vs 年線用 mas 裡 k=240 的 diff,不自己重算均線。 */
 function chainStats(seg){
@@ -2722,18 +2719,18 @@ function autoTodos(){
     const money=Math.round((1-L.act)*liq/1000);
     head=`先把曝險補到 1.0 倍`;
     body=`全資產口徑,現在 ${fmtLev(L.act)} 倍,差約 <b>${money}K</b> 曝險。`
-      +`路線:IB 融資買 CL2(兩倍,每 1 塊算 2 塊,約需 <b>${(money/2).toFixed(1)}K</b>)。`
-      +`元大目前不能下單台股正二,所以走 IB。IB 借款要守在淨值 40% 以內,天花板約 1.05 倍。`
+      +`路線:用融資買兩倍 ETF(每 1 塊算 2 塊,約需 <b>${(money/2).toFixed(1)}K</b>)。`
+      +`融資借款守在淨值 40% 以內,天花板約 1.05 倍。`
       +`滿倉之後才用小回檔往基準 ${fmtLev(LADDER_BASE)} 爬,大跌照檔位表。`;
   }else if(L.gap>0.02){
     // 檔位未到位:要補倉
     const money=Math.round(L.gap*liq/1000);
     head=`把槓桿補到 ${fmtLev(L.target)} 倍`;
     body=`大盤距高點 -${L.dd.toFixed(1)}%,目標 ${fmtLev(L.target)} 倍,現在 ${fmtLev(L.act)} 倍。`
-      +`買 <b>約 ${money}K</b> 的正二(00631L),或等值原型換過去。`;
+      +`買 <b>約 ${money}K</b> 的兩倍 ETF,或等值原型換過去。`;
   }else if(L.gap<-0.02){
     head=`收回到基準 ${fmtLev(LADDER_BASE)} 倍`;
-    body=`現在 ${fmtLev(L.act)} 倍,超出基準。把超出的正二賣回原型。`;
+    body=`現在 ${fmtLev(L.act)} 倍,超出基準。把超出的兩倍 ETF 賣回原型。`;
   }else{
     head=`維持現在的 ${fmtLev(L.act)} 倍`;
     body=nextStep
@@ -2832,25 +2829,19 @@ function renderTopStrip(){
 /* IB 帳戶內的借款紅線:2026-08-19 從 20% 放寬到 40%。
    理由:正2 只能在 IB 買,槓桿全壓這一個帳戶,而 IB 淨值只佔全帳戶不到兩成,
    20% 會在總曝險還不到 1.0x 就卡住。危險區維持 50%。
-   Ivan 的「借款不超過總資產 20%」是另一條(分母是總資產),沒有改,在總曝險卡上。 */
+   「借款不超過總資產 20%」是另一條(分母是總資產),沒有改,在總曝險卡上。 */
 const RK_LIMIT={safeMax:.4, watchMax:.5};
-const RK_SEG={"4GLD":"#e0a132","LQQ":"#d16ba5","SECO":"#1d6fd8","SEC0":"#1d6fd8","SXR8":"#12a670","SXRV":"#d95f18",
-  "台積電":"#d95f18","元大台灣50":"#12a670","富邦台50":"#1d6fd8","元大S&P500":"#7c5cd6","元大高股息":"#e0a132"};
-/* 元大持倉:資料來自 ASSET_DATA(每天自動重算),整理成跟 IBKR 快照一樣的欄位,
-   兩張卡才能共用同一個渲染函式。元大目前全是原型(1x),沒有融資。 */
-const IB_SYM={"4GLD":"4GLD.DE","CL2":"CL2.PA","LQQ":"LQQ.PA","SEC0":"SEC0.DE","SECO":"SEC0.DE",
-  "SXR8":"SXR8.DE","SXRV":"SXRV.DE"};
+const RK_SEG={"IWDA":"#12a670","VWCE":"#1d6fd8","SGLD":"#e0a132","LVE":"#d16ba5","EMIM":"#7c5cd6","XDWT":"#d95f18"};
+/* 券商 B持倉:資料來自 ASSET_DATA(每天自動重算),整理成跟 券商 快照一樣的欄位,
+   兩張卡才能共用同一個渲染函式。券商 B目前全是原型(1x),沒有融資。 */
+const IB_SYM={"IWDA":"IWDA.AS","VWCE":"VWCE.DE","SGLD":"SGLD.AS","LVE":"LVE.PA"};
 const YUANTA_META={
-  "2330.TW":{name:"台積電",ticker:"台積電 2330"},
-  "0050.TW":{name:"元大台灣50",ticker:"0050"},
-  "006208.TW":{name:"富邦台50",ticker:"006208"},
-  "00646.TW":{name:"元大S&P500",ticker:"00646"},
-  "0056.TW":{name:"元大高股息",ticker:"0056"},
-  "00631L.TW":{name:"元大台灣50正2",ticker:"00631L",lev:2},
+  "EMIM.AS":{name:"新興市場",ticker:"EMIM"},
+  "XDWT.DE":{name:"全球科技",ticker:"XDWT"},
 };
 /* 個股(2026-08-20 定案):
-   個股卡從資產分析搬到槓桿風險最下面。搬去 IB 的個股(NVDA / GOOGL)算在這張,
-   不算進「持倉曝險配置 · IB」,因為那張卡他是拿來看 ETF 的。元大的台積電同理。 */
+   個股卡從資產分析搬到槓桿風險最下面。放在有融資那個帳戶裡的個股也算在這張,
+   不算進「持倉曝險配置 · IB」,因為那張卡是拿來看 ETF 的。 */
 function stockBlock(){
   const A=window.ASSET_DATA;
   return (A&&A.holdings&&A.holdings.find(h=>h.title.indexOf("個股")>=0))||null;
@@ -2859,7 +2850,7 @@ function stockSymSet(){
   const b=stockBlock();
   return new Set(b?b.rows.map(r=>r.sym).filter(Boolean):[]);
 }
-/* 一筆券商持倉是不是個股。快照只有簡稱(NVDA / SXR8),先用 IB_SYM 對回 Yahoo 代號 */
+/* 一筆券商持倉是不是個股。快照只有簡稱(IWDA / VWCE),先用 IB_SYM 對回 Yahoo 代號 */
 function isStockHold(h,set){
   const nm=String(h.name||"").toUpperCase();
   const sym=h.sym||IB_SYM[nm]||nm;
@@ -2896,7 +2887,7 @@ function rkExpo(s){
 function rkStress(s){
   const gross=s.gross, mm=+s.maintenance_margin||0, el=+s.excess_liquidity||0, net=s.net, loan=Math.max(s.loan,0);
   return {
-    marginCallDrop: gross>mm&&el>0 ? el/(gross-mm) : null,        // 距 IBKR 追繳
+    marginCallDrop: gross>mm&&el>0 ? el/(gross-mm) : null,        // 距券商追繳
     breachDrop: loan>0&&gross>0 ? (net-loan/RK_LIMIT.safeMax)/gross : null, // 碰 40% 警戒
     cushionRatio: net>0 ? el/net : null,                         // 強平安全墊
     cashBuffer: net>0 ? s.cash/net : null,                       // 現金緩衝
@@ -2911,7 +2902,7 @@ function rkRel(t){
   if(min<1) return "剛剛"; if(min<60) return min+" 分鐘前";
   const h=Math.floor(min/60); if(h<24) return h+" 小時前"; return Math.floor(h/24)+" 天前";
 }
-/* 正二與原型的比例。Ivan 的硬規則:原型市值要大於正二,也就是「正二占原型」不超過 100%。 */
+/* 正二與原型的比例。硬規則:原型市值要大於正二,也就是「正二占原型」不超過 100%。 */
 function levMix(list){
   let two=0, one=0;
   (list||[]).forEach(h=>{ const mv=+h.market_value||0; if((+h.leverage||1)>1) two+=mv; else one+=mv; });
@@ -2921,12 +2912,12 @@ function levMixHtml(list, empty){
   const m=levMix(list);
   if(!m.two) return `正二占原型 <b>0%</b><span class="nt">${empty||"上限 100%"}</span>`;
   const col=m.two<=m.one?"#0b7a55":"#c2373b";
-  return `正二占原型 <b style="color:${col}">${m.pct.toFixed(0)}%</b><span class="nt">上限 100%（Ivan）</span>`;
+  return `正二占原型 <b style="color:${col}">${m.pct.toFixed(0)}%</b><span class="nt">上限 100%</span>`;
 }
 function rkBadge(kind){ return {safe:"rk-safe",watch:"rk-watch",danger:"rk-danger"}[kind]||"rk-safe"; }
 function rkBorrowKind(r){ if(r==null) return "safe"; return r<=RK_LIMIT.safeMax?"safe":r<=RK_LIMIT.watchMax?"watch":"danger"; }
 
-/* 個股卡:資料直接用 ASSET_DATA 的個股區塊(涵蓋 BUX、IB、元大三邊),
+/* 個股卡:資料直接用 ASSET_DATA 的個股區塊(涵蓋 個股帳戶、IB、券商 B三邊),
    占比是佔全帳戶流動資產。桌面分兩欄,手機單欄只列前幾檔可展開。 */
 let RK_STKOPEN=false;
 function stockCardHTML(mob){
@@ -2955,7 +2946,7 @@ function stockCardHTML(mob){
   return `<div class="rk-card">
     <div class="rk-h"><h2 style="font-size:15px">個股</h2><span class="rk-sub">${sub}</span></div>
     <div class="as-rows" style="margin-top:6px">${b.rows.map(row).join("")}</div>
-    <div class="rk-foot2">BUX、IB、元大三邊的個股都算在這裡。列可點開線圖。</div>
+    <div class="rk-foot2">所有帳戶的個股都算在這裡。列可點開線圖。</div>
   </div>`;
 }
 function renderRisk(){
@@ -2993,7 +2984,7 @@ function renderRisk(){
   const hh=hhLev();
   const hhL=ladderState();
   /* ══ 手機版 v3(2026-08-17 設計稿):
-     ①總敞口 hero ②IBKR 敞口(含借款比例與帳戶明細) ③離警戒多遠
+     ①總敞口 hero ②券商 敞口(含借款比例與帳戶明細) ③離警戒多遠
      ④持倉曝險配置 ⑤我的 To-Do。數字全部沿用同一套函式。
      檔位表規則不放在這裡,規則類內容集中在股票面板的規則彈窗(openRules)。 ══ */
   if(isMobile()){
@@ -3028,10 +3019,10 @@ function renderRisk(){
           <div><span class="k">全部資金</span><span class="v">${rkMoney(hh.liquid,"")}</span></div>
           <div><span class="k">現金</span><span class="v">${hh.cashPct!=null?hh.cashPct.toFixed(0)+"%":"—"}</span></div>
         </div>
-        <div class="rkm-src">借款佔總資產 ${(Math.max(s.loan,0)/hh.liquid*100).toFixed(1)}% · 上限 20%(Ivan)</div>
+        <div class="rkm-src">借款佔總資產 ${(Math.max(s.loan,0)/hh.liquid*100).toFixed(1)}% · 上限 20%</div>
       </div>`:"";
 
-    // ② IBKR 敞口:量表刻度 1.0x 到 3.0x(安全 1.0 到 2.0、注意 2.0 到 2.5、危險 2.5 以上)
+    // ② 券商 敞口:量表刻度 1.0x 到 3.0x(安全 1.0 到 2.0、注意 2.0 到 2.5、危險 2.5 以上)
     const EXPO_MIN=1, EXPO_MAX=3;
     const expoPct=(expo.effRatio!=null)
       ? Math.max(Math.min((expo.effRatio-EXPO_MIN)/(EXPO_MAX-EXPO_MIN)*100,100),0) : 0;
@@ -3054,7 +3045,7 @@ function renderRisk(){
     const stressRows=[
       {k:"碰到 40% 自訂警戒", v:rkPct(st.breachDrop), col:barCol[bcKind],
        w:pctW(st.breachDrop), note:"實際要盯的線", bar:true},
-      {k:"距 IBKR 追繳", v:rkPct(st.marginCallDrop), col:barCol[mcKind],
+      {k:"距券商追繳", v:rkPct(st.marginCallDrop), col:barCol[mcKind],
        w:pctW(st.marginCallDrop), note:"市場再跌這麼多", bar:true},
       {k:"現金緩衝", v:rkPct(st.cashBuffer), col:(st.cashBuffer||0)<0?"var(--dn)":"var(--up)",
        w:0, note:"現金 ÷ 帳戶淨值", bar:false},
@@ -3086,7 +3077,7 @@ function renderRisk(){
       ${heroCard}
 
       <div class="dm-card">
-        <div class="dm-hd"><span class="dm-t">IB 曝險</span>
+        <div class="dm-hd"><span class="dm-t">券商 A 曝險</span>
           <span class="dm-pill ${pillKind[bk]}">${bLbl}</span></div>
         <div class="dm-hero sm"><span class="n">${effTxt}</span><span class="x">x</span>
           <span class="side">帳面 ${expo.bookRatio!=null?expo.bookRatio.toFixed(2):"—"}x + 正二額外 ${rkPct(expo.boostRatio)} · 上限 2.0x</span></div>
@@ -3094,7 +3085,7 @@ function renderRisk(){
           <span class="z1" style="width:50%"></span><span class="z2" style="width:25%"></span><span class="z3"></span>
           <span class="fill" style="width:${expoPct}%"></span>
         </div>
-        <div class="dm-brw"><span class="l">借款佔 IB 淨值 <b>${rkPct(s.borrowRatio)}</b></span>
+        <div class="dm-brw"><span class="l">借款佔券商 A 淨值 <b>${rkPct(s.borrowRatio)}</b></span>
           <span class="r" style="color:${safeRoom>=0?"var(--up)":"var(--dn)"}">離安全線 ${rkMoney(Math.abs(safeRoom),cur)}</span></div>
         <!-- 借款量表 0 到 50%:40% 安全線落在 80% 的位置 -->
         <div class="dm-bbar">
@@ -3104,7 +3095,7 @@ function renderRisk(){
           ${ibStop!=null?`<span class="tick ib" style="left:${ibStop}%"></span>`:""}
         </div>
         <div class="dm-blbl"><span><b>40%</b> 我的線 · ${rkMoney(safeAmt,"")}</span>
-          ${ibStop!=null?`<span style="color:#c2373b"><b>IB 追繳</b> ${rkMoney(ibLoanMax,"")}</span>`:""}</div>
+          ${ibStop!=null?`<span style="color:#c2373b"><b>券商追繳</b> ${rkMoney(ibLoanMax,"")}</span>`:""}</div>
         <button class="dm-btn" id="rkIbToggle">${RK_IBOPEN?"收起帳戶明細 ▲":"帳戶明細:市值 · 淨值 · 借款 · 利率 ▾"}</button>
         ${RK_IBOPEN?`<div class="dm-open">${ibKv}${ibNote}</div>`:""}
       </div>
@@ -3125,14 +3116,14 @@ function renderRisk(){
 
       <div class="dm-card c2">
         <div class="dm-hd bl"><span class="dm-t">我的 To-Do</span>
-          <span class="dm-link">Notion 同步 · ${RK_TODO_DATE} ↗</span></div>
+          <span class="dm-link">示範清單 · ${RK_TODO_DATE} ↗</span></div>
         ${todoRows}
         <div class="dm-todofoot"><span>已完成 ${todoCount().done} / ${todoCount().all}　點一下打勾,只存這台裝置</span>
           ${todoCount().done?`<button id="rkTodoClear">清除勾選</button>`:""}</div>
       </div>
 
       ${stockCardHTML(true)}
-      <div class="dm-disc">40% 規則是風險緩衝,不是保證不會被追繳。資料由 IBKR 連線讀值,只存在登入閘後面,不公開。</div>`;
+      <div class="dm-disc">40% 規則是風險緩衝,不是保證不會被追繳。這是公開示範版,所有數字都是編的。</div>`;
     return;
   }
   // 持倉表格
@@ -3155,7 +3146,7 @@ function renderRisk(){
   const allocTbl=`<table class="rk-tbl alloc">
     <thead><tr><th>標的</th><th>市值</th><th>占比</th><th>槓桿</th><th>等效曝險</th></tr></thead>
     <tbody>${rows}</tbody></table>`;
-  /* 持倉卡(桌面):IB 與元大共用同一個版型。unit 是金額單位,foot 是卡片底部那行字。 */
+  /* 持倉卡(桌面):IB 與券商 B共用同一個版型。unit 是金額單位,foot 是卡片底部那行字。 */
   function allocCard(title,sub,list,unit,foot,mix){
     // 依「等效曝險」由大到小排(市值 x 槓桿),正二會被放大,所以排序跟市值不一定一樣。
     // 上面的色條與下面的表用同一份順序,兩者才對得起來。
@@ -3195,7 +3186,7 @@ function renderRisk(){
   }
   el.innerHTML=`
     <div class="rk-h" style="padding:0 2px">
-      <h2>槓桿風險</h2><span class="rk-sub">IBKR 讀值 · ${rkRel(s.updated_at)}</span></div>
+      <h2>槓桿風險</h2><span class="rk-sub">示範讀值 · ${rkRel(s.updated_at)}</span></div>
 
     <div class="rk-strip">
       <span class="k">風險狀態</span><span class="rk-pill ${rkBadge(bk)}">${bLbl}</span>
@@ -3208,12 +3199,12 @@ function renderRisk(){
     <div class="rk-card rk-main">
       <div class="rk-main-left">
         <div class="rk-hero-row">
-          <div><div class="k" style="font-size:11.5px;color:var(--faint)">IB 曝險</div>
+          <div><div class="k" style="font-size:11.5px;color:var(--faint)">券商 A 曝險</div>
             <div class="rk-expo" style="margin-top:8px">${expo.effRatio!=null?expo.effRatio.toFixed(2)+"x":"—"}</div>
             <div class="rk-expo-note">帳面 <b>${expo.bookRatio!=null?expo.bookRatio.toFixed(2)+"x":"—"}</b>　正二額外 <b>${rkPct(expo.boostRatio)}</b></div></div>
           ${hh?`<div><div class="k" style="font-size:11.5px;color:var(--faint)">全帳戶總曝險</div>
             <div class="rk-expo" style="margin-top:8px">${hh.lev.toFixed(2)}x</div>
-            <div class="rk-expo-note">借款佔總資產 <b>${(Math.max(s.loan,0)/hh.liquid*100).toFixed(1)}%</b> · 上限 20%（Ivan）</div></div>`:""}
+            <div class="rk-expo-note">借款佔總資產 <b>${(Math.max(s.loan,0)/hh.liquid*100).toFixed(1)}%</b> · 上限 20%</div></div>`:""}
         </div>
         <div class="rk-kv">
           <div><div class="kk">持倉市值</div><div class="vv">${rkMoney(s.gross,"")}</div></div>
@@ -3223,7 +3214,7 @@ function renderRisk(){
         </div>
         <div class="rk-gauge-wrap">
           <div class="rk-gauge-top">
-            <div class="g-l"><span style="font-size:14px;font-weight:700">借款佔 IB 淨值</span><b>${rkPct(s.borrowRatio)}</b><span style="font-size:12px;color:var(--faint)">上面那個 6.8% 是佔全帳戶,分母不一樣</span></div>
+            <div class="g-l"><span style="font-size:14px;font-weight:700">借款佔券商 A 淨值</span><b>${rkPct(s.borrowRatio)}</b><span style="font-size:12px;color:var(--faint)">上面那個 6.8% 是佔全帳戶,分母不一樣</span></div>
             <div class="g-r">離 40% 安全線${safeRoom>=0?"還有":"已超出"} <b>${rkMoney(Math.abs(safeRoom),cur)}</b></div>
           </div>
           <div class="rk-mark"><div class="m" style="left:${Math.min(fillPct,100)}%;color:#0b7a55">
@@ -3240,7 +3231,7 @@ function renderRisk(){
             <div class="m" style="left:${safeStop}%;color:#3f4652">
               <span style="font-size:8px">▲</span><span>40% 我的線 · ${rkMoney(safeAmt,cur)}</span></div>
             ${ibStop!=null?`<div class="m" style="left:${ibStop}%;color:#c2373b">
-              <span style="font-size:8px">▲</span><span>IB 追繳 ${(ibRatio*100).toFixed(0)}% · ${rkMoney(ibLoanMax,cur)}</span></div>`:""}
+              <span style="font-size:8px">▲</span><span>券商追繳 ${(ibRatio*100).toFixed(0)}% · ${rkMoney(ibLoanMax,cur)}</span></div>`:""}
           </div>
           <div class="rk-zones">
             <span class="zt rk-safe">安全區 0–40%</span>
@@ -3248,13 +3239,13 @@ function renderRisk(){
             <span class="zt rk-danger">危險區 50%↑</span>
             <span class="zmax">刻度到 ${(gMax*100).toFixed(0)}% · ${rkMoney(s.net*gMax,cur)}</span>
           </div>
-          ${hh?`<div style="margin-top:10px;font-size:11.5px;color:var(--muted)">40% 是我自己的線，IB 那條才是真的會被強平的。</div>`:""}
+          ${hh?`<div style="margin-top:10px;font-size:11.5px;color:var(--muted)">40% 是自己設的線，券商那條才是真的會被強平的。</div>`:""}
         </div>
       </div>
       <div class="rk-main-right">
         <div class="rk-h"><h2 style="font-size:13px">下跌承受力</h2></div>
         <div class="rk-stress" style="margin-top:16px">
-          <div class="srow"><div class="st"><span class="sl">距 IBKR 追繳</span>
+          <div class="srow"><div class="st"><span class="sl">距券商追繳</span>
             <span class="sv" style="color:${barCol[mcKind]}">${rkPct(st.marginCallDrop)}</span></div>
             <div class="sbar"><i style="width:${Math.min((st.marginCallDrop||0)*100,100)}%;background:${barCol[mcKind]}"></i></div>
             </div>
@@ -3273,19 +3264,19 @@ function renderRisk(){
     </div>
 
     <div class="rk-holds">
-      ${allocCard("持倉曝險配置 · IB",cur,H_ETF,cur,
+      ${allocCard("持倉曝險配置 · 券商 A",cur,H_ETF,cur,
         `融資借款 <b>−${rkMoney(Math.max(s.loan,0),cur)}</b> · 個股列在下面那張卡`,
         levMixHtml(H_ETF))}
-      ${allocCard("持倉曝險配置 · 元大","EUR",YT_ETF,"EUR",
+      ${allocCard("持倉曝險配置 · 券商 B","EUR",YT_ETF,"EUR",
         "列可點開線圖。個股列在下面那張卡。",
-        levMixHtml(YT_ETF,"帳戶還沒開通，不能下單 00631L"))}
+        levMixHtml(YT_ETF,"這個帳戶沒有開融資"))}
     </div>
 
     ${stockCardHTML(false)}
 
     <div class="rk-card todo">
       <div class="rk-h"><h2 style="font-size:14px">我的 To-Do</h2>
-        <span class="rk-sub">跟 Notion 三師開槓紀錄 ↗ 同步 · ${RK_TODO_DATE}</span></div>
+        <span class="rk-sub">跟 示範清單 同步 · ${RK_TODO_DATE}</span></div>
       ${(()=>{const D=todoDone();
         return todoList().map((t,i)=>{const on=!!D[t.title];
           return `<div class="rk-auto${on?" done":""}" data-todo="${encodeURIComponent(t.title)}">
@@ -3296,7 +3287,7 @@ function renderRisk(){
         ${todoCount().done?`<button id="rkTodoClear">清除勾選</button>`:""}</div>
     </div>
 
-    <div class="rk-note">斷頭風險看 IB 帳戶內口徑,倍率與總量看全帳戶。金額單位 ${cur}。</div>
+    <div class="rk-note">斷頭風險看券商 A 帳戶內口徑,倍率與總量看全帳戶。金額單位 ${cur}。</div>
   `;
 }
 
@@ -3542,17 +3533,17 @@ function renderAsset(){
     const heroCard="";
 
     // ② 流動資產配置:荷蘭 vs 台灣、現金 vs 股票、投資工具
-    const nlTw=pick("荷蘭"), tool=pick("現金 vs");
+    const nlTw=pick("ETF vs"), tool=pick("資產類型");
     const cash=L.cash!=null?L.cash:0, stock=Math.max(liqVal-cash,0);
     const rows=[];
     rows.push({t:"淨資產組成", segs:[
       {name:"流動資產", value:liqVal, color:"#2f6fed"},
       {name:"房產淨值", value:prop,   color:"#d9682f"}]});
-    if(nlTw) rows.push({t:"荷蘭 vs 台灣", segs:nlTw.slices});
+    if(nlTw) rows.push({t:"ETF vs 個股", segs:nlTw.slices});
     rows.push({t:"現金 vs 股票", segs:[
       {name:"現金", value:cash, color:"#8f97a3"},
       {name:"股票", value:stock, color:"#2f6fed"}]});
-    if(tool) rows.push({t:"投資工具", segs:tool.slices.slice().sort((a,b)=>b.value-a.value)});
+    if(tool) rows.push({t:"資產類型", segs:tool.slices.slice().sort((a,b)=>b.value-a.value)});
     const miniDonut=r=>{
       const base=r.segs.reduce((a,x)=>a+x.value,0)||1;
       // 比例是這張卡的重點,做成大字放在圓餅上面,數字顏色對應扇形顏色。
@@ -3643,7 +3634,7 @@ function renderAsset(){
     </div>`;
   // 資產結構:三種切法,展開才畫甜甜圈與圖例(重用 donuts 的資料)
   const structRows=[
-    {k:"荷蘭 vs 台灣", v:S[2].value, sub:S[2].sub, di:1},
+    {k:"ETF vs 個股", v:S[2].value, sub:S[2].sub, di:1},
     {k:"現金 vs 股票", v:S[3].value, sub:S[3].sub, di:2},
     {k:"淨資產類別", v:A.donuts[0].slices.length+" 類",
      sub:A.donuts[0].slices.map(x=>x.name).join(" · "), di:0},
@@ -3711,7 +3702,7 @@ function exShell(){
 }
 
 /* ── 每月支出 dashboard ──────────────────────────────────────────────
-   資料在 expense-data.js(月結時讀 銀行 + 信用卡 後更新)。
+   資料在 expense-data.js(月結時月結時手動更新)。
    transactions = 真的花掉的錢(fixed:true 是每月固定帳單)。
    transfers = 錢只是換位置(投資、借出、帳戶之間搬錢、待確認匯款),不進總額。 */
 
@@ -4341,9 +4332,9 @@ function syncHeader(){
   }else if(isMobile()&&PANEL==="risk"){
     h1.textContent="槓桿風險";
     const t=rkSnaps().length?(rkSnaps()[0].updated_at||""):"";
-    sub.parentElement.innerHTML=`<span id="datadate">IBKR 讀值 · ${rkRel(t)}</span>`;
+    sub.parentElement.innerHTML=`<span id="datadate">示範讀值 · ${rkRel(t)}</span>`;
   }else{
-    h1.textContent="Market Compass";
+    h1.textContent="Market Compass Beta";
     // 有抓到即時報價就顯示報價時間,沒有就顯示資料檔的建置時間
     sub.parentElement.innerHTML=LIVE_AT
       ? `<span id="datadate">${LIVE_AT}</span> 即時報價`
@@ -4881,7 +4872,8 @@ function mergeLive(sym,q){
 }
 
 function fetchLive(){
-  if(location.protocol==="file:") return Promise.resolve(0);
+  // 示範版沒有報價 API,價格直接用 data.json 裡的收盤
+  return Promise.resolve(0);
   const syms=Object.keys(DATA||{}).filter(k=>k[0]!=="_"&&DATA[k]&&!DATA[k].error);
   if(!syms.length) return Promise.resolve(0);
   const jobs=[];

@@ -1,6 +1,6 @@
 {
-  "name": "Market Compass",
-  "short_name": "Compass",
+  "name": "Market Compass Beta",
+  "short_name": "Compass Beta",
   "description": "個人持股均線與槓桿風險面板",
   "lang": "zh-Hant",
   "start_url": "./",

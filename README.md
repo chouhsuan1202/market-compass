@@ -1,10 +1,10 @@
-# Market Compass
+# Market Compass Beta
 
 A personal investing dashboard in one HTML file. Open it and you see four things: which of your holdings just dropped below a moving average, how much you borrowed and how far the market can fall before the broker sells you out, where your money actually sits, and what you spent this month.
 
 **Live demo:** https://chouhsuan1202.github.io/market-compass/
 
-Every number in this repo is made up. No real account, no real position, no real transaction.
+This is the public copy, so it says **Beta** in the title bar. Every number in it is made up: the holdings, the share counts, the cash, the mortgage, the transactions. No real account, no real position, no real trade.
 
 ![Market Compass](preview.png)
 
@@ -14,14 +14,16 @@ Download the folder and open `index.html`. That is the whole setup. No build ste
 
 On a phone, add it to the home screen and it runs full screen like an app.
 
-## The four tabs
+## The tabs
 
 | Tab | The question it answers |
 |---|---|
 | Stocks | Which tickers just fell below the 5, 20, 60, 120 or 240 day average, so I can add |
 | Leverage | How much did I borrow, and how far can the market drop before I get liquidated |
-| Assets | How much do I have, split by account and by market |
+| Assets | How much do I have, split into ETFs, single stocks and everything else |
 | Spending | Where did the money go this month, and did I go over my baseline |
+
+On a wide screen Assets and Spending share one page, with Spending shown first.
 
 ## Use your own numbers
 
@@ -36,7 +38,7 @@ Edit these files and the screen follows. Nothing else to change.
 | `expense-data.js` | Every transaction for the month |
 | `watchlist.json` | Which tickers to track |
 
-`data.json` holds prices and moving averages. Refresh it daily with your own script and a quote API key. This repo ships a trimmed sample so the charts have something to draw.
+`data.json` holds prices and moving averages. Refresh it daily with your own script and a quote API. This repo ships a trimmed sample so the charts have something to draw.
 
 `asset-data.js` is computed. Do not hand edit it.
 

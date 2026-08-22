@@ -1,189 +1,140 @@
 {
  "_說明": [
-  "示範用的持倉。股數全部是編的,代號留真的才畫得出線圖。"
+  "示範用的持倉。標的與股數全部是編的,跟任何人的真實帳戶無關。"
  ],
  "accounts": {
-  "bux": {
-   "name": "BUX 投資",
+  "ib": {
+   "name": "券商 A",
    "region": "nl",
-   "color": "#2f6fed",
-   "cash": 120.0
+   "color": "#7b5cd6",
+   "cash": -1500.0
   },
   "yuanta": {
-   "name": "元大證券",
-   "region": "tw",
+   "name": "券商 B",
+   "region": "nl",
    "color": "#e08b2f",
    "cash": 0
   },
-  "ib": {
-   "name": "Interactive Brokers",
+  "bux": {
+   "name": "個股帳戶",
    "region": "nl",
-   "color": "#7b5cd6",
-   "cash": -900.0
+   "color": "#2f6fed",
+   "cash": 180.0
   }
  },
  "holdings": [
   {
-   "account": "yuanta",
-   "sym": "2330.TW",
-   "name": "台積電 (元大)",
-   "tag": "台股ETF",
+   "account": "ib",
+   "sym": "IWDA.AS",
+   "name": "iShares 全球市場",
+   "tag": "ETF",
    "group": "etf",
-   "shares": 300
-  },
-  {
-   "account": "yuanta",
-   "sym": "0050.TW",
-   "name": "元大台灣50 (0050)",
-   "tag": "台股ETF",
-   "group": "etf",
-   "shares": 4000
-  },
-  {
-   "account": "yuanta",
-   "sym": "006208.TW",
-   "name": "富邦台50 (006208)",
-   "tag": "台股ETF",
-   "group": "etf",
-   "shares": 1200
-  },
-  {
-   "account": "yuanta",
-   "sym": "0056.TW",
-   "name": "元大高股息 (0056)",
-   "tag": "台股ETF",
-   "group": "etf",
-   "shares": 2000
+   "shares": 60
   },
   {
    "account": "ib",
-   "sym": "SXR8.DE",
-   "name": "iShares Core S&P 500",
+   "sym": "VWCE.DE",
+   "name": "Vanguard 全世界",
    "tag": "ETF",
    "group": "etf",
+   "shares": 30
+  },
+  {
+   "account": "ib",
+   "sym": "SGLD.AS",
+   "name": "實體黃金",
+   "tag": "黃金",
+   "group": "etf",
+   "shares": 8
+  },
+  {
+   "account": "ib",
+   "sym": "LVE.PA",
+   "name": "歐洲藍籌 2x",
+   "tag": "ETF",
+   "group": "etf",
+   "shares": 40,
+   "lev": 2
+  },
+  {
+   "account": "yuanta",
+   "sym": "EMIM.AS",
+   "name": "新興市場",
+   "tag": "ETF",
+   "group": "etf",
+   "shares": 100
+  },
+  {
+   "account": "yuanta",
+   "sym": "XDWT.DE",
+   "name": "全球科技",
+   "tag": "ETF",
+   "group": "etf",
+   "shares": 20
+  },
+  {
+   "account": "bux",
+   "sym": "ORCL",
+   "name": "甲骨文",
+   "tag": "股票",
+   "group": "stock",
    "shares": 12
   },
   {
-   "account": "ib",
-   "sym": "SXRV.DE",
-   "name": "iShares NASDAQ 100",
-   "tag": "ETF",
-   "group": "etf",
-   "shares": 3
-  },
-  {
-   "account": "ib",
-   "sym": "SEC0.DE",
-   "name": "iShares MSCI Global Semi",
-   "tag": "ETF",
-   "group": "etf",
-   "shares": 200
-  },
-  {
-   "account": "ib",
-   "sym": "4GLD.DE",
-   "name": "Xetra Gold",
-   "tag": "黃金",
-   "group": "etf",
-   "shares": 25
-  },
-  {
-   "account": "ib",
-   "sym": "LQQ.PA",
-   "name": "Amundi Nasdaq-100 2x",
-   "tag": "ETF",
-   "group": "etf",
-   "shares": 200,
-   "lev": 2
-  },
-  {
-   "account": "ib",
-   "sym": "CL2.PA",
-   "name": "Amundi MSCI USA 2x",
-   "tag": "ETF",
-   "group": "etf",
-   "shares": 60,
-   "lev": 2
-  },
-  {
    "account": "bux",
-   "sym": "NVDA",
-   "name": "NVIDIA",
+   "sym": "QCOM",
+   "name": "高通",
    "tag": "股票",
    "group": "stock",
-   "shares": 18
+   "shares": 20
   },
   {
    "account": "bux",
-   "sym": "GOOGL",
-   "name": "Alphabet A",
-   "tag": "股票",
-   "group": "stock",
-   "shares": 10
-  },
-  {
-   "account": "bux",
-   "sym": "AMD",
-   "name": "AMD",
-   "tag": "股票",
-   "group": "stock",
-   "shares": 6
-  },
-  {
-   "account": "bux",
-   "sym": "AVGO",
-   "name": "Broadcom",
-   "tag": "股票",
-   "group": "stock",
-   "shares": 5
-  },
-  {
-   "account": "bux",
-   "sym": "AMZN",
-   "name": "Amazon.com",
+   "sym": "ADBE",
+   "name": "Adobe",
    "tag": "股票",
    "group": "stock",
    "shares": 8
   },
   {
    "account": "bux",
-   "sym": "META",
-   "name": "Meta Platforms",
+   "sym": "INTC",
+   "name": "英特爾",
    "tag": "股票",
    "group": "stock",
-   "shares": 3
+   "shares": 60
   },
   {
    "account": "bux",
-   "sym": "MSFT",
-   "name": "Microsoft",
+   "sym": "CRM",
+   "name": "Salesforce",
+   "tag": "股票",
+   "group": "stock",
+   "shares": 10
+  },
+  {
+   "account": "bux",
+   "sym": "TER",
+   "name": "泰瑞達",
+   "tag": "股票",
+   "group": "stock",
+   "shares": 6
+  },
+  {
+   "account": "bux",
+   "sym": "VST",
+   "name": "Vistra",
+   "tag": "股票",
+   "group": "stock",
+   "shares": 15
+  },
+  {
+   "account": "bux",
+   "sym": "BRK-B",
+   "name": "波克夏 B",
    "tag": "股票",
    "group": "stock",
    "shares": 4
-  },
-  {
-   "account": "bux",
-   "sym": "AAPL",
-   "name": "Apple",
-   "tag": "股票",
-   "group": "stock",
-   "shares": 5
-  },
-  {
-   "account": "bux",
-   "sym": "ASML",
-   "name": "ASML",
-   "tag": "股票",
-   "group": "stock",
-   "shares": 1
-  },
-  {
-   "account": "bux",
-   "sym": "TSLA",
-   "name": "Tesla",
-   "tag": "股票",
-   "group": "stock",
-   "shares": 2
   }
  ]
 }
