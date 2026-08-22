@@ -7,10 +7,10 @@ window.EXPENSE_DATA = {
   "parking": 8000
  },
  "updated": "2026-08-22",
- "fixedBudget": 55000,
+ "fixedBudget": 45000,
  "livingBudget": 15000,
  "budgetBreakdown": {
-  "bills": 40000,
+  "bills": 30000,
   "living": 15000
  },
  "groups": [
@@ -41,7 +41,7 @@ window.EXPENSE_DATA = {
      "desc": "房貸",
      "cat": "房貸",
      "group": "固定帳單",
-     "amount": 30000.0,
+     "amount": 20000.0,
      "src": "示範",
      "fixed": true
     },
@@ -624,7 +624,7 @@ window.EXPENSE_DATA = {
      "desc": "房貸",
      "cat": "房貸",
      "group": "固定帳單",
-     "amount": 30000.0,
+     "amount": 20000.0,
      "src": "示範",
      "fixed": true
     },
@@ -1252,7 +1252,7 @@ window.EXPENSE_DATA = {
      "desc": "房貸",
      "cat": "房貸",
      "group": "固定帳單",
-     "amount": 30000.0,
+     "amount": 20000.0,
      "src": "示範",
      "fixed": true
     },
@@ -1817,7 +1817,7 @@ window.EXPENSE_DATA = {
      "desc": "房貸",
      "cat": "房貸",
      "group": "固定帳單",
-     "amount": 30000.0,
+     "amount": 20000.0,
      "src": "示範",
      "fixed": true
     },
@@ -2418,7 +2418,7 @@ window.EXPENSE_DATA = {
      "desc": "房貸",
      "cat": "房貸",
      "group": "固定帳單",
-     "amount": 30000.0,
+     "amount": 20000.0,
      "src": "示範",
      "fixed": true
     },
@@ -3001,7 +3001,7 @@ window.EXPENSE_DATA = {
      "desc": "房貸",
      "cat": "房貸",
      "group": "固定帳單",
-     "amount": 30000.0,
+     "amount": 20000.0,
      "src": "示範",
      "fixed": true
     },
@@ -3629,7 +3629,7 @@ window.EXPENSE_DATA = {
      "desc": "房貸",
      "cat": "房貸",
      "group": "固定帳單",
-     "amount": 30000.0,
+     "amount": 20000.0,
      "src": "示範",
      "fixed": true
     },
@@ -4257,7 +4257,7 @@ window.EXPENSE_DATA = {
      "desc": "房貸",
      "cat": "房貸",
      "group": "固定帳單",
-     "amount": 30000.0,
+     "amount": 20000.0,
      "src": "示範",
      "fixed": true
     },

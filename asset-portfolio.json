@@ -7,7 +7,7 @@
    "name": "券商 A",
    "region": "tw",
    "color": "#7b5cd6",
-   "cash": -100000.0
+   "cash": -50000.0
   },
   "yuanta": {
    "name": "券商 B",
@@ -19,7 +19,7 @@
    "name": "個股帳戶",
    "region": "tw",
    "color": "#2f6fed",
-   "cash": 15000.0
+   "cash": 8000.0
   }
  },
  "holdings": [
@@ -29,7 +29,7 @@
    "name": "元大高股息",
    "tag": "ETF",
    "group": "etf",
-   "shares": 3000
+   "shares": 1500
   },
   {
    "account": "ib",
@@ -37,7 +37,7 @@
    "name": "國泰永續高股息",
    "tag": "ETF",
    "group": "etf",
-   "shares": 4000
+   "shares": 2000
   },
   {
    "account": "ib",
@@ -45,7 +45,7 @@
    "name": "元大S&P500",
    "tag": "ETF",
    "group": "etf",
-   "shares": 2000
+   "shares": 1000
   },
   {
    "account": "ib",
@@ -53,7 +53,7 @@
    "name": "富邦NASDAQ正2",
    "tag": "ETF",
    "group": "etf",
-   "shares": 500,
+   "shares": 250,
    "lev": 2
   },
   {
@@ -62,7 +62,7 @@
    "name": "富邦科技",
    "tag": "ETF",
    "group": "etf",
-   "shares": 2000
+   "shares": 1000
   },
   {
    "account": "yuanta",
@@ -70,7 +70,7 @@
    "name": "元大高息低波",
    "tag": "ETF",
    "group": "etf",
-   "shares": 2000
+   "shares": 1000
   },
   {
    "account": "bux",
@@ -78,7 +78,7 @@
    "name": "聯發科",
    "tag": "股票",
    "group": "stock",
-   "shares": 30
+   "shares": 15
   },
   {
    "account": "bux",
@@ -86,7 +86,7 @@
    "name": "台達電",
    "tag": "股票",
    "group": "stock",
-   "shares": 60
+   "shares": 30
   },
   {
    "account": "bux",
@@ -94,7 +94,7 @@
    "name": "鴻海",
    "tag": "股票",
    "group": "stock",
-   "shares": 500
+   "shares": 250
   },
   {
    "account": "bux",
@@ -102,7 +102,7 @@
    "name": "廣達",
    "tag": "股票",
    "group": "stock",
-   "shares": 300
+   "shares": 150
   },
   {
    "account": "bux",
@@ -110,7 +110,7 @@
    "name": "中華電",
    "tag": "股票",
    "group": "stock",
-   "shares": 800
+   "shares": 400
   },
   {
    "account": "bux",
@@ -118,7 +118,7 @@
    "name": "富邦金",
    "tag": "股票",
    "group": "stock",
-   "shares": 1000
+   "shares": 500
   },
   {
    "account": "bux",
@@ -126,7 +126,7 @@
    "name": "統一",
    "tag": "股票",
    "group": "stock",
-   "shares": 1000
+   "shares": 500
   },
   {
    "account": "bux",
@@ -134,7 +134,7 @@
    "name": "長榮",
    "tag": "股票",
    "group": "stock",
-   "shares": 400
+   "shares": 200
   }
  ]
 }
