@@ -1697,6 +1697,10 @@
 <style>
   /* 示範版的標題用粉紅色,跟自用那份一眼分得開 */
   .brandcol h1{color:#e0218a;}
+  /* 只有一個帳戶,持倉卡吃滿整列 */
+  .rk-holds{grid-template-columns:1fr;}
+  /* 借款量表拿掉之後左欄變短,置中比較不會空一大塊 */
+  .rk-main-left{display:flex;flex-direction:column;justify-content:center;}
 </style>
 </head>
 <body>
@@ -2074,8 +2078,9 @@ function ladderTarget(dd){
 /* 全帳戶槓桿口徑(asset_build.py 算好放在 ASSET_DATA.leverage):
    所有帳戶加起來算,股數沒更新就視為不變,價格每天自動重抓。沒有就回 null。 */
 function hhLev(){
-  const L=window.ASSET_DATA&&ASSET_DATA.leverage;
-  return (L&&L.lev!=null&&L.liquid>0)?L:null;
+  // 示範版只有一個帳戶,沒有「全帳戶」這個口徑,所以一律回 null。
+  // 呼叫端都有 null 的分支:占比改成看帳戶內,總曝險那格也不會畫出來。
+  return null;
 }
 /* 目前實際倍率:優先用全帳戶口徑;沒有資產資料才退回 券商 帳戶的敞口(rkNorm + rkExpo)。 */
 function actualLeverage(){
@@ -2833,14 +2838,11 @@ function renderTopStrip(){
    20% 會在總曝險還不到 1.0x 就卡住。危險區維持 50%。
    「借款不超過總資產 20%」是另一條(分母是總資產),沒有改,在總曝險卡上。 */
 const RK_LIMIT={safeMax:.4, watchMax:.5};
-const RK_SEG={"IWDA":"#12a670","VWCE":"#1d6fd8","SGLD":"#e0a132","LVE":"#d16ba5","EMIM":"#7c5cd6","XDWT":"#d95f18"};
+const RK_SEG={"0056":"#12a670","00878":"#1d6fd8","00646":"#e0a132","0052":"#d16ba5","00713":"#7c5cd6","00670L":"#d95f18"};
 /* 券商 B持倉:資料來自 ASSET_DATA(每天自動重算),整理成跟 券商 快照一樣的欄位,
    兩張卡才能共用同一個渲染函式。券商 B目前全是原型(1x),沒有融資。 */
-const IB_SYM={"IWDA":"IWDA.AS","VWCE":"VWCE.DE","SGLD":"SGLD.AS","LVE":"LVE.PA"};
-const YUANTA_META={
-  "0052.TW":{name:"富邦科技",ticker:"0052"},
-  "00713.TW":{name:"元大高息低波",ticker:"00713"},
-};
+const IB_SYM={};
+const YUANTA_META={};
 /* 個股(2026-08-20 定案):
    個股卡從資產分析搬到槓桿風險最下面。放在有融資那個帳戶裡的個股也算在這張,
    不算進「持倉曝險配置 · IB」,因為那張卡是拿來看 ETF 的。 */
@@ -2936,7 +2938,7 @@ function stockCardHTML(mob){
       <span class="pp num">${(r.value/base*100).toFixed(1)}%</span>
       <span class="ar">${link?"\u203a":""}</span></div>`;
   };
-  const sub=`${b.rows.length} 筆 · ${fmtN(tot)} TWD · 占全帳戶 ${(tot/base*100).toFixed(1)}%`;
+  const sub=`${b.rows.length} 筆 · ${fmtN(tot)} TWD`;
   if(mob){
     const n=RK_STKOPEN?b.rows.length:6;
     return `<div class="dm-card c2">
@@ -2948,7 +2950,7 @@ function stockCardHTML(mob){
   return `<div class="rk-card">
     <div class="rk-h"><h2 style="font-size:15px">個股</h2><span class="rk-sub">${sub}</span></div>
     <div class="as-rows" style="margin-top:6px">${b.rows.map(row).join("")}</div>
-    <div class="rk-foot2">所有帳戶的個股都算在這裡。列可點開線圖。</div>
+    <div class="rk-foot2">列可點開線圖。</div>
   </div>`;
 }
 function renderRisk(){
@@ -3079,7 +3081,7 @@ function renderRisk(){
       ${heroCard}
 
       <div class="dm-card">
-        <div class="dm-hd"><span class="dm-t">券商 A 曝險</span>
+        <div class="dm-hd"><span class="dm-t">曝險</span>
           <span class="dm-pill ${pillKind[bk]}">${bLbl}</span></div>
         <div class="dm-hero sm"><span class="n">${effTxt}</span><span class="x">x</span>
           <span class="side">帳面 ${expo.bookRatio!=null?expo.bookRatio.toFixed(2):"—"}x + 正二額外 ${rkPct(expo.boostRatio)} · 上限 2.0x</span></div>
@@ -3087,17 +3089,6 @@ function renderRisk(){
           <span class="z1" style="width:50%"></span><span class="z2" style="width:25%"></span><span class="z3"></span>
           <span class="fill" style="width:${expoPct}%"></span>
         </div>
-        <div class="dm-brw"><span class="l">借款佔券商 A 淨值 <b>${rkPct(s.borrowRatio)}</b></span>
-          <span class="r" style="color:${safeRoom>=0?"var(--up)":"var(--dn)"}">離安全線 ${rkMoney(Math.abs(safeRoom),cur)}</span></div>
-        <!-- 借款量表 0 到 50%:40% 安全線落在 80% 的位置 -->
-        <div class="dm-bbar">
-          <span class="z1" style="width:${safeStop}%"></span><span class="z2"></span>
-          <span class="fill" style="width:${fillPct}%"></span>
-          <span class="tick" style="left:${safeStop}%"></span>
-          ${ibStop!=null?`<span class="tick ib" style="left:${ibStop}%"></span>`:""}
-        </div>
-        <div class="dm-blbl"><span><b>40%</b> 我的線 · ${rkMoney(safeAmt,"")}</span>
-          ${ibStop!=null?`<span style="color:#c2373b"><b>券商追繳</b> ${rkMoney(ibLoanMax,"")}</span>`:""}</div>
         <button class="dm-btn" id="rkIbToggle">${RK_IBOPEN?"收起帳戶明細 ▲":"帳戶明細:市值 · 淨值 · 借款 · 利率 ▾"}</button>
         ${RK_IBOPEN?`<div class="dm-open">${ibKv}${ibNote}</div>`:""}
       </div>
@@ -3201,7 +3192,7 @@ function renderRisk(){
     <div class="rk-card rk-main">
       <div class="rk-main-left">
         <div class="rk-hero-row">
-          <div><div class="k" style="font-size:11.5px;color:var(--faint)">券商 A 曝險</div>
+          <div><div class="k" style="font-size:11.5px;color:var(--faint)">曝險</div>
             <div class="rk-expo" style="margin-top:8px">${expo.effRatio!=null?expo.effRatio.toFixed(2)+"x":"—"}</div>
             <div class="rk-expo-note">帳面 <b>${expo.bookRatio!=null?expo.bookRatio.toFixed(2)+"x":"—"}</b>　正二額外 <b>${rkPct(expo.boostRatio)}</b></div></div>
           ${hh?`<div><div class="k" style="font-size:11.5px;color:var(--faint)">全帳戶總曝險</div>
@@ -3213,35 +3204,6 @@ function renderRisk(){
           <div><div class="kk">帳戶淨值</div><div class="vv">${rkMoney(s.net,"")}</div></div>
           <div><div class="kk">質押借款</div><div class="vv">${rkMoney(Math.max(s.loan,0),"")}</div></div>
           <div><div class="kk">利率 · 月利息</div><div class="vv">${(RK_MARGIN_RATE*100).toFixed(2)}% · ${rkMoney(Math.max(s.loan,0)*RK_MARGIN_RATE/12,"")}/月</div></div>
-        </div>
-        <div class="rk-gauge-wrap">
-          <div class="rk-gauge-top">
-            <div class="g-l"><span style="font-size:14px;font-weight:700">借款佔券商 A 淨值</span><b>${rkPct(s.borrowRatio)}</b><span style="font-size:12px;color:var(--faint)">上面那個是佔全帳戶,分母不一樣</span></div>
-            <div class="g-r">離 40% 安全線${safeRoom>=0?"還有":"已超出"} <b>${rkMoney(Math.abs(safeRoom),cur)}</b></div>
-          </div>
-          <div class="rk-mark"><div class="m" style="left:${Math.min(fillPct,100)}%;color:#0b7a55">
-            <span>目前 ${rkPct(s.borrowRatio)}</span><span style="font-size:8px">▼</span></div></div>
-          <div class="rk-bar">
-            <div class="z1" style="width:${safeStop}%"></div>
-            <div class="z2" style="width:${watchStop-safeStop}%"></div>
-            <div class="z3" style="flex:1"></div>
-            <div class="fill" style="width:${fillPct}%"></div>
-            <div class="safe-line" style="left:${safeStop}%"></div>
-            ${ibStop!=null?`<div class="ib-line" style="left:${ibStop}%"></div>`:""}
-          </div>
-          <div class="rk-mark lo">
-            <div class="m" style="left:${safeStop}%;color:#3f4652">
-              <span style="font-size:8px">▲</span><span>40% 我的線 · ${rkMoney(safeAmt,cur)}</span></div>
-            ${ibStop!=null?`<div class="m" style="left:${ibStop}%;color:#c2373b">
-              <span style="font-size:8px">▲</span><span>券商追繳 ${(ibRatio*100).toFixed(0)}% · ${rkMoney(ibLoanMax,cur)}</span></div>`:""}
-          </div>
-          <div class="rk-zones">
-            <span class="zt rk-safe">安全區 0–40%</span>
-            <span class="zt rk-watch">注意區 40–50%</span>
-            <span class="zt rk-danger">危險區 50%↑</span>
-            <span class="zmax">刻度到 ${(gMax*100).toFixed(0)}% · ${rkMoney(s.net*gMax,cur)}</span>
-          </div>
-          ${hh?`<div style="margin-top:10px;font-size:11.5px;color:var(--muted)">40% 是自己設的線，券商那條才是真的會被強平的。</div>`:""}
         </div>
       </div>
       <div class="rk-main-right">
@@ -3266,12 +3228,9 @@ function renderRisk(){
     </div>
 
     <div class="rk-holds">
-      ${allocCard("持倉曝險配置 · 券商 A",cur,H_ETF,cur,
+      ${allocCard("ETF",cur,H_ETF,cur,
         `融資借款 <b>−${rkMoney(Math.max(s.loan,0),cur)}</b> · 個股列在下面那張卡`,
         levMixHtml(H_ETF))}
-      ${allocCard("持倉曝險配置 · 券商 B","TWD",YT_ETF,"TWD",
-        "列可點開線圖。個股列在下面那張卡。",
-        levMixHtml(YT_ETF,"這個帳戶沒有開融資"))}
     </div>
 
     ${stockCardHTML(false)}
@@ -3289,7 +3248,7 @@ function renderRisk(){
         ${todoCount().done?`<button id="rkTodoClear">清除勾選</button>`:""}</div>
     </div>
 
-    <div class="rk-note">斷頭風險看券商 A 帳戶內口徑,倍率與總量看全帳戶。金額單位 ${cur}。</div>
+    <div class="rk-note">所有數字都是這個帳戶內的。金額單位 ${cur}。</div>
   `;
 }
 
