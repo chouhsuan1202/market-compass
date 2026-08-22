@@ -1,49 +1,53 @@
 # Market Compass
 
-A single-file dashboard for watching moving averages across a list of tickers.
-Open `index.html` in a browser. No build step, no server, no account.
+A personal investing dashboard in one HTML file. Open it and you see four things: which of your holdings just dropped below a moving average, how much you borrowed and how far the market can fall before the broker sells you out, where your money actually sits, and what you spent this month.
 
 **Live demo:** https://chouhsuan1202.github.io/market-compass/
 
-All numbers in the demo are generated sample data. Nothing here is a real account or a real position.
+Every number in this repo is made up. No real account, no real position, no real transaction.
 
 ![Market Compass](preview.png)
 
-## What it does
+## Run it
 
-Three tabs:
+Download the folder and open `index.html`. That is the whole setup. No build step, no server, no account, no database.
 
-- **Market** - core ETFs and regional funds. Each row shows five moving averages (5, 20, 60, 120, 240) as coloured dots, so you can see at a glance whether price is above or below each one.
-- **Stocks** - the same read for individual names, with sparkline charts and cost basis markers.
-- **Leverage** - margin headroom, distance to a margin call, and exposure mix, for people running a leveraged account.
+On a phone, add it to the home screen and it runs full screen like an app.
 
-The point is the dot row. Five moving averages per ticker, green above and hollow below, sorted so the weakest float to the top. You stop reading numbers and start reading shapes.
+## The four tabs
 
-## How it works
+| Tab | The question it answers |
+|---|---|
+| Stocks | Which tickers just fell below the 5, 20, 60, 120 or 240 day average, so I can add |
+| Leverage | How much did I borrow, and how far can the market drop before I get liquidated |
+| Assets | How much do I have, split by account and by market |
+| Spending | Where did the money go this month, and did I go over my baseline |
 
-The page is one HTML file. It reads two JSON files from the same folder:
+## Use your own numbers
 
-- `watchlist.json` - what to show and how to group it
-- `data.json` - price history and computed moving averages per ticker
+Edit these files and the screen follows. Nothing else to change.
 
-See `sample-data/` for both files with the demo content, so you can match the shape.
+| File | What goes in it |
+|---|---|
+| `asset-portfolio.json` | Which tickers you hold in which account, and how many shares |
+| `asset-balances.json` | Bank cash, property, mortgage. Anything without a market price |
+| `asset-milestones.json` | Historical net worth points, for the long term chart |
+| `leverage-data.js` | A snapshot of your broker account: equity, loan, maintenance margin |
+| `expense-data.js` | Every transaction for the month |
+| `watchlist.json` | Which tickers to track |
 
-In the demo build those two files are inlined into the page, so it works offline and from `file://`. If you want live data, drop real `watchlist.json` and `data.json` next to `index.html` and delete the inline block at the top of `<head>`.
+`data.json` holds prices and moving averages. Refresh it daily with your own script and a quote API key. This repo ships a trimmed sample so the charts have something to draw.
 
-## Making it yours
+`asset-data.js` is computed. Do not hand edit it.
 
-1. Copy `sample-data/watchlist.json` and edit the ticker groups.
-2. Write a script that fetches prices, computes the moving averages, and writes `data.json` in the same shape. Any source works.
-3. Serve the folder, or host it on GitHub Pages.
+## Ideas behind it
 
-The dashboard does no fetching of market data itself. That is on purpose: you own the data step, the page only draws it.
+**It describes, it does not predict.** The dashboard never says "buy now". It says "this fell below the 60 day line". What you do about that is your call.
 
-## Notes
+**Two separate risk lines.** Liquidation risk only counts collateral inside the broker account, because money sitting elsewhere takes days to move and will not save you. The total borrowing cap is measured against everything you own.
 
-- Works offline once loaded. Add it to a phone home screen and it behaves like an app.
-- Everything stays in the browser. No tracking, no backend, no keys.
-- The layout is built mobile first. It scales up to desktop but it is designed for a phone.
+**Phone and desktop are two different layouts,** not one shrunk down. On a phone you want fewer things on screen, not the same things smaller.
 
-## Licence
+## License
 
-MIT. Do what you like with it.
+MIT. Fork it, change it, make it yours.

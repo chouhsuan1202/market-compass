@@ -1,0 +1,63 @@
+{
+ "_說明": [
+  "示範資料,數字全部是編的,不是任何人的真實帳戶。"
+ ],
+ "updated": "2026-08-21",
+ "items": [
+  {
+   "key": "savings",
+   "name": "儲蓄帳戶",
+   "kind": "cash",
+   "region": "nl",
+   "value": 12000,
+   "color": "#ec6a9c",
+   "note": "含緊急備用金"
+  },
+  {
+   "key": "checking",
+   "name": "日常帳戶",
+   "kind": "cash",
+   "region": "nl",
+   "value": 2500,
+   "color": "#9aa4b2"
+  },
+  {
+   "key": "tw_bank",
+   "name": "台灣銀行",
+   "kind": "cash",
+   "region": "tw",
+   "value": 90000,
+   "currency": "TWD",
+   "color": "#9aa4b2"
+  },
+  {
+   "key": "btc",
+   "name": "加密貨幣",
+   "kind": "crypto",
+   "region": "nl",
+   "sym": "BTC-EUR",
+   "qty": 0.03,
+   "color": "#3b82f6"
+  },
+  {
+   "key": "property",
+   "name": "房產（市場估值）",
+   "kind": "property",
+   "region": "nl",
+   "value": 300000,
+   "color": "#d9682f"
+  },
+  {
+   "key": "mortgage",
+   "name": "房貸",
+   "kind": "debt",
+   "region": "nl",
+   "value": -270000,
+   "color": "#d9682f"
+  }
+ ],
+ "notes": [
+  "這是公開示範版,所有金額都是編的。"
+ ],
+ "extra_risks": []
+}

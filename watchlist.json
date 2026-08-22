@@ -1,0 +1,308 @@
+{
+ "indexes": [
+  "^GSPC",
+  "^NDX",
+  "^SOX",
+  "^VIX"
+ ],
+ "market_holdings": [
+  {
+   "s": "SEC0.DE",
+   "dn": "SEC0",
+   "note": "iShares MSCI 全球半導體 · 歐元"
+  },
+  {
+   "s": "SXRV.DE",
+   "dn": "SXRV",
+   "note": "iShares NASDAQ 100 · 歐元"
+  },
+  {
+   "s": "SXR8.DE",
+   "dn": "SXR8",
+   "note": "iShares Core S&P 500 · 歐元"
+  },
+  {
+   "s": "LQQ.PA",
+   "dn": "LQQ",
+   "note": "Amundi NASDAQ 100 每日 2x · 歐元",
+   "lev": 2
+  },
+  {
+   "s": "CL2.PA",
+   "dn": "CL2",
+   "note": "Amundi MSCI USA 每日 2x · 歐元",
+   "lev": 2
+  },
+  {
+   "s": "DBPG.DE",
+   "dn": "DBPG",
+   "note": "Xtrackers 標普500 每日 2x · 歐元 · 非 Amundi",
+   "lev": 2
+  },
+  {
+   "s": "4GLD.DE",
+   "dn": "黃金",
+   "note": "Xetra-Gold · 歐元"
+  },
+  {
+   "s": "0050.TW",
+   "dn": "元大台灣50",
+   "note": "0050"
+  },
+  {
+   "s": "006208.TW",
+   "dn": "富邦台50",
+   "note": "006208"
+  },
+  {
+   "s": "2330.TW",
+   "dn": "台積電",
+   "note": "2330 現股 · 視同大盤級"
+  }
+ ],
+ "holdings": [
+  {
+   "s": "NVDA"
+  },
+  {
+   "s": "GOOGL"
+  },
+  {
+   "s": "AMD"
+  },
+  {
+   "s": "AVGO"
+  },
+  {
+   "s": "META"
+  },
+  {
+   "s": "AMZN"
+  },
+  {
+   "s": "SNDK"
+  },
+  {
+   "s": "AAPL"
+  },
+  {
+   "s": "LITE"
+  },
+  {
+   "s": "MSFT"
+  },
+  {
+   "s": "ANET"
+  },
+  {
+   "s": "MU"
+  },
+  {
+   "s": "ASML"
+  },
+  {
+   "s": "TSLA"
+  },
+  {
+   "s": "MRVL"
+  },
+  {
+   "s": "PLTR"
+  },
+  {
+   "s": "CRWD"
+  },
+  {
+   "s": "NET"
+  },
+  {
+   "s": "SPCX",
+   "dn": "SpaceX",
+   "note": "2026/06 上市 · 季線年線未成形"
+  }
+ ],
+ "watch": [
+  {
+   "s": "ARM",
+   "group": "半導體"
+  },
+  {
+   "s": "COHR",
+   "group": "光通訊"
+  },
+  {
+   "s": "AAOI",
+   "group": "光通訊"
+  },
+  {
+   "s": "BRK-B",
+   "group": "金融控股 · 原持股已賣出"
+  },
+  {
+   "s": "00631L.TW",
+   "dn": "台灣50正2",
+   "group": "台股大盤",
+   "note": "元大台灣50 單日正2 · 台股大盤",
+   "lev": 2,
+   "big": true
+  }
+ ],
+ "ai_chain": [
+  {
+   "chain": "上游",
+   "seg": "半導體設備",
+   "syms": [
+    "ASML",
+    "AMAT",
+    "LRCX",
+    "KLAC",
+    "TER"
+   ]
+  },
+  {
+   "chain": "上游",
+   "seg": "晶圓代工",
+   "syms": [
+    "TSM",
+    "INTC"
+   ]
+  },
+  {
+   "chain": "上游",
+   "seg": "晶片設計",
+   "syms": [
+    "NVDA",
+    "AMD",
+    "AVGO",
+    "QCOM",
+    "ARM",
+    "MRVL"
+   ]
+  },
+  {
+   "chain": "上游",
+   "seg": "記憶體與儲存",
+   "syms": [
+    "MU",
+    "SNDK",
+    "SIMO",
+    "STX",
+    "WDC"
+   ]
+  },
+  {
+   "chain": "中游",
+   "seg": "AI 伺服器",
+   "syms": [
+    "SMCI",
+    "DELL",
+    "2317.TW",
+    "2382.TW"
+   ]
+  },
+  {
+   "chain": "中游",
+   "seg": "網路設備",
+   "syms": [
+    "ANET",
+    "AVGO",
+    "NOK",
+    "ERIC"
+   ]
+  },
+  {
+   "chain": "中游",
+   "seg": "光通訊",
+   "syms": [
+    "AAOI",
+    "LITE",
+    "COHR",
+    "MRVL"
+   ]
+  },
+  {
+   "chain": "中游",
+   "seg": "散熱與電力",
+   "syms": [
+    "VRT",
+    "MOD",
+    "NVT",
+    "VST",
+    "CEG",
+    "GEV",
+    "SBGSY",
+    "ETN",
+    "POWL",
+    "PWR",
+    "FIX"
+   ]
+  },
+  {
+   "chain": "中游",
+   "seg": "雲端資料中心",
+   "syms": [
+    "MSFT",
+    "AMZN",
+    "GOOGL",
+    "ORCL",
+    "NBIS"
+   ]
+  },
+  {
+   "chain": "下游",
+   "seg": "AI 模型與平台",
+   "syms": [
+    "META",
+    "TSLA",
+    "AAPL",
+    "MSFT",
+    "GOOGL"
+   ]
+  },
+  {
+   "chain": "下游",
+   "seg": "AI 應用軟體",
+   "syms": [
+    "PLTR",
+    "CRM",
+    "ADBE",
+    "TEAM",
+    "CRWD",
+    "NET"
+   ]
+  }
+ ],
+ "chain_names": {
+  "2317.TW": "鴻海",
+  "2382.TW": "廣達",
+  "ADBE": "Adobe",
+  "AMAT": "應用材料",
+  "CEG": "星座能源",
+  "CRM": "Salesforce",
+  "DELL": "戴爾",
+  "ERIC": "愛立信",
+  "ETN": "伊頓",
+  "FIX": "Comfort Systems",
+  "GEV": "GE Vernova",
+  "INTC": "英特爾",
+  "LRCX": "科林研發",
+  "MOD": "摩丁",
+  "NBIS": "Nebius",
+  "NOK": "諾基亞",
+  "NVT": "nVent",
+  "ORCL": "甲骨文",
+  "POWL": "Powell",
+  "PWR": "Quanta",
+  "QCOM": "高通",
+  "SBGSY": "施耐德",
+  "SIMO": "慧榮",
+  "SMCI": "美超微",
+  "STX": "希捷",
+  "TEAM": "Atlassian",
+  "TER": "泰瑞達",
+  "VRT": "Vertiv",
+  "VST": "Vistra",
+  "WDC": "威騰",
+  "KLAC": "科磊"
+ }
+}
