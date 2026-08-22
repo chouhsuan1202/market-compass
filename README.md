@@ -6,6 +6,8 @@ A personal investing dashboard in one HTML file. Open it and you see four things
 
 This is the public copy, so it says **Beta** in the title bar. Every number in it is made up: the holdings, the share counts, the cash, the mortgage, the transactions. No real account, no real position, no real trade.
 
+The sample data is a Taiwan office worker in New Taiwan dollars: a salary, a mortgage, a few dividend ETFs and eight local stocks. Swap in your own numbers and currency and it follows.
+
 ![Market Compass](preview.png)
 
 ## Run it
