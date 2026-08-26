@@ -13,8 +13,12 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<!-- 開啟時不要白閃:底色先塗上,字型不擋首次繪製(先用系統字,載完再換) -->
+<style>html{background:#eef0f4;}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Manrope:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Manrope:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Manrope:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
 <style>
   /* 色彩系統依完稿規格(2026-08-11 上色版) */
   :root{
@@ -166,48 +170,6 @@
   .rule .msg{font-size:15px;font-weight:700;}
   .rule .why{font-size:11.5px;color:var(--muted);margin-top:2px;}
 
-  /* 篩選列:大盤=全部/歐洲/台灣,個股與觀察清單=全部/多頭排列/空頭排列 */
-  /* 篩選:小圓角 chip 靠左,不再是佔滿一列的分段控制項(依設計稿) */
-  .filterbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;padding:0 2px;}
-  .filterbar .fbtn{flex:none;border:1px solid var(--line);background:var(--card);color:var(--muted);
-    font:inherit;font-size:11.5px;font-weight:600;padding:4px 12px;border-radius:20px;cursor:pointer;
-    display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
-  .filterbar .fbtn:hover{color:var(--ink);}
-  .filterbar .fbtn .fn{font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--faint);}
-  .filterbar .fbtn.on{border-color:var(--ink);color:var(--ink);font-weight:700;}
-  .filterbar .fbtn.on .fn{color:var(--ink);}
-  .filterbar .fbtn.bull.on .fn{color:var(--up);}
-  .filterbar .fbtn.bear.on .fn{color:var(--dn);}
-
-  /* 觀察清單頂部的族群總結卡:選單段看該段體檢,選全部看三段對比 */
-  .chain-sum{background:var(--card);border:1px solid var(--line2);border-radius:16px;
-    padding:13px 16px 12px;margin-bottom:12px;}
-  .chain-sum .cs-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
-    font-size:13px;font-weight:700;color:var(--ink);}
-  .chain-sum .cs-sub{font-size:10.5px;font-weight:600;color:var(--faint);}
-  .cs-kpis{display:flex;gap:30px;margin-top:10px;}
-  .cs-kpi b{display:block;font-family:var(--num);font-size:25px;font-weight:800;
-    letter-spacing:-.02em;line-height:1.05;font-variant-numeric:tabular-nums;}
-  .cs-kpi span{display:block;font-size:10.5px;font-weight:600;color:var(--muted);margin-top:3px;}
-  .cs-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px;}
-  .cs-chip{font-size:11.5px;font-weight:600;color:var(--muted);border:1px solid var(--line2);
-    border-radius:20px;padding:2px 10px;white-space:nowrap;}
-  .cs-chip b{font-family:var(--num);font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink);}
-  .cs-chip.up b{color:var(--up);} .cs-chip.dn b{color:var(--dn);}
-  .cs-ext{font-size:11.5px;color:var(--muted);margin-top:9px;}
-  .cs-ext b{font-family:var(--num);font-weight:800;font-variant-numeric:tabular-nums;}
-  .cs-ext b.up{color:var(--up);} .cs-ext b.dn{color:var(--dn);}
-  .cs-tbl{margin-top:4px;}
-  .cs-tr{display:grid;grid-template-columns:minmax(0,1fr) 92px 108px 76px;
-    align-items:baseline;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);}
-  .cs-tr:last-child{border-bottom:none;padding-bottom:2px;}
-  .cs-tr.cs-thead{padding:6px 0 5px;font-size:10.5px;font-weight:600;color:var(--faint);}
-  .cs-tr span:not(.cs-seg){text-align:right;}
-  .cs-seg{font-size:13.5px;font-weight:700;color:var(--ink);}
-  .cs-tr b{font-family:var(--num);font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;}
-  .cs-tr b.up{color:var(--up);} .cs-tr b.dn{color:var(--dn);} .cs-tr b.na{color:var(--faint);}
-  .cs-tr .cs-bull{font-size:12.5px;color:var(--muted);}
-
   /* 訊號區在 shell 內,不需要自己的框與圓角 */
   .topstrip{margin-bottom:0;}
   .topstrip .sig{border:none;border-radius:0;margin-bottom:0;padding:12px 16px;}
@@ -255,9 +217,8 @@
   .sigfull[hidden]{display:none;}
   .sigfull{margin-top:4px;}
   .sigdiv{height:1px;background:var(--line);margin:6px 0 2px;}
-  /* 訊號列裡的標的名:觀察清單用淺色,不再寫「(持)」 */
+  /* 訊號列裡的標的名:全部都是持有部位,不再寫「(持)」 */
   .sigtxt .sy{font-weight:600;}
-  .sigtxt .sy.wl{color:var(--muted);font-weight:500;}
   .sigrow{display:flex;gap:10px;align-items:center;padding:6px 0;}
   .tag{font-size:12px;font-weight:800;padding:4px 10px;border-radius:8px;flex:none;min-width:62px;text-align:center;color:#fff;}
   .tag.b{background:var(--up);} .tag.s{background:var(--dn);}
@@ -289,56 +250,11 @@
   .blk{margin-bottom:16px;}
   .blk h2{font-size:12px;color:var(--muted);font-weight:600;margin:0 0 7px;padding-left:2px;}
   .grphd{font-size:12px;color:var(--ink);font-weight:700;margin:12px 0 6px;padding-left:2px;}
+  /* .row 現在只剩「這一段沒有標的」的空狀態在用(舊的精簡列已隨個股分頁移除) */
   .row{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:7px 11px;margin-bottom:5px;cursor:pointer;}
   .row .head{display:flex;align-items:center;gap:9px;}
-  .row .id{flex:1;min-width:0;}
-  .row .sym{font-size:14.5px;font-weight:800;}
-  .row .grp{font-size:10px;color:var(--faint);display:block;margin-top:0;line-height:1.3;}
-  .row .dots{display:flex;gap:7px;flex:none;}
-  .row .rt{flex:none;text-align:right;min-width:72px;}
-  .row .rt .px{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1.25;}
-  /* 年線% 與 站上數 併成一行,省掉一整行高度 */
-  .row .sub{display:flex;align-items:baseline;justify-content:flex-end;gap:5px;line-height:1.2;}
-  .row .yr{font-size:12.5px;font-weight:800;font-variant-numeric:tabular-nums;}
-  .row .yr.up{color:var(--up);} .row .yr.dn{color:var(--dn);} .row .yr.na{color:var(--faint);}
-  .row .sc{font-size:10.5px;color:var(--muted);}
-  /* 判讀文字移進展開區,收合時不佔高度 */
-  .row .detail .rowip{grid-column:1 / -1;font-size:11px;color:var(--muted);line-height:1.4;margin:0 0 2px;}
-  .row .grp .pe,.grp{white-space:nowrap;}
-
-  /* 財報時間表:一天一張卡,同天股票合併 */
-  .ecard{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 12px;margin-bottom:6px;}
-  .ecard-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
-  .edate{display:flex;align-items:baseline;gap:6px;line-height:1.1;}
-  .edate b{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;}
-  .edate span{font-size:11px;color:var(--faint);}
-  .emeta{flex:none;display:flex;align-items:center;gap:6px;}
-  .echips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-  .echip{display:inline-flex;align-items:baseline;gap:5px;font-size:13px;font-weight:700;color:var(--ink);
-    background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 9px;text-decoration:none;}
-  .echip:active{background:var(--line);}
-  .echip .ecode{font-size:10px;color:var(--faint);font-weight:500;}
-  .echip .elink{font-size:10px;color:var(--faint);font-weight:700;}
-  .ebadge{font-size:11.5px;font-weight:700;color:var(--muted);background:var(--bg);
-    border-radius:7px;padding:3px 9px;font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .ebadge.today{color:#fff;background:var(--red);}
-  .ebadge.soon{color:var(--nearink);background:var(--nearbg);}
-  .ebadge.past{color:var(--faint);background:transparent;padding:3px 0;}
-  .eest{font-size:10px;color:var(--faint);border:1px solid var(--line);border-radius:6px;padding:1px 5px;}
-  .row .note{font-size:11px;color:var(--faint);display:block;margin-top:2px;}
   .row.err{opacity:.6;}
   .row .nd{color:var(--faint);font-size:12px;}
-
-  /* expand detail */
-  .detail{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);
-    grid-template-columns:1fr 1fr;gap:8px;}
-  .row.open .detail{display:grid;}
-  .mrow{background:var(--bg);border-radius:9px;padding:7px 9px;}
-  .mrow.up{background:var(--upbg);} .mrow.dn{background:var(--dnbg);}
-  .mrow .ml{font-size:11px;color:var(--muted);}
-  .mrow .mv{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;}
-  .mrow .md{font-size:11px;font-weight:700;}
-  .mrow.up .md{color:var(--up);} .mrow.dn .md{color:var(--dn);}
   .caret{font-size:11px;color:var(--faint);margin-left:2px;}
 
   footer{color:var(--muted);font-size:12px;margin-top:22px;text-align:center;line-height:1.6;}
@@ -807,8 +723,12 @@
      桌面完全不受影響:底部分頁列只在窄螢幕出現,頂部分頁與面板切換則收起來。 */
   .tabbar{display:none;}
   @media(max-width:720px){
+    /* 捲到底的回彈會把 fixed 元素一起拖走,關掉回彈這條就不動了 */
+    html,body{overscroll-behavior-y:none;}
     .tabbar{
       display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;
+      /* 推到自己的合成層,iOS 捲動時才不會跟著飄 */
+      transform:translateZ(0);will-change:transform;backface-visibility:hidden;
       background:rgba(255,255,255,.93);
       -webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);
       border-top:1px solid var(--line2);
@@ -832,8 +752,19 @@
     .tb-dot.warn{background:var(--yellow);} .tb-dot.danger{background:var(--red);}
     /* 內容不要被底部列蓋住 */
     .wrap{padding-top:8px;padding-bottom:calc(78px + env(safe-area-inset-bottom));}
-    /* 頂部的分頁列與面板切換已移到底部,收起來 */
-    .tabs{display:none;}
+    /* 面板切換已移到底部列,收起來。分頁列留著,它就是四段導覽(2026-08-25 改一層),
+       用 order 排到脈搏卡下面,位置跟舊的篩選 chip 列一樣。 */
+    #stockChrome{display:flex;flex-direction:column;}
+    #topstrip{order:1;}
+    .tabs{order:2;gap:6px;padding:0 2px 9px;margin:9px 0 0;border-bottom:none;background:none;
+      flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+    .tabs::-webkit-scrollbar{display:none;}
+    .tabs button[data-seg]{flex:none;font-size:11.5px;font-weight:600;padding:3px 11px;
+      border:1px solid var(--line);border-radius:20px;background:var(--card);color:var(--muted);
+      box-shadow:none;white-space:nowrap;}
+    .tabs button[data-seg].active{border-color:var(--ink);color:var(--ink);font-weight:700;box-shadow:none;}
+    /* 手機的規則入口在脈搏卡裡,分頁列這顆不重複出現 */
+    .tabs button.tabrules{display:none;}
     #panelToggle{display:none !important;}
     footer{display:none;}
     /* 標題列收成一行,不要折行吃掉半個螢幕 */
@@ -844,16 +775,6 @@
     /* 彈窗改成貼底的 sheet,留出底部列的高度 */
     .sheet{max-height:88vh;padding-bottom:calc(24px + env(safe-area-inset-bottom));}
   }
-  /* 個股頁子籤:觀察與財報從底部列收進來,只在手機出現 */
-  .msub{display:none;}
-  @media(max-width:720px){
-    /* 子籤是「換頁」,用灰軌道+白塊(同桌面面板切換鈕);下面的篩選膠囊才是白底圓框,兩者分開 */
-    .msub{display:flex;gap:3px;padding:3px;background:#e7eaef;border-radius:12px;margin:9px 15px 4px;}
-    .msub button{flex:1;border:none;background:transparent;color:var(--muted);
-      font:600 12.5px/1 "Noto Sans TC",sans-serif;padding:9px 0;border-radius:9px;cursor:pointer;}
-    .msub button.on{background:#fff;box-shadow:0 1px 2px rgba(16,20,24,.14);color:var(--ink);font-weight:700;}
-  }
-
   /* 主畫面 app(standalone)時,狀態列區域要自己撐開 */
   @media(display-mode:standalone){
     .wrap{padding-top:calc(8px + env(safe-area-inset-top));}
@@ -879,15 +800,11 @@
     .wrap{padding-top:0;}
 
 
-    /* 篩選 chip 列 */
-    .filterbar{gap:6px;margin:9px 0 0;padding:0 2px 9px;flex-wrap:nowrap;
-      overflow-x:auto;scrollbar-width:none;}
-    .filterbar::-webkit-scrollbar{display:none;}
-    .filterbar .fbtn{font-size:11.5px;padding:3px 11px;flex:none;}
-
     /* ── 標的清單(手機專用結構) ── */
     .blk{margin-bottom:0;}
     .blk h2{display:none;}                 /* 分區標題改印在清單卡內 */
+    /* 線圖那張卡的標題要留著,它不是分區標題 */
+    .blk.perfblk .perfcard h2{display:block;font-size:15px;color:var(--ink);font-weight:700;margin:0;}
     /* 列上的小籤 */
     .mtag{font-size:9px;font-weight:700;border-radius:5px;padding:1px 6px;flex:none;}
     .mtag.add{color:var(--add);background:var(--addbg);}
@@ -1141,6 +1058,37 @@
   .rk-mini .mr .ml{font-size:12px;color:#3f4652;}
   .rk-mini .mr .ml span{display:block;font-size:11px;color:var(--faint);margin-top:3px;}
   .rk-mini .mr .mv{font-family:var(--num);font-weight:700;font-size:17px;font-variant-numeric:tabular-nums;}
+  /* 績效線圖:版面沿用資產分頁那張歷年線圖,兩張要看起來像同一個東西 */
+  .perfblk{padding:0;}
+  .perfcard{background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px 14px;margin:0;}
+  .perfcard .tl-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .perfcard .tl-head h3{margin:0;font-size:15px;font-weight:700;color:var(--ink);}
+  .perfcard .tl-seg{display:flex;gap:3px;padding:3px;background:#f4f6f8;border-radius:8px;}
+  .perfcard .tl-seg button{height:24px;padding:0 12px;border:none;border-radius:6px;
+    background:transparent;cursor:pointer;color:var(--muted);
+    font:600 12px/1 "Noto Sans TC",sans-serif;}
+  .perfcard .tl-seg button.on{background:#fff;box-shadow:0 1px 2px rgba(16,20,24,.12);
+    color:var(--ink);font-weight:700;}
+  .pf-sub{font-size:11.5px;color:var(--faint);margin-top:5px;}
+  .pf-legend{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px;}
+  .pf-lg{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);
+    background:#fff;border-radius:999px;padding:4px 10px;cursor:pointer;
+    font:600 11.5px/1 "Noto Sans TC",sans-serif;color:var(--body);}
+  .pf-lg i{width:8px;height:8px;border-radius:50%;}
+  .pf-lg b{font-family:var(--num);font-size:12px;}
+  .pf-lg b.up{color:var(--up);} .pf-lg b.dn{color:var(--dn);}
+  .pf-lg.off{opacity:.38;}
+  /* 高度寫死,切圖例或換刻度時整頁不會上下跳 */
+  .pf-svg{width:100%;height:auto;aspect-ratio:920/300;display:block;margin-top:2px;}
+  /* 高度用固定比例算,不是固定像素:手機上圖被縮到一半寬,固定 300px 會在上下留一大片空白。
+     比例是常數,所以切換線或切換刻度時版面一樣不會跳。 */
+  .pf-zero{stroke:var(--line2);stroke-width:1;stroke-dasharray:3 3;}
+  .pf-line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;}
+  .pf-line.bench{stroke-width:1.6;stroke-dasharray:5 4;}
+  .pf-dot{stroke:#fff;stroke-width:1.4;cursor:default;}
+  .pf-foot{font-size:11px;color:var(--muted);line-height:1.6;margin-top:6px;}
+  .pf-empty{font-size:12.5px;color:var(--muted);line-height:1.7;padding:14px 0 6px;}
   /* 持倉曝險配置 */
   .rk-alloc{display:flex;height:26px;border-radius:7px;overflow:hidden;margin-top:14px;}
   .rk-alloc .seg{display:flex;align-items:center;justify-content:center;font:700 11px/1 var(--num);color:#fff;min-width:0;overflow:hidden;}
@@ -1208,15 +1156,8 @@
     .refresh svg{width:15px;height:15px;}
     /* 底部分頁列:選中墨色粗體,未選灰色,槓桿格的狀態點沿用 */
     .tabbar button{gap:5px;font-size:10.5px;}
-    /* 篩選改 pill:選中墨框墨字 */
-    .filterbar .fbtn{font-size:12px;padding:5px 13px;border-color:var(--line2);}
-    /* 族群總結卡:手機收窄欄寬,大數字略縮 */
-    .chain-sum{padding:14px 15px 12px;margin-bottom:12px;}
-    .cs-kpis{gap:24px;}
-    .cs-kpi b{font-size:23px;}
-    .cs-tr{grid-template-columns:minmax(0,1fr) 68px 76px 56px;gap:6px;}
-    .cs-tr b{font-size:14px;}
-    .cs-tr.cs-thead{font-size:10px;}
+    /* 分頁列在手機是 pill:選中墨框墨字 */
+    .tabs button[data-seg]{font-size:12px;padding:5px 13px;border-color:var(--line2);}
 
     /* ── 共用零件 ── */
     .dm-card{background:var(--card);border-radius:18px;padding:16px 16px 14px;
@@ -1501,8 +1442,7 @@
     #rail{display:flex;flex-direction:column;gap:12px;min-width:0;
       position:sticky;top:117px;}
 
-    /* 清單:篩選 chip + 組標籤 + 白卡 */
-    .filterbar{margin:2px 0 12px;}
+    /* 清單:組標籤 + 白卡 */
     .blk{margin-bottom:18px;}
     .blk h2{font-size:12px;color:var(--muted);font-weight:600;margin:0 0 7px;}
     .blist{padding:2px 22px 8px;margin-bottom:0;}
@@ -1511,11 +1451,6 @@
     .bhead .c2{white-space:nowrap;margin:0 -16px;}
     .brow{padding:14px 4px;}
     .brow.clickable:hover{margin:0 -22px;padding-left:26px;padding-right:26px;}
-
-    /* 財報:兩欄卡片格線 */
-    .egrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    .egrid .ecard{margin-bottom:0;border-radius:12px;padding:11px 14px;}
-    .egrid.past .ecard{opacity:.75;}
 
     /* ── 右欄:脈搏卡 ── */
     .rl-card{background:var(--card);border:1px solid var(--line2);border-radius:16px;
@@ -1564,7 +1499,6 @@
     .rl-moves{font-size:13px;line-height:1.9;min-width:0;}
     .rl-moves .mv{margin-right:10px;white-space:nowrap;}
     .rl-moves .sy{font-weight:600;color:var(--ink);}
-    .rl-moves .sy.wl{color:var(--muted);font-weight:500;}
     .rl-divline{height:1px;background:var(--line);margin:11px 0 3px;}
     .rl-hl{font-size:12px;color:var(--muted);line-height:1.7;margin-top:10px;padding-top:9px;
       border-top:1px dashed var(--line);}
@@ -1648,7 +1582,7 @@
     .blist,.rl-card,.rk-card,.as-card,.as-kpi,#expensePanel .card{
       border:1px solid var(--line2);border-radius:16px;
       box-shadow:0 1px 2px rgba(16,20,24,.05);}
-    .egrid .ecard,#expensePanel .ask,#expensePanel .picker{border-radius:12px;}
+    #expensePanel .ask,#expensePanel .picker{border-radius:12px;}
 
     /* 4)卡片內距:主卡一律 18/22,量表卡與清單卡不再各有一套 */
     .rl-pulse,.rl-sig{padding:18px 20px;}
@@ -1659,7 +1593,7 @@
 
     /* 5)卡與卡的間距一律 14 */
     #stockPanel,#riskPanel,#assetPanel,#expensePanel,#expensePanel #app{gap:14px;}
-    .rk-two,.rk-holds,.as-two,.as-holds,.as-kpis,.as-donuts,.ax-two,.egrid,
+    .rk-two,.rk-holds,.as-two,.as-holds,.as-kpis,.as-donuts,.ax-two,
     #expensePanel .cols{gap:14px;}
 
     /* 6)標題層級:主標 16/700,副標 12 faint */
@@ -1728,19 +1662,16 @@
 
   <!-- 分頁列與訊號列只屬於股票面板,切到槓桿面板時整段隱藏 -->
   <div id="stockChrome">
+   <!-- 導覽只有一層:分頁列本身就是四段,底下不再有篩選列(2026-08-25 改) -->
    <div class="tabs">
-    <button data-tab="macro" class="active">大盤</button>
-    <button data-tab="stocks">個股</button>
-    <button data-tab="watch">觀察清單</button>
-    <!-- 規則入口:桌面在分頁列右端(手機的入口在脈搏卡裡) -->
+    <button data-seg="all" class="active">全部</button>
+    <button data-seg="eu">大盤 ETF</button>
+    <button data-seg="stock">個股</button>
+    <button data-seg="perf">線圖</button>
+    <!-- 規則入口:桌面在分頁列右端(手機的入口在脈搏卡裡,所以手機隱藏這顆) -->
     <button class="tabrules" id="rulesTop">規則 ↗</button>
    </div>
    <div id="topstrip" class="topstrip"></div>
-   <div id="msub" class="msub" hidden>
-     <button data-go="macro" class="on">大盤</button>
-     <button data-go="stocks">個股</button>
-     <button data-go="watch">觀察</button>
-   </div>
   </div>
  </div>
 
@@ -1750,9 +1681,6 @@
    <div id="status" class="loading">讀取資料中…</div>
    <div id="paneCol">
     <div id="macro" class="pane"></div>
-    <div id="stocks" class="pane" hidden></div>
-    <div id="watch" class="pane" hidden></div>
-    <div id="earnings" class="pane" hidden></div>
    </div>
    <!-- 桌面右欄:脈搏卡 + 今日訊號。手機不顯示(訊號在 #topstrip 的脈搏卡裡) -->
    <aside id="rail"></aside>
@@ -1848,7 +1776,7 @@ function bigHoldCard(sym){
   const e=(typeof wlEntry==="function")?wlEntry(sym):{s:sym};
   const short=e.dn||sym;
   const cur=(r&&r.currency)||"";
-  // 右上小字:備註或分類 + P/E(有才顯示),個股/觀察清單資訊不因改大卡而流失
+  // 右上小字:備註或分類 + P/E(有才顯示),清單資訊不因改大卡而流失
   const full=[e.note||e.group||"", (r&&r.pe!=null)?`P/E ${r.pe}`:""].filter(Boolean).join(" · ");
   // 內建槓桿產品(正二/正三)標記:每日重設,長抱有耗損,均線訊號要比原型更嚴格看待
   const lev=Number(e.lev||1);
@@ -2014,7 +1942,7 @@ function indexCard(sym){
   </div>`;
 }
 /* 檔位表:NDX 距高點回落越深,目標水位越高。基準水位自己調這裡 */
-const LADDER_BASE = 1.3;                       // 平常站的基準倍率
+const LADDER_BASE = 1.35;                      // 平常站的基準倍率。示範版基準
 const LADDER = [ {dd:30, lev:2.0}, {dd:22.5, lev:1.75}, {dd:15, lev:1.5} ];  // 回落 % 由深到淺
 const LADDER_EPS = 0.05;                       // 實際與目標差距在這個範圍內就算「到位」
 /* 券商 TWD margin 年利率(基準 2.203% + 1.5%,LYNX 對照表 2026-08-12)。利率變了改這裡 */
@@ -2104,10 +2032,139 @@ function ladderState(){
   }
   return {dd:d.dd, proxy:d.proxy, target, act, gap, gapTxt, kind};
 }
+/* ── 績效線圖 ────────────────────────────────────────────────
+   個股帳戶 以前每年寄的那份報酬對照大盤,自己做的版本。
+   資料在 ASSET_DATA.perf,每條線起點都是 100,所以帳戶跟大盤可以直接疊著看。
+   數字是時間加權報酬:入金那天不算成獲利(記在 asset-flows.json),
+   不然薪水投進去會被誤算成賺到的。
+   版面沿用資產分頁歷年線圖那一套(.tl-* 樣式),兩張圖看起來要像同一個東西。
+   幾何(寬高、y 軸範圍)一律用「全部線」算,切圖例時畫面不會跳。 */
+const PERF_COLOR={total:"#101418", ib:"#7b5cd6", yuanta:"#e08b2f", bux:"#2f6fed", sp500:"#9aa1ab"};
+const PERF_ORDER=["total","ib","yuanta","bux","sp500"];
+let PERF_ON=null;        // null = 全部顯示
+let PERF_X="day";        // 橫軸刻度:day / month / year
+let PERF_NUM=false;      // 要不要把每個點的數字標出來
+function perfData(){
+  const A=window.ASSET_DATA||{}, P=A.perf;
+  if(!P) return null;
+  const nm=A.perfNames||{};
+  const label=k=>k==="total"?"全部投資":k==="sp500"?"S&P 500":(nm[k]||k);
+  const rows=PERF_ORDER.filter(k=>P[k]&&P[k].length>=2)
+    .map(k=>({k,label:label(k),pts:P[k],color:PERF_COLOR[k]}));
+  return rows.length?rows:null;
+}
+function bindPerf(el, redraw){
+  el.querySelectorAll("[data-perf]").forEach(b=>b.addEventListener("click",()=>{
+    PERF_ON = PERF_ON===b.dataset.perf ? null : b.dataset.perf; redraw();
+  }));
+  el.querySelectorAll("[data-perfx]").forEach(b=>b.addEventListener("click",()=>{
+    PERF_X=b.dataset.perfx; redraw();
+  }));
+  el.querySelectorAll("[data-perfnum]").forEach(b=>b.addEventListener("click",()=>{
+    PERF_NUM=!PERF_NUM; redraw();
+  }));
+}
+function perfCardHTML(){
+  const A=window.ASSET_DATA||{};
+  const rows=perfData();
+  if(!rows){
+    const base=(A.timeline&&A.timeline.length)?A.timeline[A.timeline.length-1].d:"今天";
+    return `<section class="card perfcard">
+      <div class="tl-head"><h3>報酬對照大盤</h3></div>
+      <div class="pf-empty">從 ${base} 開始記錄,每天自動存一筆。
+        累積到兩天以上就會開始畫線,之後每天往右長一格。</div></section>`;
+  }
+  const W=920,H=300,L=46,R=14,T=18,B=34;
+  const days=rows.reduce((a,r)=>r.pts.length>a.length?r.pts.map(p=>p.d):a,[]);
+  const idx={}; days.forEach((d,i)=>idx[d]=i);
+  const X=i=>L+(days.length>1?i/(days.length-1):0.5)*(W-L-R);
+  // y 軸永遠用全部線去算,不因為只看一條就重新縮放,畫面才不會跳
+  const all=rows.flatMap(r=>r.pts.map(p=>p.v)).concat([100]);
+  let lo=Math.min(...all), hi=Math.max(...all);
+  const pad=Math.max((hi-lo)*0.18,0.8); lo-=pad; hi+=pad;
+  const Y=v=>T+(1-(v-lo)/(hi-lo||1))*(H-T-B);
+
+  // 橫軸格線:日看每隔幾天,月看每月第一個交易日,年看每年第一個交易日
+  let grid="";
+  const tick=(x,lbl)=>`<line class="tl-g" x1="${x.toFixed(1)}" y1="${T}" x2="${x.toFixed(1)}" y2="${H-B}"/>
+    <text class="tl-t" x="${x.toFixed(1)}" y="${H-B+16}" text-anchor="middle">${lbl}</text>`;
+  if(PERF_X==="day"){
+    const every=Math.max(1,Math.ceil(days.length/7));
+    days.forEach((d,i)=>{ if(i%every===0||i===days.length-1)
+      grid+=tick(X(i), d.slice(5).replace("-","/")); });
+  }else{
+    const cut=PERF_X==="month"?7:4;      // 2026-08 或 2026
+    const seen={};
+    days.forEach((d,i)=>{ const k=d.slice(0,cut);
+      if(!seen[k]){ seen[k]=1;
+        grid+=tick(X(i), PERF_X==="month"?(+d.slice(5,7))+"月":d.slice(0,4)); } });
+  }
+  // 縱軸四條格線,中間那條 100 是損益兩平,畫成虛線
+  let hg="";
+  for(let i=0;i<=3;i++){ const v=lo+(hi-lo)*i/3;
+    hg+=`<line class="tl-g" x1="${L}" y1="${Y(v).toFixed(1)}" x2="${W-R}" y2="${Y(v).toFixed(1)}"/>
+      <text class="tl-t" x="${L-6}" y="${(Y(v)+4).toFixed(1)}" text-anchor="end">${v.toFixed(1)}</text>`; }
+  const zero=`<line class="pf-zero" x1="${L}" y1="${Y(100).toFixed(1)}" x2="${W-R}" y2="${Y(100).toFixed(1)}"/>`;
+
+  const shown=rows.filter(r=>!PERF_ON||PERF_ON===r.k);
+  // 只看一條的時候補一塊淡淡的面積,跟資產那張線圖同一個做法
+  let area="";
+  if(shown.length===1){
+    const r=shown[0], seg=r.pts.map(p=>`${X(idx[p.d])} ${Y(p.v)}`);
+    area=`<path d="M${seg.join(" L")} L${X(idx[r.pts[r.pts.length-1].d])} ${Y(lo)} L${X(idx[r.pts[0].d])} ${Y(lo)} Z"
+      fill="${r.color}" opacity=".07"/>`;
+  }
+  const lines=shown.map(r=>{
+    const d=r.pts.map((p,i)=>`${i?"L":"M"}${X(idx[p.d]).toFixed(1)} ${Y(p.v).toFixed(1)}`).join(" ");
+    return `<path class="pf-line${r.k==="sp500"?" bench":""}" d="${d}" stroke="${r.color}"/>`;
+  }).join("");
+  // 點與數字。點太密就隔幾個標一次,最後一個一定標
+  let dots="",nums="";
+  shown.forEach(r=>{
+    const every=Math.max(1,Math.ceil(r.pts.length/8));
+    r.pts.forEach((p,i)=>{
+      const x=X(idx[p.d]), y=Y(p.v), last=i===r.pts.length-1;
+      dots+=`<circle class="pf-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${last?4:3}"
+        fill="${r.color}"><title>${p.d} ${r.label} ${(p.v-100>=0?"+":"")}${(p.v-100).toFixed(2)}%</title></circle>`;
+      if(PERF_NUM&&(last||i%every===0))
+        nums+=`<text class="tl-n" x="${x.toFixed(1)}" y="${(y-9).toFixed(1)}" text-anchor="middle"
+          fill="${r.color}">${(p.v-100>=0?"+":"")}${(p.v-100).toFixed(1)}</text>`;
+    });
+  });
+  const legend=rows.map(r=>{
+    const p=r.pts[r.pts.length-1], chg=p.v-100, on=!PERF_ON||PERF_ON===r.k;
+    return `<button class="pf-lg${on?"":" off"}" data-perf="${r.k}">
+      <i style="background:${r.color}"></i><span class="n">${r.label}</span>
+      <b class="${chg>=0?"up":"dn"}">${chg>=0?"+":""}${chg.toFixed(2)}%</b></button>`;
+  }).join("");
+  const xseg=[["day","日"],["month","月"],["year","年"]].map(([k,t])=>
+    `<button data-perfx="${k}" class="${PERF_X===k?"on":""}">${t}</button>`).join("");
+  return `<section class="card perfcard">
+    <div class="tl-head"><h3>報酬對照大盤</h3>
+      <div class="tl-seg">${xseg}
+        <button data-perfnum="1" class="${PERF_NUM?"on":""}">數字</button></div></div>
+    <div class="pf-sub">${days[0]} 起 · 已扣掉入金 · 共 ${days.length} 天</div>
+    <div class="pf-legend">${legend}</div>
+    <svg class="pf-svg" viewBox="0 0 ${W} ${H}" role="img"
+      aria-label="各帳戶報酬與 S&P 500 對照">${hg}${grid}${zero}${area}${lines}${dots}${nums}</svg>
+    <div class="pf-foot">起點都設成 100,線在 100 以上就是賺。
+      入金記在 <b>asset-flows.json</b>,沒記的話薪水會被算成獲利。</div>
+  </section>`;
+}
+
 function renderMacro(){
+  // 「線圖」這一段跟其他段不一樣:它不是篩選清單,是整頁換成報酬對照卡,
+  // 這樣可以單獨拉出來看,不被下面一長串持股卡干擾。
+  if((FILTER.macro||"all")==="perf"){
+    const el=document.getElementById("macro");
+    el.innerHTML=`<div class="blk perfblk">${perfCardHTML()}</div>`;
+    bindPerf(el, renderMacro);
+    return;
+  }
   const mh=(WL.market_holdings||[]);
   // 依帳戶分區:.TW 結尾歸台灣,其餘歸 IB(歐股)。
-  // 大盤分頁「每張卡片一律用大卡」——同樣式、同互動(可點開走勢圖),不再有精簡列。
+  // 個股(holdings)2026-08-25 起併進同一個分頁,靠篩選列第四段切換,不再是獨立分頁。
+  // 這個分頁「每張卡片一律用大卡」:同樣式、同互動(可點開走勢圖),不再有精簡列。
   // BIG_HOLD_CARDS 只決定排序優先(不在清單內的排後面,維持 watchlist 原順序)。
   const isTW=s=>s.endsWith(".TW");
   const rank=h=>{ const i=BIG_HOLD_CARDS.indexOf(h.s); return i<0?99:i; };
@@ -2116,33 +2173,34 @@ function renderMacro(){
     .sort((a,b)=>(rank(a.h)-rank(b.h))||(a.i-b.i))
     .map(x=>bigHoldCard(x.h.s)).join("");
   const eu=mh, tw=[];        // 示範版不分區
-  // 區域篩選列(全部 / 歐洲大盤 / 台灣大盤)
+  const st=(WL.holdings||[]);   // 個股維持 watchlist 的權重順序
+  // 分頁列選中的那一段(全部 / 歐洲大盤 / 台灣大盤 / 個股),「全部」等於三段相加
   const cur=FILTER.macro||"all";
-  const btn=(kind,label,n)=>
-    `<button class="fbtn${cur===kind?" on":""}" data-filter="${kind}" data-pane="macro"
-       aria-pressed="${cur===kind}">${label}<span class="fn">${n}</span></button>`;
-  const bar=`<div class="filterbar" role="group" aria-label="區域篩選">
-    ${btn("all","全部",eu.length+tw.length)}
-    ${tw.length?btn("eu","歐洲大盤",eu.length)+btn("tw","台灣大盤",tw.length):""}
-  </div>`;
-  // 手機版:兩個分區收在同一張清單卡裡,分區標題印在卡內(設計稿 1a)
+  const segs=[
+    {k:"eu",    label:"大盤 ETF", list:eu},
+    {k:"tw",    label:"台灣大盤", list:tw},
+    {k:"stock", label:"個股",     list:st},
+  ];
+  const shown=segs.filter(g=>(cur==="all"||cur===g.k)&&g.list.length);
+  // 手機版:各分區收在同一張清單卡裡,分區標題印在卡內(設計稿 1a)
   if(isMobile()){
     const sortByRank=list=>list.map((h,i)=>({h,i}))
       .sort((a,b)=>(rank(a.h)-rank(b.h))||(a.i-b.i)).map(x=>x.h);
-    const groups=[];
-    if(cur!=="tw") groups.push({label:"大盤 ETF", list:sortByRank(eu)});
-    if(cur!=="eu"&&tw.length) groups.push({label:"台灣大盤", list:sortByRank(tw)});
-    document.getElementById("macro").innerHTML = bar + mListHtml(groups);
+    const groups=shown.map(g=>({label:g.label, list:sortByRank(g.list)}));
+    document.getElementById("macro").innerHTML = mListHtml(groups);
     return;
   }
-  const euBlk=`<div class="blk"><h2>大盤 ETF</h2>${blistHtml(cardsOf(eu))}</div>`;
-  const twBlk=tw.length?`<div class="blk"><h2>台灣大盤</h2>${blistHtml(cardsOf(tw))}</div>`:"";
   // NDX 檔位已整合進頂部訊號卡(vixNdxLine / mPulseTop);指數卡不顯示,NDX/VIX 數據仍供檔位判斷用
-  document.getElementById("macro").innerHTML =
-    bar + (cur==="tw"?"":euBlk) + (cur==="eu"?"":twBlk);
+  const blk=g=>{
+    const cards=cardsOf(g.list);
+    const body=cards?blistHtml(cards)
+      :`<div class="row err"><div class="head"><span class="nd">這一段目前沒有標的</span></div></div>`;
+    return `<div class="blk"><h2>${g.label}</h2>${body}</div>`;
+  };
+  document.getElementById("macro").innerHTML = shown.map(blk).join("");
 }
 
-/* ---------- 訊號（統計 market_holdings + holdings + watch 全部） ---------- */
+/* ---------- 訊號（統計 market_holdings + holdings） ---------- */
 // 「(持)」與 dn 顯示涵蓋 market_holdings + holdings（兩清單合併建 SET / DN Map）
 let HOLD_SET = new Set(), HOLD_DN = new Map();
 function buildHoldMaps(){
@@ -2150,7 +2208,7 @@ function buildHoldMaps(){
   HOLD_SET = new Set(held.map(h=>h.s));
   HOLD_DN  = new Map(held.map(h=>[h.s, h.dn||h.s]));
 }
-function allTracked(){ return [...(WL.market_holdings||[]), ...(WL.holdings||[]), ...(WL.watch||[])]; }
+function allTracked(){ return [...(WL.market_holdings||[]), ...(WL.holdings||[])]; }
 function symLabel(s){ return HOLD_SET.has(s) ? `${HOLD_DN.get(s)}(持)` : s; }
 
 function crossSignals(){
@@ -2172,12 +2230,11 @@ function nearSignals(){
   });
   return arr;
 }
-// 訊號區的標的名:省略「(持)」文字,持有與觀察改用深淺區分,滑過有 title
+// 訊號區的標的名:清單只剩持有部位,省略「(持)」文字,滑過有 title
 function symPlain(s){
-  const held=HOLD_SET.has(s);
   const e=(typeof wlEntry==="function")?wlEntry(s):{};
-  const name=held?(HOLD_DN.get(s)||s):(e.dn||s);
-  return `<span class="sy${held?"":" wl"}" title="${held?"持有":"觀察清單"}">${name}</span>`;
+  const name=HOLD_DN.get(s)||e.dn||s;
+  return `<span class="sy" title="持有">${name}</span>`;
 }
 // 合併同一標的的多條均線,並省略重複的「線」字(週線+月線 → 週/月)
 function mergeSym(arr){
@@ -2228,7 +2285,7 @@ function vixNdxLine(){
   </div>`;
 }
 /* 加碼訊號:持有部位跌破季線/半年線/年線就是加碼點,跌得越深訊號越強。
-   只看持有的部位(大盤 + 個股),觀察清單還沒進場不談加碼。 */
+   只看持有的部位(大盤 + 個股)。 */
 const ADD_LV={60:{n:1,lbl:"季線"},120:{n:2,lbl:"半年線"},240:{n:3,lbl:"年線"}};
 // 單一標的的加碼判定,給卡片標記用(未持有回傳 null)
 function addLevelOf(sym){
@@ -2463,251 +2520,11 @@ function signalsHtml(){
   </div>`;
 }
 
-/* ---------- 清單（個股 / 觀察通用） ---------- */
-// 個股/觀察清單的分類:bull=站上全部均線、bear=全部跌破、na=無資料或均線未成形
-function trendOf(sym){
-  const r=DATA[sym];
-  if(!r||r.error||r.valid===0) return "na";
-  if(r.score===r.valid && r.valid>0) return "bull";
-  if(r.score===0) return "bear";
-  return "mid";
-}
-// 目前的篩選狀態(依分頁各自記憶):all=全部
-const FILTER={ stocks:"all", watch:"all", macro:"all" };
-function summaryHtml(list, pane){
-  let bull=0, bear=0;
-  list.forEach(h=>{ const t=trendOf(h.s); if(t==="bull") bull++; else if(t==="bear") bear++; });
-  const cur=FILTER[pane]||"all";
-  const btn=(kind,label,n)=>
-    `<button class="fbtn ${kind}${cur===kind?" on":""}" data-filter="${kind}" data-pane="${pane}"
-       aria-pressed="${cur===kind}">${label}<span class="fn">${n}</span></button>`;
-  return `<div class="filterbar" role="group" aria-label="篩選">
-    ${btn("all","全部",list.length)}
-    ${btn("bull","多頭排列",bull)}
-    ${btn("bear","空頭排列",bear)}
-  </div>`;
-}
-// 依目前篩選取子集
-function applyFilter(list, pane){
-  const f=FILTER[pane]||"all";
-  return f==="all"?list:list.filter(h=>trendOf(h.s)===f);
-}
-const FILTER_LBL={ bull:"多頭排列", bear:"空頭排列" };
-function detailHtml(r){
-  const rows=[5,20,60,120,240].map(k=>{
-    const m=maByK(r,k);
-    if(!m||m.v==null) return `<div class="mrow"><div class="ml">${({5:'週線 5',20:'月線 20',60:'季線 60',120:'半年線 120',240:'年線 240'})[k]}MA</div><div class="mv">—</div></div>`;
-    const cls=m.above?"up":"dn", s=m.diff>=0?"+":"";
-    const v=m.v.toLocaleString(undefined,{maximumFractionDigits:2});
-    return `<div class="mrow ${cls}"><div class="ml">${({5:'週線 5',20:'月線 20',60:'季線 60',120:'半年線 120',240:'年線 240'})[k]}MA</div>
-      <div class="mv">${v}</div><div class="md">${m.above?'站上':'跌破'} ${s}${m.diff.toFixed(1)}%</div></div>`;
-  }).join("");
-  return rows;
-}
-function stockRow(sym, group, note, dn){
-  const r=DATA[sym];
-  const main = dn || sym;
-  // 內建槓桿產品(正二/正三)在清單列也掛警示,與大卡同一套 levtag
-  const we=(typeof wlEntry==="function")?wlEntry(sym):{};
-  const lev=Number(we.lev||1);
-  const levTag=lev>1?`<span class="levtag">${lev>=3?"正三":"正二"} ${lev}x</span>`:"";
-  // 左側小字:分類/備註 + P/E(有才顯示),併成一行
-  const metaTxt=[(group||note||""), (r&&r.pe!=null)?`P/E ${r.pe}`:""].filter(Boolean).join(" · ");
-  const idHtml=`<div class="id"><span class="sym">${main}</span>${levTag}${metaTxt?`<span class="grp">${metaTxt}</span>`:""}</div>`;
-  if(!r||r.error){
-    return `<div class="row err"><div class="head">${idHtml}<span class="nd">${(r&&r.error)||"無資料"}</span></div></div>`;
-  }
-  const pxTxt=(r.price!=null)?r.price.toLocaleString(undefined,{maximumFractionDigits:2}):"—";
-  const ip=interpret(r);
-  const ipHtml=ip?`<div class="rowip">↳ ${ip}</div>`:"";
-  return `<div class="row" data-sym="${sym}">
-    <div class="head">
-      ${idHtml}
-      <div class="rt">
-        <div class="px">${pxTxt}</div>
-        <div class="sub">${yrHtml(r)}<span class="sc">${r.score}/${r.valid}</span><span class="caret">▾</span></div>
-      </div>
-      <div class="dots">${dotsHtml(r)}</div>
-    </div>
-    <div class="detail">${ipHtml}${detailHtml(r)}</div>
-  </div>`;
-}
-/* ---------- 個股分頁（僅統計 holdings 20 檔，依 watchlist 權重順序） ---------- */
-function renderStocks(){
-  const list=(WL.holdings||[]);
-  let html=summaryHtml(list,"stocks");
-  const f=FILTER.stocks;
-  const shown=applyFilter(list,"stocks");
-  const title=FILTER_LBL[f]?`個股 · ${FILTER_LBL[f]}(${shown.length})`:"個股(權重順序)";
-  if(isMobile()){
-    document.getElementById("stocks").innerHTML = html + mListHtml([{label:"", list:shown}]);
-    return;
-  }
-  // 全部用大盤同款大卡(樣式與點擊彈窗一致)
-  const body=shown.length?blistHtml(shown.map(h=>bigHoldCard(h.s)).join("")):`<div class="row err"><div class="head"><span class="nd">目前沒有符合的個股</span></div></div>`;
-  html+=`<div class="blk"><h2>${title}</h2>${body}</div>`;
-  document.getElementById("stocks").innerHTML=html;
-}
-
-/* ---------- 觀察清單分頁（清單順序，group 顯示在代號下方小字） ---------- */
-/* 觀察清單 = AI 產業鏈視圖(來自 Obsidian 心智圖,2026-08-17)。
-   chips 是上/中/下游的「切段」,不是多空篩選;訊號計算不含這些觀察股。 */
-let CHAINF="全部";
-
-/* 一段(上游/中游/下游)的體檢數字。
-   代號跨子分組去重(同一檔出現在兩個子分組時只算一次),
-   DATA 沒資料或 error 的略過,分母用實際有資料的支數。
-   今日漲跌沿用大卡的算法(hist 末兩筆收盤),vs 年線用 mas 裡 k=240 的 diff,不自己重算均線。 */
-function chainStats(seg){
-  const syms=[...new Set((WL.ai_chain||[]).filter(g=>g.chain===seg).flatMap(g=>g.syms||[]))];
-  const items=[];
-  syms.forEach(s=>{
-    const r=DATA[s];
-    if(!r||r.error) return;
-    let day=null;
-    if(r.hist&&r.hist.c&&r.hist.c.length>1){ const c=r.hist.c; day=(c[c.length-1]/c[c.length-2]-1)*100; }
-    const m=maByK(r,240);
-    items.push({s, day, yr:(m&&m.v!=null)?m.diff:null, score:Number(r.score||0), valid:Number(r.valid||0)});
-  });
-  if(!items.length) return null;
-  const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
-  const withDay=items.filter(x=>x.day!=null).sort((a,b)=>b.day-a.day);
-  const valids=items.filter(x=>x.valid>0);
-  return {
-    seg, n:items.length,
-    day:avg(withDay.map(x=>x.day)),
-    yr:avg(items.filter(x=>x.yr!=null).map(x=>x.yr)),
-    bull:valids.filter(x=>x.score===x.valid).length,
-    bear:valids.filter(x=>x.score===0).length,
-    ma:avg(valids.map(x=>x.score)),
-    best:withDay[0]||null,
-    worst:withDay.length>1?withDay[withDay.length-1]:null
-  };
-}
-// 帶正負號與漲跌色的百分比,缺資料印連字號
-function csPct(v,dp){
-  if(v==null) return `<b class="na">-</b>`;
-  return `<b class="${v>=0?"up":"dn"}">${v>=0?"+":"−"}${Math.abs(v).toFixed(dp)}%</b>`;
-}
-/* 觀察清單頂部的族群總結卡:
-   選了某一段 → 該段體檢(平均今日 / 平均 vs 年線 / 多空排列 / 最強最弱)
-   選「全部」 → 三段一行一段的對比,一眼看出哪段最熱 */
-function chainSumCard(){
-  const segs=[...new Set((WL.ai_chain||[]).map(g=>g.chain))];
-  if(CHAINF!=="全部"){
-    const t=chainStats(CHAINF);
-    if(!t) return "";
-    const nm=s=>{ const e=wlEntry(s); return e.dn||s; };
-    const ext=(t.best&&t.worst)
-      ? `<div class="cs-ext">最強 ${nm(t.best.s)} ${csPct(t.best.day,1)} · 最弱 ${nm(t.worst.s)} ${csPct(t.worst.day,1)}</div>`
-      : "";
-    return `<div class="chain-sum">
-      <div class="cs-h">${t.seg} · ${t.n} 支</div>
-      <div class="cs-kpis">
-        <div class="cs-kpi">${csPct(t.day,2)}<span>平均今日漲跌</span></div>
-        <div class="cs-kpi">${csPct(t.yr,1)}<span>平均 vs 年線</span></div>
-      </div>
-      <div class="cs-chips">
-        <span class="cs-chip up">多頭排列 <b>${t.bull}</b> 支</span>
-        <span class="cs-chip dn">空頭排列 <b>${t.bear}</b> 支</span>
-        <span class="cs-chip">平均站上 <b>${t.ma!=null?t.ma.toFixed(1):"-"}</b>/5</span>
-      </div>
-      ${ext}
-    </div>`;
-  }
-  const rows=segs.map(c=>chainStats(c)).filter(Boolean);
-  if(!rows.length) return "";
-  return `<div class="chain-sum">
-    <div class="cs-h">AI 產業鏈 · 三段對比<span class="cs-sub">各段平均,點上方切段看細節</span></div>
-    <div class="cs-tbl">
-      <div class="cs-tr cs-thead"><span class="cs-seg"></span><span>平均今日</span><span>平均 vs 年線</span><span>多頭排列</span></div>
-      ${rows.map(t=>`<div class="cs-tr">
-        <span class="cs-seg">${t.seg}</span>
-        <span>${csPct(t.day,2)}</span>
-        <span>${csPct(t.yr,1)}</span>
-        <span class="cs-bull"><b>${t.bull}</b>/${t.n}</span>
-      </div>`).join("")}
-    </div>
-  </div>`;
-}
-
-function renderWatch(){
-  const el=document.getElementById("watch");
-  const chain=WL.ai_chain||[];
-  if(!chain.length){ el.innerHTML=`<div class="loading">watchlist.json 沒有 ai_chain 資料</div>`; return; }
-  const chains=[...new Set(chain.map(g=>g.chain))];
-  const cnt=c=>chain.filter(g=>c==="全部"||g.chain===c).reduce((a,g)=>a+g.syms.length,0);
-  const chips=`<div class="filterbar" role="group" aria-label="產業鏈分段">`+
-    ["全部",...chains].map(c=>`<button class="fbtn${CHAINF===c?" on":""}" data-chainf="${c}"
-      aria-pressed="${CHAINF===c}">${c}<span class="fn">${cnt(c)}</span></button>`).join("")+`</div>`;
-  const sum=chainSumCard();   // chips 下方、第一個分組卡上方的族群總結卡
-  const groups=chain.filter(g=>CHAINF==="全部"||g.chain===CHAINF)
-    .map(g=>({label:(CHAINF==="全部"&&g.chain!=="其他")?`${g.chain} · ${g.seg}`:g.seg,
-              list:g.syms.map(sy=>({s:sy}))}));
-  if(isMobile()){ el.innerHTML=chips+sum+mListHtml(groups); return; }
-  const secs=groups.map(g=>{
-    const rows=g.list.filter(h=>DATA[h.s]&&!DATA[h.s].error).map(h=>bigHoldCard(h.s)).join("");
-    return rows?`<div class="blk"><h2>${g.label}</h2>${blistHtml(rows)}</div>`:"";
-  }).join("");
-  el.innerHTML=chips+sum+(secs||`<div class="loading">資料抓取中,下次自動更新後就會出現。</div>`);
-}
-
-/* ---------- 財報時間表分頁 ---------- */
-function renderEarnings(){
-  const list=(DATA._earnings||[]);
-  const el=document.getElementById("earnings");
-  if(!list.length){
-    el.innerHTML=`<div class="blk"><div class="nd" style="padding:16px 4px">尚無財報日資料,等待下次自動更新。</div></div>`;
-    return;
-  }
-  // 以本地日期零點為基準算距今天數
-  const today=new Date(); today.setHours(0,0,0,0);
-  const dn=s=>{ const e=wlEntry(s); return e.dn||s; };
-  const fmtDate=dt=>`${dt.getMonth()+1}/${dt.getDate()}`;
-  const wk=["日","一","二","三","四","五","六"];
-  // 點擊個股 → 開 Yahoo 奇摩股市該股「相關新聞」頁(繁體財報分析/法人評等/市場評論)。
-  // 用 /news 而非行情頁,直接落在最近財報的中文分析。代號原樣,BRK-B 直接可用。
-  const zhUrl=s=>`https://tw.stock.yahoo.com/quote/${s}/news`;
-  // 依日期分組:同一天的股票合併成一張卡
-  const byDate=new Map();
-  list.forEach(e=>{
-    if(!byDate.has(e.date)) byDate.set(e.date, []);
-    byDate.get(e.date).push(e);
-  });
-  const groups=[...byDate.entries()].map(([date,items])=>{
-    const dt=new Date(date+"T00:00:00");
-    return {date, dt, days:Math.round((dt-today)/864e5), items};
-  });
-  const upcoming=groups.filter(g=>g.days>=0).sort((a,b)=>a.dt-b.dt);
-  const past=groups.filter(g=>g.days<0).sort((a,b)=>b.dt-a.dt);  // 最近的在前
-  const cardHtml=g=>{
-    let badge;
-    if(g.days<0){ badge=`<span class="ebadge past">${-g.days} 天前</span>`; }
-    else if(g.days===0){ badge=`<span class="ebadge today">今天</span>`; }
-    else if(g.days<=7){ badge=`<span class="ebadge soon">${g.days} 天後</span>`; }
-    else { badge=`<span class="ebadge">${g.days} 天後</span>`; }
-    const est=g.items.some(x=>x.est)?`<span class="eest">預估</span>`:"";
-    const chips=g.items.map(x=>`<a class="echip" href="${zhUrl(x.s)}" target="_blank" rel="noopener">${dn(x.s)}<span class="ecode">${x.s}</span><span class="elink">↗</span></a>`).join("");
-    return `<div class="ecard">
-      <div class="ecard-top">
-        <div class="edate"><b>${fmtDate(g.dt)}</b><span>週${wk[g.dt.getDay()]}</span></div>
-        <div class="emeta">${est}${badge}</div>
-      </div>
-      <div class="echips">${chips}</div>
-    </div>`;
-  };
-  // 桌面:卡片排成兩欄格線,已公布那組整體淡化(設計稿 B)。手機維持一天一張的直排。
-  const wrap=(cards,past)=>isMobile()?cards:`<div class="egrid${past?" past":""}">${cards}</div>`;
-  let html="";
-  if(upcoming.length){
-    html+=`<div class="blk"><h2>即將公布</h2>${wrap(upcoming.map(cardHtml).join(""),false)}</div>`;
-  }
-  if(past.length){
-    html+=`<div class="blk"><h2>最近已公布</h2>${wrap(past.map(cardHtml).join(""),true)}</div>`;
-  }
-  el.innerHTML=html;
-}
-
+/* ---------- 清單 ---------- */
+// 目前的篩選狀態(只剩大盤分頁在用):all=全部,其餘是 eu / tw / stock
+const FILTER={ macro:"all" };
+/* 舊的精簡列 stockRow / 行內展開 detailHtml 隨個股分頁一起移除(2026-08-25),
+   現在所有標的一律用 bigHoldCard(桌面)與 mListHtml(手機),點卡開線圖彈窗。 */
 /* ══════ 桌面右欄(設計稿 B):脈搏卡 + 今日訊號 ══════
    資料來源與手機完全相同(ladderState / hhLev / addSignals / crossSignals…),
    只是版型換成 352px 的側欄,而且訊號永遠全部展開,不需要展開/收合。 */
@@ -2727,7 +2544,7 @@ function autoTodos(){
     head=`先把曝險補到 1.0 倍`;
     body=`全資產口徑,現在 ${fmtLev(L.act)} 倍,差約 <b>${money}K</b> 曝險。`
       +`路線:用融資買兩倍 ETF(每 1 塊算 2 塊,約需 <b>${(money/2).toFixed(1)}K</b>)。`
-      +`融資借款守在淨值 40% 以內,天花板約 1.05 倍。`
+      +`借款成數(借款 ÷ 持倉市值)守在 40% 以內。`
       +`滿倉之後才用小回檔往基準 ${fmtLev(LADDER_BASE)} 爬,大跌照檔位表。`;
   }else if(L.gap>0.02){
     // 檔位未到位:要補倉
@@ -2833,9 +2650,10 @@ function renderTopStrip(){
    槓桿風險面板:資料來自本機 leverage-data.js(window.MANUAL_SNAPSHOTS)。
    計算式移植自 ib-leverage-dashboard/public/app.js,單一真相同一套。
    ========================================================== */
-/* IB 帳戶內的借款紅線:2026-08-19 從 20% 放寬到 40%。
-   理由:正2 只能在 IB 買,槓桿全壓這一個帳戶,而 IB 淨值只佔全帳戶不到兩成,
-   20% 會在總曝險還不到 1.0x 就卡住。危險區維持 50%。
+/* 借款紅線:用質押成數口徑。
+   成數 = 借款 ÷ 持倉(擔保品)市值。法規上限 60%,安全上限 30 到 40%,
+   「不要把額度借滿 6 成,借 3 到 4 成才能安穩睡覺」(ivan_EP09 [21:15] [21:30],pilot 集)。
+   以前(2026-08-19 到 08-22)分母用的是 IB 淨值,同一個 40% 比較嚴格,已改掉。危險區 50%。
    「借款不超過總資產 20%」是另一條(分母是總資產),沒有改,在總曝險卡上。 */
 const RK_LIMIT={safeMax:.4, watchMax:.5};
 const RK_SEG={"0056":"#12a670","00878":"#1d6fd8","00646":"#e0a132","0052":"#d16ba5","00713":"#7c5cd6","00670L":"#d95f18"};
@@ -2872,6 +2690,17 @@ function yuantaHoldings(){
 const RK_FB=["#8b5cf6","#0891b2","#65a30d","#db2777","#ea580c"];
 function rkSnaps(){ return Array.isArray(window.MANUAL_SNAPSHOTS)?window.MANUAL_SNAPSHOTS:[]; }
 function rkHas(){ return rkSnaps().length>0; }
+/* 持倉明細的來源快照。最新一筆有時只填帳戶層級的數字(券商 連線讀值不一定帶持倉明細),
+   這時往回找最近一筆有持倉的快照來畫「持倉曝險配置 · IB」,並回報那筆的時間,
+   卡片會把日期標出來。不這樣做的話整張卡會直接消失(2026-08-25 修)。 */
+function rkHoldSnap(){
+  const snaps=rkSnaps();
+  for(let i=0;i<snaps.length;i++){
+    const hs=(snaps[i].holdings||[]).filter(h=>(+h.market_value||0)>0);
+    if(hs.length) return {list:hs, from:snaps[i].updated_at||"", stale:i>0};
+  }
+  return {list:[], from:"", stale:false};
+}
 function rkNorm(s){
   const net=+s.net_liquidation||0;
   const settled=+(s.settled_cash ?? s.total_cash_value ?? 0);
@@ -2879,7 +2708,8 @@ function rkNorm(s){
   const gross=+(s.gross_position_value ?? Math.max(net-Math.max(cash,0),0));
   const loan=+(s.margin_loan ?? Math.max(-cash, gross-net, 0));
   return {...s, net, cash, gross, loan,
-    exposureRatio: net>0?gross/net:null, borrowRatio: net>0?loan/net:null};
+    exposureRatio: net>0?gross/net:null,
+    borrowRatio: gross>0?loan/gross:null};   // 借款成數:借款 ÷ 持倉市值
 }
 function rkExpo(s){
   let boost=0; (s.holdings||[]).forEach(h=>{ const mv=+h.market_value||0, lev=+h.leverage||1;
@@ -2892,7 +2722,7 @@ function rkStress(s){
   const gross=s.gross, mm=+s.maintenance_margin||0, el=+s.excess_liquidity||0, net=s.net, loan=Math.max(s.loan,0);
   return {
     marginCallDrop: gross>mm&&el>0 ? el/(gross-mm) : null,        // 距券商追繳
-    breachDrop: loan>0&&gross>0 ? (net-loan/RK_LIMIT.safeMax)/gross : null, // 碰 40% 警戒
+    breachDrop: loan>0&&gross>0 ? 1-loan/(RK_LIMIT.safeMax*gross) : null, // 市場再跌這麼多,借款成數碰到 40%
     cushionRatio: net>0 ? el/net : null,                         // 強平安全墊
     cashBuffer: net>0 ? s.cash/net : null,                       // 現金緩衝
   };
@@ -2966,15 +2796,18 @@ function renderRisk(){
   // IB 真正的追繳線:再借滿超額流動性就碰到。換算成借款比例常常超過 100%,
   // 所以刻度上限跟著它走,兩條線才畫得進同一條 bar。
   const ibLoanMax=Math.max(s.loan,0)+(+s.excess_liquidity||0);
-  const ibRatio=s.net>0?ibLoanMax/s.net:null;
+  const ibRatio=s.gross>0?ibLoanMax/s.gross:null;
   const gMax=Math.max(RK_LIMIT.watchMax, (ibRatio||0)*1.12);
   const fillPct=Math.min((s.borrowRatio||0)/gMax*100,100);
   const safeStop=RK_LIMIT.safeMax/gMax*100;
   const watchStop=RK_LIMIT.watchMax/gMax*100;
   const ibStop=ibRatio!=null?Math.min(ibRatio/gMax*100,100):null;
-  const safeAmt=s.net*RK_LIMIT.safeMax, safeRoom=safeAmt-Math.max(s.loan,0);
-  // 持倉曝險配置:各持倉市值占持倉總市值
-  const H=(s.holdings||[]).filter(h=>(+h.market_value||0)>0);
+  const safeAmt=s.gross*RK_LIMIT.safeMax, safeRoom=safeAmt-Math.max(s.loan,0);
+  // 持倉曝險配置:各持倉市值占持倉總市值。最新快照沒帶持倉明細時退回上一筆有的
+  const HSNAP=rkHoldSnap();
+  const H=HSNAP.list;
+  // 明細不是這一筆快照的就在卡上標來源時間,不要讓人以為是最新的組成
+  const holdSub=HSNAP.stale?` · 持倉明細取自 ${HSNAP.from}`:"";
   // 兩張券商卡只看 ETF,個股統一在最下面那張(2026-08-20 定案)
   const STKSET=stockSymSet();
   const H_ETF=H.filter(h=>!isStockHold(h,STKSET));
@@ -3041,13 +2874,13 @@ function renderRisk(){
       <span class="v" style="color:${x.c}">${x.v}</span></div>`).join("");
     const ibLine=(+s.excess_liquidity||0);
     const ibLoanMax=Math.max(s.loan,0)+ibLine;
-    const ibNote=hh?`<div class="dm-foot">上面的 <b>40%</b> 線是你自己訂的,只算 IB 帳戶內。
-      <b>IB 真正的追繳線</b>在借款 ${rkMoney(ibLoanMax,cur)}(${s.net>0?(ibLoanMax/s.net*100).toFixed(0):"—"}%,超出這個刻度),
+    const ibNote=hh?`<div class="dm-foot">上面的 <b>40%</b> 線是質押成數線(借款 ÷ 持倉市值),只算 IB 帳戶內。
+      <b>IB 真正的追繳線</b>在借款 ${rkMoney(ibLoanMax,cur)}(${s.gross>0?(ibLoanMax/s.gross*100).toFixed(0):"—"}%,超出這個刻度),
       現在還可以再借 <b>${rkMoney(ibLine,cur)}</b> 才碰到。</div>`:"";
 
     // ③ 離警戒多遠:現金緩衝沒有條,只有數字與說明
     const stressRows=[
-      {k:"碰到 40% 自訂警戒", v:rkPct(st.breachDrop), col:barCol[bcKind],
+      {k:"碰到 40% 成數線", v:rkPct(st.breachDrop), col:barCol[bcKind],
        w:pctW(st.breachDrop), note:"實際要盯的線", bar:true},
       {k:"距券商追繳", v:rkPct(st.marginCallDrop), col:barCol[mcKind],
        w:pctW(st.marginCallDrop), note:"市場再跌這麼多", bar:true},
@@ -3100,7 +2933,7 @@ function renderRisk(){
 
       <div class="dm-card c2">
         <div class="dm-hd bl"><span class="dm-t">持倉曝險配置</span>
-          <span class="dm-hint">等效市場曝險 · ${cur}</span></div>
+          <span class="dm-hint">等效市場曝險 · ${cur}${holdSub}</span></div>
         <div class="dm-mix">${levMixHtml(H)}</div>
         <div class="dm-seg" style="margin:10px 0 4px">${holdSeg}</div>
         ${holdRows}
@@ -3184,7 +3017,7 @@ function renderRisk(){
     <div class="rk-strip">
       <span class="k">風險狀態</span><span class="rk-pill ${rkBadge(bk)}">${bLbl}</span>
       <span class="sep"></span>
-      <span class="k">借款比例</span><b>${rkPct(s.borrowRatio)}</b><span class="note">安全區 0–40%</span>
+      <span class="k">借款成數</span><b>${rkPct(s.borrowRatio)}</b><span class="note">安全區 0–40%</span>
       <span class="sep"></span>
       <span class="k">距追繳</span><b>${rkPct(st.marginCallDrop)}</b><span class="note">市場需再跌這麼多才觸發</span>
     </div>
@@ -3213,7 +3046,7 @@ function renderRisk(){
             <span class="sv" style="color:${barCol[mcKind]}">${rkPct(st.marginCallDrop)}</span></div>
             <div class="sbar"><i style="width:${Math.min((st.marginCallDrop||0)*100,100)}%;background:${barCol[mcKind]}"></i></div>
             </div>
-          <div class="srow"><div class="st"><span class="sl">碰到 40% 自訂警戒</span>
+          <div class="srow"><div class="st"><span class="sl">碰到 40% 成數線</span>
             <span class="sv" style="color:${barCol[bcKind]}">${rkPct(st.breachDrop)}</span></div>
             <div class="sbar"><i style="width:${Math.min((st.breachDrop||0)*100,100)}%;background:${barCol[bcKind]}"></i></div>
             </div>
@@ -3228,7 +3061,7 @@ function renderRisk(){
     </div>
 
     <div class="rk-holds">
-      ${allocCard("ETF",cur,H_ETF,cur,
+      ${allocCard("ETF",cur+holdSub,H_ETF,cur,
         `融資借款 <b>−${rkMoney(Math.max(s.loan,0),cur)}</b> · 個股列在下面那張卡`,
         levMixHtml(H_ETF))}
     </div>
@@ -3555,6 +3388,9 @@ function renderAsset(){
 
     el.innerHTML=heroCard+splitCard+twoCards+tlCardD;
     bindDonutHover(el);
+    el.querySelectorAll("[data-perf]").forEach(b=>b.addEventListener("click",()=>{
+      PERF_ON = PERF_ON===b.dataset.perf ? null : b.dataset.perf; renderAsset();
+    }));
     return;
   }
   /* ══ 手機版 v3(2026-08-17 設計稿):
@@ -4246,7 +4082,7 @@ let DATA_DATE="";
 // 一定要宣告在 syncHeader() 前面:那個函式載入時就會跑,宣告放後面會踩到暫時性死區。
 let LIVE_AT=null;
 
-/* 底部分頁列(手機):大盤/個股/觀察/財報 屬股票面板,槓桿是另一個面板。
+/* 底部分頁列(手機):大盤屬股票面板,槓桿與資產是另外的面板。
    點哪一格就切到對應的面板與分頁,並把亮起來的那格同步。 */
 function goNav(k){
   if(k==="risk"){ switchPanel("risk"); }
@@ -4260,8 +4096,8 @@ function syncTabbar(){
   let cur = (PANEL==="risk") ? "risk"
     : (PANEL==="asset") ? "asset"
     : (PANEL==="expense") ? "expense"
-    : (["macro","stocks","watch","earnings"].find(p=>!document.getElementById(p).hidden) || "macro");
-  // 底部列已無觀察/財報格,這兩頁算在「個股」名下
+    : "stock";
+  // 股票面板只剩大盤一頁,底部列對應「股票」那格
   if(!document.querySelector('#tabbar [data-go="'+cur+'"]')) cur="stock";
   document.querySelectorAll("#tabbar button").forEach(b=>b.classList.toggle("on", b.dataset.go===cur));
   // 槓桿那格的狀態點跟著借款比例的安全/注意/危險走(設計稿 1e)
@@ -4272,26 +4108,30 @@ function syncTabbar(){
   }
 }
 
-/* 切到指定分頁（重用 tab 切換邏輯，含 active 樣式更新） */
+/* 導覽只有一層:分頁列的四顆按鈕就是四段,選哪段就重畫大盤那個 pane。
+   FILTER.macro 是唯一的狀態,分頁列的 active 樣式跟著它走。 */
+const MACRO_SEGS=["all","eu","tw","stock","perf"];
+function syncSegTabs(){
+  const cur=FILTER.macro||"all";
+  document.querySelectorAll(".tabs button[data-seg]")
+    .forEach(x=>x.classList.toggle("active", x.dataset.seg===cur));
+}
+function setMacroSeg(k){
+  FILTER.macro=MACRO_SEGS.includes(k)?k:"all";
+  syncSegTabs();
+  if(typeof DATA!=="undefined" && DATA && WL) renderMacro();
+}
+/* 股票面板只剩大盤一個 pane,這支留著是因為面板切換與 hash 都會呼叫它。 */
 let CUR_TAB="macro";
-function switchTab(t){
-  CUR_TAB=t;
-  document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("active", x.dataset.tab===t));
-  ["macro","stocks","watch","earnings"].forEach(p=>{
-    document.getElementById(p).hidden = t!==p;
-  });
-  // 四個子分頁共用同一張頂部脈搏卡,版型不跳動(2026-08-17 使用者要求)
+function switchTab(){
+  CUR_TAB="macro";
+  document.getElementById("macro").hidden=false;
+  // 頂部脈搏卡固定顯示,版型不跳動(2026-08-17 使用者要求)
   document.getElementById("topstrip").hidden = false;
-  // 桌面:財報分頁不要右欄,清單佔滿版心
   const rl=document.getElementById("rail");
-  if(rl) rl.hidden = t==="earnings";
-  document.getElementById("stockPanel").classList.toggle("norail", t==="earnings");
-  // 手機:個股/觀察/財報共用底部的「個股」格,子籤在這裡切
-  const ms=document.getElementById("msub");
-  if(ms){
-    ms.hidden = !isMobile();   // 手機的股票面板固定顯示子籤(桌面用頂部分頁列)
-    ms.querySelectorAll("button").forEach(b=>b.classList.toggle("on", b.dataset.go===t));
-  }
+  if(rl) rl.hidden = false;
+  document.getElementById("stockPanel").classList.remove("norail");
+  syncSegTabs();
   syncTabbar();
   syncHash();
 }
@@ -4305,8 +4145,7 @@ let CHART={ sym:null, range:"6M" };
 
 // 從 watchlist 找顯示名 / 說明
 function wlEntry(sym){
-  return [...(WL.market_holdings||[]), ...(WL.holdings||[]), ...(WL.watch||[])].find(h=>h.s===sym)
-    || ((WL.chain_names&&WL.chain_names[sym])?{s:sym, dn:WL.chain_names[sym]}:{s:sym});
+  return [...(WL.market_holdings||[]), ...(WL.holdings||[])].find(h=>h.s===sym) || {s:sym};
 }
 // 依選定區間取歷史資料尾段
 function slice(hist){
@@ -4609,8 +4448,8 @@ function closeRules(){ document.getElementById("rulesModal").classList.remove("s
 
 /* ---------- interactions ---------- */
 // 只掛分頁鈕;同一列裡的「規則 ↗」不是分頁,由下面的全域 click 處理
-document.querySelectorAll(".tabs button[data-tab]").forEach(b=>{
-  b.addEventListener("click",()=>switchTab(b.dataset.tab));
+document.querySelectorAll(".tabs button[data-seg]").forEach(b=>{
+  b.addEventListener("click",()=>setMacroSeg(b.dataset.seg));
 });
 document.addEventListener("click",e=>{
   // 面板切換(股票 / 槓桿)與槓桿詳細折疊
@@ -4637,23 +4476,12 @@ document.addEventListener("click",e=>{
   const ar=e.target.closest("[data-asrisk]");
   if(ar){ const i=+ar.dataset.asrisk; AS_RISKOPEN=(AS_RISKOPEN===i)?null:i; renderAsset(); return; }
   const tb=e.target.closest("#tabbar button"); if(tb){ goNav(tb.dataset.go); return; }
-  const mb=e.target.closest("#msub button"); if(mb){ goNav(mb.dataset.go); return; }
   // 訊號區展開/收合(在頂部訊號列,不在彈窗內)
   if(e.target.closest("#sigToggle")){ SIGOPEN=!SIGOPEN; renderTopStrip(); return; }
   if(e.target.closest("#rulesToggle")||e.target.closest("#rulesTop")){ openRules(); return; }
   // 規則彈窗:點 ✕ 或背景關閉,點內容不關
   if(e.target.closest("#rulesSheet")){ if(e.target.closest("#rulesClose")) closeRules(); return; }
   if(e.target.closest("#rulesModal")){ closeRules(); return; }
-  const cf=e.target.closest("[data-chainf]");
-  if(cf){ CHAINF=cf.dataset.chainf; renderWatch(); return; }
-  // 篩選列(大盤區域 / 個股與觀察清單的多空排列):切換後重繪該分頁
-  const fc=e.target.closest("[data-filter]");
-  if(fc){
-    const pane=fc.dataset.pane;
-    FILTER[pane]=fc.dataset.filter;
-    ({stocks:renderStocks, watch:renderWatch, macro:renderMacro})[pane]();
-    return;
-  }
   // 彈窗內互動
   if(e.target.closest("#chartSheet")){
     if(e.target.closest("[data-goasset]")){ closeChart(); switchPanel("asset"); return; }
@@ -4689,18 +4517,17 @@ if(window.EXPENSE_DATA){
   document.getElementById("tabbarExpense").hidden=false;
 }
 
-/* 分頁寫進 URL hash(#macro/#stocks/#watch/#earnings/#risk/#asset):
+/* 分頁寫進 URL hash(#macro/#risk/#asset/#expense):
    重新整理、加書籤、PWA 冷啟動都停在原分頁。用 replaceState,不塞瀏覽歷史。 */
-const NAV_KEYS=["macro","stocks","watch","earnings","risk","asset","expense"];
+const NAV_KEYS=["macro","risk","asset","expense"];
 function syncHash(){
-  const key=(PANEL==="risk")?"risk":(PANEL==="asset")?"asset":(PANEL==="expense")?"expense"
-    :(["macro","stocks","watch","earnings"].find(p=>!document.getElementById(p).hidden)||"macro");
+  const key=(PANEL==="risk")?"risk":(PANEL==="asset")?"asset":(PANEL==="expense")?"expense":"macro";
   if(location.hash.slice(1)!==key) history.replaceState(null,"","#"+key);
 }
 (function(){
   const k=location.hash.slice(1);
   if(NAV_KEYS.includes(k)&&k!=="macro") goNav(k);
-  /* #macro / #stocks / #watch / #earnings 跟面板的 id 同名,瀏覽器會把它當成錨點捲下去。
+  /* #macro 跟面板的 id 同名,瀏覽器會把它當成錨點捲下去。
      手機的頁首吸頂、脈搏卡跟著捲,一開啟就會停在清單中段,所以載入後拉回頂端。
      桌面維持原本的行為,不動。 */
   if(isMobile()) window.addEventListener("load",function(){ window.scrollTo(0,0); });
@@ -4825,10 +4652,7 @@ function loadData(){
     document.getElementById("status").style.display="none";
     renderTopStrip();
     renderMacro();
-    renderStocks();
-    renderWatch();
-    renderEarnings();
-    switchTab(CUR_TAB);   // 同步子籤顯示與選中狀態
+    switchTab(CUR_TAB);   // 同步分頁顯示與選中狀態
     // 人在哪個面板就重畫哪個,槓桿狀態點也同步
     if(PANEL==="risk") renderRisk();
     if(PANEL==="asset") renderAsset();
@@ -4839,7 +4663,7 @@ function loadData(){
     return fetchLive().then(n=>{
       if(n){
         syncHeader();
-        renderTopStrip(); renderMacro(); renderStocks(); renderWatch(); renderEarnings();
+        renderTopStrip(); renderMacro();
         switchTab(CUR_TAB);
         if(PANEL==="risk") renderRisk();
         if(PANEL==="asset") renderAsset();
@@ -4873,7 +4697,7 @@ window.matchMedia("(max-width:720px)").addEventListener("change",function(){
   switchTab(CUR_TAB);
   if(PANEL==="asset") renderAsset();
   if(!DATA||!WL) return;
-  renderTopStrip(); renderMacro(); renderStocks(); renderWatch(); renderEarnings();
+  renderTopStrip(); renderMacro();
   if(PANEL==="risk") renderRisk();
 });
 
