@@ -10,7 +10,7 @@ window.ASSET_DATA = {
  "summary": [
   {
    "label": "淨資產（扣房貸）",
-   "value": "3,249,409",
+   "value": "3,249,443",
    "unit": "TWD",
    "sub": "≈ 324.9 萬 TWD",
    "delta": null,
@@ -18,7 +18,7 @@ window.ASSET_DATA = {
   },
   {
    "label": "流動資產（不含房產）",
-   "value": "1,249,409",
+   "value": "1,249,443",
    "unit": "TWD",
    "sub": "≈ 124.9 萬 TWD",
    "delta": null,
@@ -32,7 +32,7 @@ window.ASSET_DATA = {
   {
    "label": "現金 vs 股票（流動資產）",
    "value": "33% : 67%",
-   "sub": "現金 410,000 / 股票 839,409 TWD"
+   "sub": "現金 410,000 / 股票 839,443 TWD"
   }
  ],
  "donuts": [
@@ -61,7 +61,7 @@ window.ASSET_DATA = {
     },
     {
      "name": "加密貨幣",
-     "value": 12406,
+     "value": 12440,
      "color": "#5b6270"
     }
    ]
@@ -96,7 +96,7 @@ window.ASSET_DATA = {
     },
     {
      "name": "其他資產",
-     "value": 422406,
+     "value": 422440,
      "color": "#8f97a3"
     }
    ]
@@ -130,7 +130,7 @@ window.ASSET_DATA = {
   },
   {
    "name": "加密貨幣",
-   "value": 12406,
+   "value": 12440,
    "color": "#3b82f6",
    "pct": 0.4
   }
@@ -325,8 +325,8 @@ window.ASSET_DATA = {
  },
  "holdingsTotal": 827002,
  "leverage": {
-  "exposure": 888471,
-  "liquid": 1249409,
+  "exposure": 888505,
+  "liquid": 1249443,
   "lev": 0.711,
   "boost": 49062,
   "core": 395128,
