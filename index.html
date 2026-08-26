@@ -2042,8 +2042,19 @@ function ladderState(){
 const PERF_COLOR={total:"#101418", ib:"#7b5cd6", yuanta:"#e08b2f", bux:"#2f6fed", sp500:"#9aa1ab"};
 const PERF_ORDER=["total","ib","yuanta","bux","sp500"];
 let PERF_ON=null;        // null = 全部顯示
-let PERF_X="day";        // 橫軸刻度:day / month / year
-let PERF_NUM=false;      // 要不要把每個點的數字標出來
+let PERF_X="day";        // 日 / 月 / 年。不只是換刻度,線本身也跟著換密度
+/* 月看每個月的最後一筆,年看每年的最後一筆。最新那一筆一定留著,
+   不然「這個月到今天為止」會被上個月底蓋掉。 */
+function perfResample(pts, mode){
+  if(mode==="day"||pts.length<2) return pts;
+  const cut = mode==="month" ? 7 : 4;
+  const last={};
+  pts.forEach(p=>{ last[p.d.slice(0,cut)]=p; });
+  const out=Object.keys(last).sort().map(k=>last[k]);
+  const tail=pts[pts.length-1];
+  if(out[out.length-1].d!==tail.d) out.push(tail);
+  return out;
+}
 function perfData(){
   const A=window.ASSET_DATA||{}, P=A.perf;
   if(!P) return null;
@@ -2060,13 +2071,11 @@ function bindPerf(el, redraw){
   el.querySelectorAll("[data-perfx]").forEach(b=>b.addEventListener("click",()=>{
     PERF_X=b.dataset.perfx; redraw();
   }));
-  el.querySelectorAll("[data-perfnum]").forEach(b=>b.addEventListener("click",()=>{
-    PERF_NUM=!PERF_NUM; redraw();
-  }));
 }
 function perfCardHTML(){
   const A=window.ASSET_DATA||{};
-  const rows=perfData();
+  const rows0=perfData();
+  const rows=rows0&&rows0.map(r=>({...r, pts:perfResample(r.pts,PERF_X)}));
   if(!rows){
     const base=(A.timeline&&A.timeline.length)?A.timeline[A.timeline.length-1].d:"今天";
     return `<section class="card perfcard">
@@ -2093,11 +2102,9 @@ function perfCardHTML(){
     days.forEach((d,i)=>{ if(i%every===0||i===days.length-1)
       grid+=tick(X(i), d.slice(5).replace("-","/")); });
   }else{
-    const cut=PERF_X==="month"?7:4;      // 2026-08 或 2026
-    const seen={};
-    days.forEach((d,i)=>{ const k=d.slice(0,cut);
-      if(!seen[k]){ seen[k]=1;
-        grid+=tick(X(i), PERF_X==="month"?(+d.slice(5,7))+"月":d.slice(0,4)); } });
+    // 資料已經抽稀成一個月(年)一點,每一點都標
+    days.forEach((d,i)=>{ grid+=tick(X(i),
+      PERF_X==="month"?(+d.slice(5,7))+"月":d.slice(0,4)); });
   }
   // 縱軸四條格線,中間那條 100 是損益兩平,畫成虛線
   let hg="";
@@ -2121,12 +2128,13 @@ function perfCardHTML(){
   // 點與數字。點太密就隔幾個標一次,最後一個一定標
   let dots="",nums="";
   shown.forEach(r=>{
-    const every=Math.max(1,Math.ceil(r.pts.length/8));
+    // 數字一律顯示。日線的點太密會疊在一起,所以隔幾個標一次,月與年全標
+    const every=PERF_X==="day"?Math.max(1,Math.ceil(r.pts.length/8)):1;
     r.pts.forEach((p,i)=>{
       const x=X(idx[p.d]), y=Y(p.v), last=i===r.pts.length-1;
       dots+=`<circle class="pf-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${last?4:3}"
         fill="${r.color}"><title>${p.d} ${r.label} ${(p.v-100>=0?"+":"")}${(p.v-100).toFixed(2)}%</title></circle>`;
-      if(PERF_NUM&&(last||i%every===0))
+      if(last||i%every===0)
         nums+=`<text class="tl-n" x="${x.toFixed(1)}" y="${(y-9).toFixed(1)}" text-anchor="middle"
           fill="${r.color}">${(p.v-100>=0?"+":"")}${(p.v-100).toFixed(1)}</text>`;
     });
@@ -2141,9 +2149,8 @@ function perfCardHTML(){
     `<button data-perfx="${k}" class="${PERF_X===k?"on":""}">${t}</button>`).join("");
   return `<section class="card perfcard">
     <div class="tl-head"><h3>報酬對照大盤</h3>
-      <div class="tl-seg">${xseg}
-        <button data-perfnum="1" class="${PERF_NUM?"on":""}">數字</button></div></div>
-    <div class="pf-sub">${days[0]} 起 · 已扣掉入金 · 共 ${days.length} 天</div>
+      <div class="tl-seg">${xseg}</div></div>
+    <div class="pf-sub">${rows0[0].pts[0].d} 起 · 已扣掉入金 · 共 ${rows0.reduce((a,r)=>Math.max(a,r.pts.length),0)} 天</div>
     <div class="pf-legend">${legend}</div>
     <svg class="pf-svg" viewBox="0 0 ${W} ${H}" role="img"
       aria-label="各帳戶報酬與 S&P 500 對照">${hg}${grid}${zero}${area}${lines}${dots}${nums}</svg>
@@ -2922,6 +2929,17 @@ function renderRisk(){
           <span class="z1" style="width:50%"></span><span class="z2" style="width:25%"></span><span class="z3"></span>
           <span class="fill" style="width:${expoPct}%"></span>
         </div>
+        <div class="dm-brw"><span class="l">借款成數 <b>${rkPct(s.borrowRatio)}</b></span>
+          <span class="r" style="color:${safeRoom>=0?"var(--up)":"var(--dn)"}">離安全線 ${rkMoney(Math.abs(safeRoom),cur)}</span></div>
+        <!-- 借款量表 0 到 50%:40% 安全線落在 80% 的位置 -->
+        <div class="dm-bbar">
+          <span class="z1" style="width:${safeStop}%"></span><span class="z2"></span>
+          <span class="fill" style="width:${fillPct}%"></span>
+          <span class="tick" style="left:${safeStop}%"></span>
+          ${ibStop!=null?`<span class="tick ib" style="left:${ibStop}%"></span>`:""}
+        </div>
+        <div class="dm-blbl"><span><b>40%</b> 線 · ${rkMoney(safeAmt,"")}</span>
+          ${ibStop!=null?`<span style="color:#c2373b"><b>券商追繳</b> ${rkMoney(ibLoanMax,"")}</span>`:""}</div>
         <button class="dm-btn" id="rkIbToggle">${RK_IBOPEN?"收起帳戶明細 ▲":"帳戶明細:市值 · 淨值 · 借款 · 利率 ▾"}</button>
         ${RK_IBOPEN?`<div class="dm-open">${ibKv}${ibNote}</div>`:""}
       </div>
@@ -3037,6 +3055,35 @@ function renderRisk(){
           <div><div class="kk">帳戶淨值</div><div class="vv">${rkMoney(s.net,"")}</div></div>
           <div><div class="kk">質押借款</div><div class="vv">${rkMoney(Math.max(s.loan,0),"")}</div></div>
           <div><div class="kk">利率 · 月利息</div><div class="vv">${(RK_MARGIN_RATE*100).toFixed(2)}% · ${rkMoney(Math.max(s.loan,0)*RK_MARGIN_RATE/12,"")}/月</div></div>
+        </div>
+        <div class="rk-gauge-wrap">
+          <div class="rk-gauge-top">
+            <div class="g-l"><span style="font-size:14px;font-weight:700">借款成數</span><b>${rkPct(s.borrowRatio)}</b><span style="font-size:12px;color:var(--faint)">借款 ÷ 持倉市值;上面那個是佔全帳戶</span></div>
+            <div class="g-r">離 40% 安全線${safeRoom>=0?"還有":"已超出"} <b>${rkMoney(Math.abs(safeRoom),cur)}</b></div>
+          </div>
+          <div class="rk-mark"><div class="m" style="left:${Math.min(fillPct,100)}%;color:#0b7a55">
+            <span>目前 ${rkPct(s.borrowRatio)}</span><span style="font-size:8px">▼</span></div></div>
+          <div class="rk-bar">
+            <div class="z1" style="width:${safeStop}%"></div>
+            <div class="z2" style="width:${watchStop-safeStop}%"></div>
+            <div class="z3" style="flex:1"></div>
+            <div class="fill" style="width:${fillPct}%"></div>
+            <div class="safe-line" style="left:${safeStop}%"></div>
+            ${ibStop!=null?`<div class="ib-line" style="left:${ibStop}%"></div>`:""}
+          </div>
+          <div class="rk-mark lo">
+            <div class="m" style="left:${safeStop}%;color:#3f4652">
+              <span style="font-size:8px">▲</span><span>40% 線 · ${rkMoney(safeAmt,cur)}</span></div>
+            ${ibStop!=null?`<div class="m" style="left:${ibStop}%;color:#c2373b">
+              <span style="font-size:8px">▲</span><span>券商追繳 ${(ibRatio*100).toFixed(0)}% · ${rkMoney(ibLoanMax,cur)}</span></div>`:""}
+          </div>
+          <div class="rk-zones">
+            <span class="zt rk-safe">安全區 0–40%</span>
+            <span class="zt rk-watch">注意區 40–50%</span>
+            <span class="zt rk-danger">危險區 50%↑</span>
+            <span class="zmax">刻度到 ${(gMax*100).toFixed(0)}% · ${rkMoney(s.gross*gMax,cur)}</span>
+          </div>
+          ${hh?`<div style="margin-top:10px;font-size:11.5px;color:var(--muted)">40% 是質押成數線（借款 ÷ 持倉市值），券商那條才是真的會被強平的。</div>`:""}
         </div>
       </div>
       <div class="rk-main-right">
@@ -3550,10 +3597,9 @@ function render(){
 
   const ms=exMonths();
   if(!EXP_MONTH){
-    /* 預設停在最後一個過完的月份:月結看的是上個月,當月還沒過完先不當主角 */
+    /* 預設停在當月:他要看的是「這個月花到哪了」,不是上個月的結案報告 */
     const cur=(D.updated||"").slice(0,7);
-    const done=ms.filter(x=>x.month<cur);
-    EXP_MONTH=(done.length?done[done.length-1]:ms[ms.length-1]).month;
+    EXP_MONTH=(ms.find(x=>x.month===cur)||ms[ms.length-1]).month;
   }
   if(!ms.some(x=>x.month===EXP_MONTH)) EXP_MONTH=ms[ms.length-1].month;
 
