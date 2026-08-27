@@ -57,6 +57,36 @@
     width:34px;height:34px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;
     display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;}
   .refresh:active{background:var(--line);}
+  #todoBtn{position:relative;margin-right:8px;}
+  #todoBtn .bdg{position:absolute;top:-4px;right:-5px;min-width:16px;height:16px;border-radius:8px;
+    background:#c2373b;color:#fff;font-size:10px;font-weight:800;line-height:1;
+    display:flex;align-items:center;justify-content:center;padding:0 4px;}
+  /* To-Do 彈窗:全站通用,不再綁在槓桿風險頁裡 */
+  #todoSheet .td-hd{display:flex;align-items:baseline;gap:10px;}
+  #todoSheet .td-hd h3{margin:0;font-size:16px;font-weight:800;color:var(--ink);}
+  #todoSheet .td-hd .sub{font-size:12px;color:var(--faint);}
+  #todoSheet .td-x{margin-left:auto;border:none;background:none;font-size:18px;color:var(--faint);cursor:pointer;padding:4px;}
+  #todoSheet .td-row{display:grid;grid-template-columns:20px 1fr;gap:10px;padding:12px 0;
+    border-bottom:1px solid var(--line);cursor:pointer;}
+  #todoSheet .td-row .ck{width:17px;height:17px;border:1.5px solid var(--line2,#d5d9e0);border-radius:5px;
+    display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:11px;margin-top:2px;}
+  #todoSheet .td-row.done .ck{background:#0e9f6e;border-color:#0e9f6e;}
+  #todoSheet .td-row .t{font-size:13.5px;font-weight:700;line-height:1.5;color:var(--ink);}
+  #todoSheet .td-row .t .no{font-size:11px;color:var(--faint);margin-right:6px;}
+  #todoSheet .td-row .b{font-size:12px;color:var(--muted,#6b7280);line-height:1.65;margin-top:3px;}
+  #todoSheet .td-row.done .t{color:var(--faint);text-decoration:line-through;}
+  #todoSheet .td-row.done .b{opacity:.4;text-decoration:line-through;}
+  #todoSheet .td-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:11.5px;color:var(--faint);padding-top:12px;}
+  #todoSheet .td-foot button{border:1px solid var(--line);background:#fff;border-radius:7px;
+    padding:5px 10px;font-size:11.5px;cursor:pointer;color:var(--muted,#6b7280);white-space:nowrap;}
+  #todoSheet .td-foot{flex-wrap:wrap;}
+  #todoSheet .td-add{display:flex;gap:8px;padding-top:12px;}
+  #todoSheet .td-add input{flex:1;border:1px solid var(--line);border-radius:8px;padding:8px 12px;
+    font-size:13px;font-family:inherit;color:var(--ink);background:#fff;outline:none;}
+  #todoSheet .td-add input:focus{border-color:#9aa8c0;}
+  #todoSheet .td-add button{border:1px solid var(--line);background:#101418;color:#fff;border-radius:8px;
+    padding:0 16px;font-size:12.5px;font-weight:700;cursor:pointer;}
   /* 按重新整理之後的小提示:告訴你抓到的是不是新的一份,免得以為按鈕壞了 */
   #toast{position:fixed;left:50%;transform:translateX(-50%) translateY(8px);bottom:76px;z-index:80;
     background:var(--ink);color:#fff;font-size:12.5px;line-height:1;padding:10px 14px;border-radius:999px;
@@ -419,6 +449,15 @@
 #expensePanel .ask .oth{font-size:12px;color:#b08a52;line-height:1.6;padding-top:10px;}
 /* ── 兩欄 ── */
   #expensePanel .cols{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;}
+/* 目標卡的三行:名稱 / 實際/目標 / 差距 */
+#expensePanel .goalrow{display:grid;grid-template-columns:1fr auto auto;align-items:baseline;gap:12px;
+    padding:12px 0;border-bottom:1px solid var(--hair);}
+#expensePanel .goalrow:last-child{border-bottom:none;}
+#expensePanel .goalrow .gn{font-size:14px;font-weight:700;}
+#expensePanel .goalrow .ga{font-family:var(--mono);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;}
+#expensePanel .goalrow .gt{color:var(--faint);font-weight:400;font-size:12.5px;}
+#expensePanel .goalrow .gd{font-family:var(--mono);font-size:13px;font-weight:700;
+    font-variant-numeric:tabular-nums;min-width:64px;text-align:right;}
 #expensePanel .cols>section{min-width:0;}
 #expensePanel .chead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
 #expensePanel .chead h2{margin:0;font-size:16px;font-weight:700;}
@@ -555,6 +594,7 @@
 #expensePanel .yrline .t{font-size:13.5px;color:var(--body);min-width:0;overflow-wrap:anywhere;}
 #expensePanel .yrline .a{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:600;
     font-variant-numeric:tabular-nums;white-space:nowrap;}
+#expensePanel .yrline .lab{font-size:11.5px;color:var(--faint);}
 #expensePanel .empty{font-size:14px;color:var(--faint);}
   @media(max-width:720px){
 #expensePanel .card{padding:18px 16px;}
@@ -1099,6 +1139,10 @@
   .rk-tbl{width:100%;border-collapse:collapse;margin-top:18px;}
   .rk-tbl th{font:600 10.5px/1 var(--num);letter-spacing:.06em;color:var(--faint);text-align:right;padding:0 0 10px;border-bottom:1px solid var(--line2);}
   .rk-tbl th:first-child{text-align:left;}
+  .rk-h .alloc-seg{margin-left:auto;align-self:center;}
+  .rk-tbl tr.alloc-sum td{background:#f6f7f9;font-weight:700;color:var(--faint);
+    font-size:12px;padding-top:7px;padding-bottom:7px;}
+  .rk-tbl tr.alloc-sum td:first-child{color:var(--ink);}
   .rk-tbl tr.link{cursor:pointer;}
   .rk-tbl tr.link:hover td{background:#fafbfc;}
   .rk-mix{margin-top:-2px;font-size:13px;color:var(--muted);font-weight:600;}
@@ -1620,6 +1664,12 @@
     #afSummary .afdn{color:var(--dn);font-weight:700;}
     #afSummary .as-kpi .v.afdn{color:var(--dn);}
     #afSummary .as-kpi .v.afup{color:var(--up);}
+    #rkSeg{position:sticky;top:67px;z-index:50;width:max-content;margin:0 auto 14px;
+      display:flex;gap:3px;padding:3px;background:#e4e7ec;border-radius:10px;
+      box-shadow:0 1px 4px rgba(16,20,24,.10);}
+    #rkSeg button{height:30px;padding:0 24px;border:none;border-radius:8px;background:transparent;
+      color:var(--muted);font:600 13px/1 "Noto Sans TC",sans-serif;cursor:pointer;}
+    #rkSeg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(16,20,24,.14);}
     #afSeg{position:sticky;top:67px;z-index:50;width:max-content;margin:0 auto 14px;
       display:flex;gap:3px;padding:3px;background:#e4e7ec;border-radius:10px;
       box-shadow:0 1px 4px rgba(16,20,24,.10);}
@@ -1654,6 +1704,10 @@
       <button data-panel="expense" id="expenseTogBtn" hidden>支出</button>
     </div>
     <div class="hright">
+    <button id="todoBtn" class="refresh" aria-label="To-Do" title="To-Do">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11"/><path d="M9 12h11"/><path d="M9 18h11"/><path d="M3.5 6l1 1 2-2"/><path d="M3.5 12l1 1 2-2"/><path d="M3.5 18l1 1 2-2"/></svg>
+      <span class="bdg" id="todoBadge" hidden></span>
+    </button>
     <button id="refreshBtn" class="refresh" aria-label="重新整理" title="重新整理">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
     </button>
@@ -1667,7 +1721,6 @@
     <button data-seg="all" class="active">全部</button>
     <button data-seg="eu">大盤 ETF</button>
     <button data-seg="stock">個股</button>
-    <button data-seg="perf">線圖</button>
     <!-- 規則入口:桌面在分頁列右端(手機的入口在脈搏卡裡,所以手機隱藏這顆) -->
     <button class="tabrules" id="rulesTop">規則 ↗</button>
    </div>
@@ -1716,6 +1769,7 @@
 
 <div id="chartModal" class="modal"><div class="sheet" id="chartSheet"></div></div>
 <div id="rulesModal" class="modal"><div class="sheet" id="rulesSheet"></div></div>
+<div id="todoModal" class="modal"><div class="sheet" id="todoSheet"></div></div>
 
 <!-- 槓桿快照:本機檔(gitignore),線上讀不到就 404,槓桿面板自動隱藏。裡面是 window.MANUAL_SNAPSHOTS -->
 <script src="leverage-data.js"></script>
@@ -1949,6 +2003,45 @@ const LADDER_EPS = 0.05;                       // 實際與目標差距在這個
 const RK_MARGIN_RATE = 0.037;
 /* 手機槓桿頁的展開狀態(設計稿 2026-08-17):券商 帳戶明細,預設收起 */
 let RK_IBOPEN=false;
+/* 槓桿頁的兩個檢視:risk = 風險儀表,perf = 報酬線圖。
+   跟資產支出那頁的「支出/資產」同一個做法:同一顆分頁,頂上切換。 */
+let RISK_VIEW="risk";
+const riskSegHTML=()=>`<div class="tl-seg" style="margin-left:auto;align-self:center">
+  ${[["risk","風險"],["perf","線圖"]].map(([k,t])=>
+    `<button data-riskview="${k}" class="${RISK_VIEW===k?"on":""}">${t}</button>`).join("")}</div>`;
+/* 桌面版仿資產支出那頁:四格總覽把兩個檢視的重點拉到第一屏,切換鈕置中吸頂。
+   左二講風險(曝險倍數、借款成數),右二講報酬(流動資產、相對大盤),
+   這樣不管停在哪個檢視,另一邊的重點都看得到。 */
+function riskHeadHTML(){
+  const snaps=rkSnaps();
+  const s0=snaps.length?rkNorm(snaps[0]):null;
+  const ex=s0?rkExpo(s0):null;
+  const P=(window.ASSET_DATA&&ASSET_DATA.perf)||{};
+  const last=a=>a&&a.length?a[a.length-1].v-100:null;
+  const sp=last(P.sp500);
+  const ib=last(P.ib), yu=last(P.yuanta);
+  const liq=(ib!=null&&yu!=null)?(ib+yu)/2:null;   // 跟合併線同口徑:兩條指數等權
+  const dd=(liq!=null&&sp!=null)?liq-sp:null;
+  const kpi=(k,v,unit,sub,col)=>`<div class="as-kpi"><div class="k">${k}</div>
+    <div class="v num"${col?` style="color:${col}"`:""}>${v}${unit?`<span class="u">${unit}</span>`:""}</div>
+    <div class="d" style="font-weight:400;color:var(--muted)">${sub||""}</div></div>`;
+  const cells=[];
+  if(ex&&ex.effRatio!=null) cells.push(kpi("券商 A 曝險", ex.effRatio.toFixed(2),"x",
+    `帳面 ${ex.bookRatio!=null?ex.bookRatio.toFixed(2):"—"}x · 正二額外 ${rkPct(ex.boostRatio)}`));
+  if(s0) cells.push(kpi("借款成數", rkPct(s0.borrowRatio),"",
+    "安全區 0–40%", (s0.borrowRatio||0)>0.4?"var(--dn)":undefined));
+  if(liq!=null) cells.push(kpi("流動資產報酬", perfPct(liq,1),"",
+    `S&P 500 同期 ${perfPct(sp,1)}`, perfTone({chg:liq,alpha:dd})));
+  if(dd!=null) cells.push(kpi("相對大盤", (dd>=0?"+":"−")+Math.abs(dd).toFixed(1),"pp",
+    dd>=0?"贏大盤":"落後大盤", dd>=0?PERF_UP:PERF_DN));
+  const seg=[["risk","風險"],["perf","線圖"]].map(([k,t])=>
+    `<button data-riskview="${k}" class="${RISK_VIEW===k?"on":""}">${t}</button>`).join("");
+  return `<div class="as-kpis" style="margin-bottom:14px">${cells.join("")}</div>
+    <div id="rkSeg">${seg}</div>`;
+}
+/* 持倉曝險表的排法:risk = 照等效曝險由大到小(預設,看風險);
+   lev  = 正二全部集中在上面,下面才是一倍的(看槓桿集中在哪) */
+let ALLOC_SORT="risk";
 /* 槓桿風險頁最下面的備註:我的 to-do。內容跟 Notion「三師開槓紀錄」同步,改這個陣列就好 */
 const RK_TODO_DATE = "2026-08-22";
 /* 示範用的待辦。要加就往這個陣列塞 {title, body},會自動接在自動待辦後面繼續編號。
@@ -1975,8 +2068,32 @@ function todoDone(){ try{ return JSON.parse(localStorage.getItem(TODO_KEY)||"{}"
 function todoToggle(t){ const d=todoDone(); if(d[t]) delete d[t]; else d[t]=1;
   try{ localStorage.setItem(TODO_KEY,JSON.stringify(d)); }catch(e){} }
 function todoClear(){ try{ localStorage.removeItem(TODO_KEY); }catch(e){} }
-/* 一份清單兩邊共用:自動待辦在前,手寫的在後,編號連續。 */
-function todoList(){ return [...autoTodos(),...RK_TODO]; }
+/* 自己加的與刪掉的都存這台裝置(跟勾選同一套做法):
+   mc_todo_mine   = 自己在彈窗裡加的條目
+   mc_todo_hidden = 刪掉的標題。自動待辦刪不掉本體,用這份把它藏起來;
+                    標題跟著資料變(例如目標倍率改了)就會自己浮回來,這是故意的。 */
+const TODO_MINE_KEY="mc_todo_mine", TODO_HIDE_KEY="mc_todo_hidden";
+function myTodos(){ try{ return JSON.parse(localStorage.getItem(TODO_MINE_KEY)||"[]"); }catch(e){ return []; } }
+function myTodoAdd(title){ const L=myTodos(); L.push({title, mine:true});
+  try{ localStorage.setItem(TODO_MINE_KEY,JSON.stringify(L)); }catch(e){} }
+function todoHidden(){ try{ return JSON.parse(localStorage.getItem(TODO_HIDE_KEY)||"{}"); }catch(e){ return {}; } }
+function todoDelete(titles){
+  // 自己加的直接移除;其他的(自動+手寫)刪不掉本體,進隱藏清單
+  const hide=todoHidden(), mine=myTodos(), keep=mine.filter(t=>!titles.includes(t.title));
+  const mineSet=new Set(mine.map(m=>m.title));
+  titles.forEach(t=>{ if(!mineSet.has(t)) hide[t]=1; });
+  const d=todoDone(); titles.forEach(t=>delete d[t]);
+  try{
+    localStorage.setItem(TODO_MINE_KEY,JSON.stringify(keep));
+    localStorage.setItem(TODO_HIDE_KEY,JSON.stringify(hide));
+    localStorage.setItem(TODO_KEY,JSON.stringify(d));
+  }catch(e){}
+}
+/* 一份清單兩邊共用:自動待辦在前,手寫的中間,自己加的最後,刪掉的不出現 */
+function todoList(){
+  const hide=todoHidden();
+  return [...autoTodos(),...RK_TODO,...myTodos()].filter(t=>!hide[t.title]);
+}
 function todoCount(){ const L=todoList(), D=todoDone();
   return {done:L.filter(t=>D[t.title]).length, all:L.length}; }
 
@@ -2039,135 +2156,348 @@ function ladderState(){
    不然薪水投進去會被誤算成賺到的。
    版面沿用資產分頁歷年線圖那一套(.tl-* 樣式),兩張圖看起來要像同一個東西。
    幾何(寬高、y 軸範圍)一律用「全部線」算,切圖例時畫面不會跳。 */
-const PERF_COLOR={total:"#101418", ib:"#7b5cd6", yuanta:"#e08b2f", bux:"#2f6fed", sp500:"#9aa1ab"};
-const PERF_ORDER=["total","ib","yuanta","bux","sp500"];
-let PERF_ON=null;        // null = 全部顯示
-let PERF_X="day";        // 日 / 月 / 年。不只是換刻度,線本身也跟著換密度
-/* 月看每個月的最後一筆,年看每年的最後一筆。最新那一筆一定留著,
-   不然「這個月到今天為止」會被上個月底蓋掉。 */
-function perfResample(pts, mode){
+/* ── 報酬對照大盤(v3,2026-08-27 Claude Design 重做) ─────────────────
+   上面一張卡把所有能比較的東西做成 chip:流動資產、兩個券商帳戶、每一檔有買點的 ETF。
+   點一個,下面那張圖就換成「它 vs S&P 500」,並且給三個大數字:我的、大盤同期、差幾個百分點。
+   資料全部沿用既有的 ASSET_DATA(帳戶報酬)、DATA(每日收盤)、WL(買點),不另外做資料檔。 */
+const perfEsc = t => String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* 每檔 ETF 該跟哪個指數比。用同幣別的 ETF 當代理。
+   示範版的 watchlist 沒有買點,這張表用不到,留著只是跟正本版面骨架一致。 */
+const PERF_BENCH_MAP={
+  "00646.TW":{bench:"00646.TW", idx:"S&P 500"},
+  "00713.TW":{bench:"00646.TW", idx:"S&P 500"},
+  "CL2.PA": {bench:"00646.TW", idx:"S&P 500"},
+  "00670L.TW":{bench:"00670L.TW", idx:"NASDAQ 100"},
+  "00878.TW": {bench:"00670L.TW", idx:"NASDAQ 100"},
+  "0052.TW":{bench:"00670L.TW", idx:"NASDAQ 100（近似）"},
+  "VWCE.DE":{bench:"00646.TW", idx:"美國 S&P 500"}
+};
+const perfBench=sym=>PERF_BENCH_MAP[sym]||{bench:"00646.TW", idx:"S&P 500"};
+const PERF_SC={liq:"#2f6fed", ib:"#7b5cd6", yuanta:"#e08b2f",
+  "0052.TW":"#1d6fd8","00670L.TW":"#d95f18","00646.TW":"#12a670","00878.TW":"#d16ba5",
+  "CL2.PA":"#7b5cd6","00713.TW":"#6d4bc4","VWCE.DE":"#0f9d8f","0056.TW":"#e0a132",
+  "2412.TW":"#e08b2f","2881.TW":"#c2662f","2454.TW":"#b8433f"};
+/* 四種狀態:
+   灰 = 剛買不到 7 天,漲跌全是雜訊,先不評;
+   紅 = 虧錢;琥珀 = 有賺但輸給大盤(錢放大盤還比較好);綠 = 有賺而且贏過大盤。
+   「贏沒贏大盤」用 alpha 判斷:每一批買進的錢,各自跟它進場那天起的大盤比,按金額加權。
+   這樣分批買的部位不會被「首買日起算」的長窗口冤枉。 */
+const PERF_UP="#0b7a55", PERF_MID="#b5771c", PERF_DN="#c2373b",
+      PERF_GRY="#6b7280", PERF_BENCH="#3f4652";
+const PERF_UP_L="#8ee6c3", PERF_MID_L="#f4c98a", PERF_DN_L="#ffb3b5", PERF_GRY_L="#c3c9d2";
+const perfTone = x => x.fresh ? PERF_GRY : (x.chg<0 ? PERF_DN : ((x.alpha??0)>=0 ? PERF_UP : PERF_MID));
+const perfToneL= x => x.fresh ? PERF_GRY_L : (x.chg<0 ? PERF_DN_L : ((x.alpha??0)>=0 ? PERF_UP_L : PERF_MID_L));
+let PERF_SUBJ="liq";       // 現在在看誰。預設是流動資產(兩帳戶合併),那是他真正在意的總表現
+let PERF_X="day";          // 橫軸密度:day / week / month / year
+
+/* 把 Compass 現有的三份資料湊成線圖要的樣子 */
+function perfSrc(){
+  const A=window.ASSET_DATA||{}, W=(typeof WL!=="undefined"&&WL)||{};
+  const hist={};
+  const mh=(W.market_holdings||[]);
+  mh.forEach(h=>{
+    const hh=(typeof DATA!=="undefined"&&DATA&&DATA[h.s]&&DATA[h.s].hist);
+    if(hh&&hh.d&&hh.c) hist[h.s]=hh.d.map((d,k)=>({d,c:hh.c[k]}));
+  });
+  // 只有「知道成本又有買點」的才畫得出報酬,台股那幾檔沒有買點就先不列
+  const buys=mh.filter(h=>h.cost&&h.buys&&h.buys.length&&hist[h.s]&&hist[h.s].length>1)
+    .map(h=>({...h, lev:h.lev||1}));
+  return {perf:A.perf||{}, names:A.perfNames||{}, hist, buys};
+}
+
+/* 月看每個月最後一筆,週看每週最後一筆,年看每年最後一筆。最新那筆一定留著 */
+function perfResample(pts,mode){
   if(mode==="day"||pts.length<2) return pts;
-  const cut = mode==="month" ? 7 : 4;
-  const last={};
-  pts.forEach(p=>{ last[p.d.slice(0,cut)]=p; });
+  const wk=d=>{ const t=new Date(d+"T00:00:00Z");
+    t.setUTCDate(t.getUTCDate()-((t.getUTCDay()+6)%7)); return t.toISOString().slice(0,10); };
+  const keyOf = mode==="week" ? wk : (d=>d.slice(0,mode==="month"?7:4));
+  const last={}; pts.forEach(p=>{ last[keyOf(p.d)]=p; });
   const out=Object.keys(last).sort().map(k=>last[k]);
   const tail=pts[pts.length-1];
   if(out[out.length-1].d!==tail.d) out.push(tail);
   return out;
 }
-function perfData(){
-  const A=window.ASSET_DATA||{}, P=A.perf;
-  if(!P) return null;
-  const nm=A.perfNames||{};
-  const label=k=>k==="total"?"全部投資":k==="sp500"?"S&P 500":(nm[k]||k);
-  const rows=PERF_ORDER.filter(k=>P[k]&&P[k].length>=2)
-    .map(k=>({k,label:label(k),pts:P[k],color:PERF_COLOR[k]}));
-  return rows.length?rows:null;
+function perfPct(x,dec){ return (x>=0?"+":"−")+Math.abs(x).toFixed(dec==null?2:dec)+"%"; }
+function perfPathD(p,smooth){
+  const f=n=>n.toFixed(1);
+  if(!smooth||p.length<3) return p.map((q,i)=>(i?"L":"M")+f(q[0])+" "+f(q[1])).join(" ");
+  let d="M"+f(p[0][0])+" "+f(p[0][1]);
+  for(let i=0;i<p.length-1;i++){
+    const p0=p[i-1]||p[i],p1=p[i],p2=p[i+1],p3=p[i+2]||p2;
+    d+=" C"+f(p1[0]+(p2[0]-p0[0])/6)+" "+f(p1[1]+(p2[1]-p0[1])/6)+" "
+      +f(p2[0]-(p3[0]-p1[0])/6)+" "+f(p2[1]-(p3[1]-p1[1])/6)+" "+f(p2[0])+" "+f(p2[1]);
+  }
+  return d;
 }
+/* 線圖本體。o.timeX = 橫軸照真實日期拉開(ETF 檢視用),否則照資料點等距排 */
+function perfChartSVG(series,o){
+  // 手機把 viewBox 縮窄:圖被壓到 350px 寬的時候,同樣的 font-size 看起來會大一號
+  const mob=(typeof window!=="undefined")&&window.innerWidth<720;
+  const W=mob?540:920, H=300, L=mob?42:48, R=mob?14:18, T=16, B=30;
+  const dom=series.filter(s=>s.pts.length);
+  if(!dom.length) return "";
+  let X, days=null, t0=0, t1=0;
+  if(o.timeX){
+    const ts=dom.flatMap(s=>s.pts.map(p=>Date.parse(p.d)));
+    t0=Math.min(...ts); t1=Math.max(...ts);
+    X=d=>L+((Date.parse(d)-t0)/((t1-t0)||1))*(W-L-R);
+  }else{
+    const set=new Set(); dom.forEach(s=>s.pts.forEach(p=>set.add(p.d)));
+    days=[...set].sort(); const idx={}; days.forEach((d,i)=>idx[d]=i);
+    X=d=>L+(days.length>1?idx[d]/(days.length-1):0.5)*(W-L-R);
+  }
+  const all=dom.flatMap(s=>s.pts.map(p=>p.v)); all.push(100);
+  let lo=Math.min(...all), hi=Math.max(...all);
+  const pad=Math.max((hi-lo)*0.16,0.8); lo-=pad; hi+=pad;
+  const Y=v=>T+(1-(v-lo)/(hi-lo||1))*(H-T-B);
+  let g="";
+  // 橫格線挑一個好看的間距:2%、5%、10% 這種,不要冒出 3.7% 這種刻度
+  const span=hi-lo, cand=[0.5,1,2,2.5,5,10,20,25,50];
+  const step=[...cand].reverse().find(x=>span/x>=3.5)||cand[0];
+  for(let k=Math.ceil((lo-100)/step);k<=Math.floor((hi-100)/step);k++){
+    const pv=+(k*step).toFixed(4), y=Y(100+pv), zero=k===0;
+    if(!zero) g+=`<line x1="${L}" x2="${W-R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#eef1f4"/>`;
+    g+=`<text x="${L-8}" y="${(y+3.5).toFixed(1)}" text-anchor="end" font-size="10.5"
+      fill="${zero?"#6b7280":"#9aa1ab"}" font-family="Manrope,system-ui,sans-serif"
+      font-weight="${zero?700:600}">${(pv>0?"+":pv<0?"−":"")+Math.abs(pv)}%</text>`;
+  }
+  g+=`<line x1="${L}" x2="${W-R}" y1="${Y(100).toFixed(1)}" y2="${Y(100).toFixed(1)}"
+    stroke="#c9ced6" stroke-dasharray="4 4"/>`;
+  const xt=[];
+  if(o.timeX){
+    const spanD=(t1-t0)/864e5;
+    for(let i=0;i<=6;i++){ const t=t0+(t1-t0)*i/6, dt=new Date(t);
+      xt.push([L+((t-t0)/((t1-t0)||1))*(W-L-R),
+        spanD>320?(dt.getUTCFullYear()%100)+"/"+(dt.getUTCMonth()+1):(dt.getUTCMonth()+1)+"/"+dt.getUTCDate()]); }
+  }else if(o.xmode==="day"||o.xmode==="week"){
+    const ev=Math.max(1,Math.ceil(days.length/(mob?5:7)));
+    days.forEach((d,i)=>{ if(i%ev===0||i===days.length-1) xt.push([X(d),(+d.slice(5,7))+"/"+(+d.slice(8,10))]); });
+  }else{
+    days.forEach(d=>xt.push([X(d), o.xmode==="month"?(+d.slice(5,7))+"月":d.slice(0,4)]));
+  }
+  xt.forEach(([x,t])=>{ g+=`<text x="${x.toFixed(1)}" y="${H-B+18}" text-anchor="middle" font-size="10.5"
+    fill="#9aa1ab" font-family="Manrope,system-ui,sans-serif" font-weight="600">${t}</text>`; });
+  let lines="";
+  series.forEach(s=>{
+    if(!s.pts.length) return;
+    const xy=s.pts.map(p=>[X(p.d),Y(p.v)]);
+    if(s.area) lines+=`<path d="${perfPathD(xy,o.smooth)} L${xy[xy.length-1][0].toFixed(1)} ${H-B} L${xy[0][0].toFixed(1)} ${H-B} Z"
+      fill="${s.color}" opacity=".05"/>`;
+    lines+=`<path d="${perfPathD(xy,o.smooth)}" fill="none" stroke="${s.color}" stroke-width="${s.w||2}"
+      stroke-linejoin="round" stroke-linecap="round"${s.dash?` stroke-dasharray="${s.dash}"`:""}/>`;
+    const n=s.pts.length, ev=Math.max(1,Math.ceil(n/(mob?5:(o.dens||8))));
+    s.pts.forEach((p,i)=>{
+      const last=i===n-1, x=X(p.d), y=Y(p.v);
+      if(s.dots||last) lines+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${last?4.5:3}"
+        fill="${s.color}" stroke="#fff" stroke-width="1.4"><title>${p.d} ${perfEsc(s.label)} ${perfPct(p.v-100)}</title></circle>`;
+      const want = s.labels==="last" ? last : (s.labels&&(last||i%ev===0));
+      if(want) lines+=`<text x="${x.toFixed(1)}" y="${(s.lblBelow?y+16:y-9).toFixed(1)}" text-anchor="middle"
+        font-size="${last?11:10}" font-weight="700" fill="${s.lblFill||s.color}"
+        font-family="Manrope,system-ui,sans-serif" paint-order="stroke" stroke="#fff" stroke-width="3"
+        stroke-linejoin="round" style="font-variant-numeric:tabular-nums">${(p.v-100>=0?"+":"")+(p.v-100).toFixed(1)}</text>`;
+    });
+  });
+  // 加碼點:小三角形,滑過去看買了幾股、什麼價
+  (o.marks||[]).forEach(m=>{
+    const x=X(m.d), y=Y(m.v);
+    lines+=`<path d="M${x.toFixed(1)} ${(y+7).toFixed(1)} l5 8 h-10 Z" fill="${m.color||"#101418"}"
+      stroke="#fff" stroke-width="1"><title>${perfEsc(m.tip)}</title></path>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="對照 S&amp;P 500 線圖"
+    style="width:100%;height:auto;aspect-ratio:${W}/${H};display:block;margin-top:6px">${g}${lines}</svg>`;
+}
+
 function bindPerf(el, redraw){
-  el.querySelectorAll("[data-perf]").forEach(b=>b.addEventListener("click",()=>{
-    PERF_ON = PERF_ON===b.dataset.perf ? null : b.dataset.perf; redraw();
+  el.querySelectorAll("[data-perfsubj]").forEach(b=>b.addEventListener("click",()=>{
+    PERF_SUBJ=b.dataset.perfsubj; redraw();
   }));
   el.querySelectorAll("[data-perfx]").forEach(b=>b.addEventListener("click",()=>{
     PERF_X=b.dataset.perfx; redraw();
   }));
 }
+
 function perfCardHTML(){
-  const A=window.ASSET_DATA||{};
-  const rows0=perfData();
-  const rows=rows0&&rows0.map(r=>({...r, pts:perfResample(r.pts,PERF_X)}));
-  if(!rows){
-    const base=(A.timeline&&A.timeline.length)?A.timeline[A.timeline.length-1].d:"今天";
-    return `<section class="card perfcard">
-      <div class="tl-head"><h3>報酬對照大盤</h3></div>
-      <div class="pf-empty">從 ${base} 開始記錄,每天自動存一筆。
-        累積到兩天以上就會開始畫線,之後每天往右長一格。</div></section>`;
-  }
-  const W=920,H=300,L=46,R=14,T=18,B=34;
-  const days=rows.reduce((a,r)=>r.pts.length>a.length?r.pts.map(p=>p.d):a,[]);
-  const idx={}; days.forEach((d,i)=>idx[d]=i);
-  const X=i=>L+(days.length>1?i/(days.length-1):0.5)*(W-L-R);
-  // y 軸永遠用全部線去算,不因為只看一條就重新縮放,畫面才不會跳
-  const all=rows.flatMap(r=>r.pts.map(p=>p.v)).concat([100]);
-  let lo=Math.min(...all), hi=Math.max(...all);
-  const pad=Math.max((hi-lo)*0.18,0.8); lo-=pad; hi+=pad;
-  const Y=v=>T+(1-(v-lo)/(hi-lo||1))*(H-T-B);
+  const CARD="background:#fff;border:1px solid var(--line);border-radius:16px;"
+    +"box-shadow:0 1px 2px rgba(16,20,24,.05);";
+  const D=perfSrc(), P=D.perf, nm=D.names;
+  const wrap=inner=>`<div class="perfwrap" style="display:flex;flex-direction:column;gap:12px">${inner}</div>`;
+  if(!P||!P.sp500||!P.sp500.length) return wrap(`<section class="perfcard" style="${CARD}padding:18px 20px">
+    <h2 style="display:block;margin:0;font-size:16px;font-weight:700">報酬對照大盤</h2>
+    <div style="font-size:12.5px;color:var(--faint);margin-top:8px;line-height:1.7">
+      還沒有足夠的資料。每天自動存一筆,累積兩天以上就會開始畫線。</div></section>`);
 
-  // 橫軸格線:日看每隔幾天,月看每月第一個交易日,年看每年第一個交易日
-  let grid="";
-  const tick=(x,lbl)=>`<line class="tl-g" x1="${x.toFixed(1)}" y1="${T}" x2="${x.toFixed(1)}" y2="${H-B}"/>
-    <text class="tl-t" x="${x.toFixed(1)}" y="${H-B+16}" text-anchor="middle">${lbl}</text>`;
-  if(PERF_X==="day"){
-    const every=Math.max(1,Math.ceil(days.length/7));
-    days.forEach((d,i)=>{ if(i%every===0||i===days.length-1)
-      grid+=tick(X(i), d.slice(5).replace("-","/")); });
-  }else{
-    // 資料已經抽稀成一個月(年)一點,每一點都標
-    days.forEach((d,i)=>{ grid+=tick(X(i),
-      PERF_X==="month"?(+d.slice(5,7))+"月":d.slice(0,4)); });
-  }
-  // 縱軸四條格線,中間那條 100 是損益兩平,畫成虛線
-  let hg="";
-  for(let i=0;i<=3;i++){ const v=lo+(hi-lo)*i/3;
-    hg+=`<line class="tl-g" x1="${L}" y1="${Y(v).toFixed(1)}" x2="${W-R}" y2="${Y(v).toFixed(1)}"/>
-      <text class="tl-t" x="${L-6}" y="${(Y(v)+4).toFixed(1)}" text-anchor="end">${v.toFixed(1)}</text>`; }
-  const zero=`<line class="pf-zero" x1="${L}" y1="${Y(100).toFixed(1)}" x2="${W-R}" y2="${Y(100).toFixed(1)}"/>`;
+  const chgOf=k=>P[k]&&P[k].length?P[k][P[k].length-1].v-100:null;
+  // 流動資產 = IB 與券商 B兩條指數的等權平均,缺的那天用前一筆補
+  const combo=(()=>{
+    const a=P.ib||[], b=P.yuanta||[];
+    if(a.length<2||b.length<2) return null;
+    const ds=[...new Set([...a.map(p=>p.d),...b.map(p=>p.d)])].sort();
+    const ff=arr=>{ const by={}; arr.forEach(p=>by[p.d]=p.v);
+      const out={}; let last=null; ds.forEach(d=>{ if(by[d]!=null) last=by[d]; out[d]=last; }); return out; };
+    const A=ff(a), Bv=ff(b);
+    return ds.filter(d=>A[d]!=null&&Bv[d]!=null).map(d=>({d,v:(A[d]+Bv[d])/2}));
+  })();
+  const liqChg=combo?combo[combo.length-1].v-100:null;
 
-  const shown=rows.filter(r=>!PERF_ON||PERF_ON===r.k);
-  // 只看一條的時候補一塊淡淡的面積,跟資產那張線圖同一個做法
-  let area="";
-  if(shown.length===1){
-    const r=shown[0], seg=r.pts.map(p=>`${X(idx[p.d])} ${Y(p.v)}`);
-    area=`<path d="M${seg.join(" L")} L${X(idx[r.pts[r.pts.length-1].d])} ${Y(lo)} L${X(idx[r.pts[0].d])} ${Y(lo)} Z"
-      fill="${r.color}" opacity=".07"/>`;
-  }
-  const lines=shown.map(r=>{
-    const d=r.pts.map((p,i)=>`${i?"L":"M"}${X(idx[p.d]).toFixed(1)} ${Y(p.v).toFixed(1)}`).join(" ");
-    return `<path class="pf-line${r.k==="sp500"?" bench":""}" d="${d}" stroke="${r.color}"/>`;
-  }).join("");
-  // 點與數字。點太密就隔幾個標一次,最後一個一定標
-  let dots="",nums="";
-  shown.forEach(r=>{
-    // 數字一律顯示。日線的點太密會疊在一起,所以隔幾個標一次,月與年全標
-    const every=PERF_X==="day"?Math.max(1,Math.ceil(r.pts.length/8)):1;
-    r.pts.forEach((p,i)=>{
-      const x=X(idx[p.d]), y=Y(p.v), last=i===r.pts.length-1;
-      dots+=`<circle class="pf-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${last?4:3}"
-        fill="${r.color}"><title>${p.d} ${r.label} ${(p.v-100>=0?"+":"")}${(p.v-100).toFixed(2)}%</title></circle>`;
-      if(last||i%every===0)
-        nums+=`<text class="tl-n" x="${x.toFixed(1)}" y="${(y-9).toFixed(1)}" text-anchor="middle"
-          fill="${r.color}">${(p.v-100>=0?"+":"")}${(p.v-100).toFixed(1)}</text>`;
+  const spNow0=chgOf("sp500");
+  const today=(P.sp500&&P.sp500.length)?P.sp500[P.sp500.length-1].d:"";
+  const daysBetween=(a,b)=>Math.round((Date.parse(b)-Date.parse(a))/864e5);
+  // 每一批買進的錢,各自跟「它進場那天起的大盤」比,按投入金額加權平均。
+  // 分批買的部位才不會被「首買日起算」的長窗口冤枉:8/20 才進場的錢只跟 8/20 起的大盤比。
+  const alphaOf=b=>{
+    const hh=D.hist[b.s], lastC=hh[hh.length-1].c;
+    const bh=D.hist[perfBench(b.s).bench]||[]; const bLast=bh.length?bh[bh.length-1].c:null;
+    let wsum=0, asum=0;
+    b.buys.forEach(l=>{
+      const e=hh.find(p=>p.d>=l.d); if(!e) return;
+      const eRet=lastC/e.c-1;
+      const bs=bh.find(p=>p.d>=l.d);
+      const bRet=(bs&&bLast)?bLast/bs.c-1:0;
+      const w=l.q*l.p;
+      asum+=w*(eRet-bRet); wsum+=w;
     });
-  });
-  const legend=rows.map(r=>{
-    const p=r.pts[r.pts.length-1], chg=p.v-100, on=!PERF_ON||PERF_ON===r.k;
-    return `<button class="pf-lg${on?"":" off"}" data-perf="${r.k}">
-      <i style="background:${r.color}"></i><span class="n">${r.label}</span>
-      <b class="${chg>=0?"up":"dn"}">${chg>=0?"+":""}${chg.toFixed(2)}%</b></button>`;
-  }).join("");
-  const xseg=[["day","日"],["month","月"],["year","年"]].map(([k,t])=>
-    `<button data-perfx="${k}" class="${PERF_X===k?"on":""}">${t}</button>`).join("");
-  return `<section class="card perfcard">
-    <div class="tl-head"><h3>報酬對照大盤</h3>
-      <div class="tl-seg">${xseg}</div></div>
-    <div class="pf-sub">${rows0[0].pts[0].d} 起 · 已扣掉入金 · 共 ${rows0.reduce((a,r)=>Math.max(a,r.pts.length),0)} 天</div>
-    <div class="pf-legend">${legend}</div>
-    <svg class="pf-svg" viewBox="0 0 ${W} ${H}" role="img"
-      aria-label="各帳戶報酬與 S&P 500 對照">${hg}${grid}${zero}${area}${lines}${dots}${nums}</svg>
-    <div class="pf-foot">起點都設成 100,線在 100 以上就是賺。
-      入金記在 <b>asset-flows.json</b>,沒記的話薪水會被算成獲利。</div>
-  </section>`;
+    return wsum?(asum/wsum)*100:null;
+  };
+  const items=[
+    {k:"liq", t:"流動資產", chg:liqChg, alpha:liqChg-spNow0},
+    {k:"ib", t:"券商 A", chg:chgOf("ib"), alpha:chgOf("ib")-spNow0},
+    {k:"yuanta", t:"券商 B", chg:chgOf("yuanta"), alpha:chgOf("yuanta")-spNow0},
+    ...D.buys.map(b=>{ const hh=D.hist[b.s], lastC=hh[hh.length-1].c;
+      return {k:b.s, t:b.dn, chg:(lastC/b.cost-1)*100, buy:b, lev:b.lev,
+              alpha:alphaOf(b), fresh:daysBetween(b.buys[0].d,today)<7}; })
+  ].filter(x=>x.chg!=null);
+  if(!items.some(x=>x.k===PERF_SUBJ)) PERF_SUBJ=items.length?items[0].k:"ib";
+
+  const tile=x=>{
+    const sel=PERF_SUBJ===x.k, col=sel?perfToneL(x):perfTone(x);
+    return `<button data-perfsubj="${x.k}" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+      min-width:96px;border:1px solid ${sel?"#101418":"var(--line)"};background:${sel?"#101418":"#fff"};
+      border-radius:10px;padding:8px 12px;cursor:pointer;text-align:left">
+      <span style="display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;
+        color:${sel?"#c3c9d2":"var(--faint)"};white-space:nowrap">
+        <i style="width:7px;height:7px;border-radius:50%;flex:none;background:${PERF_SC[x.k]||"#9aa1ab"}"></i>${perfEsc(x.t)}${
+        x.lev>1?`<b style="font-size:9px;font-weight:800;padding:1px 4px;border-radius:4px;
+          background:${sel?"#3a3f47":"#fde7d4"};color:${sel?"#f4c98a":"#b5771c"}">2x</b>`:""}</span>
+      <b style="font-variant-numeric:tabular-nums;font-size:16px;font-weight:800;line-height:1.1;color:${col}">${perfPct(x.chg,1)}</b>
+    </button>`;
+  };
+  const spNow=chgOf("sp500");
+  const groups=[
+    {label:"① 流動資產", sel:x=>x.k==="liq"},
+    {label:"② 帳戶", sel:x=>x.k==="ib"||x.k==="yuanta"},
+    {label:"③ ETF・個股", sel:x=>!!x.buy}
+  ].map(g=>{
+    const li=items.filter(g.sel); if(!li.length) return null;
+    return {label:g.label, html:`<div style="display:flex;flex-wrap:wrap;gap:4px">${li.map(tile).join("")}</div>`};
+  }).filter(Boolean);
+  // 基準不是可以點的東西,是一條線。放右上角當這張卡的參考值就好。
+  const benchBadge = spNow==null ? "" : `<div style="flex:none;text-align:right">
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;font-size:10.5px;
+      font-weight:600;color:var(--faint);white-space:nowrap">
+      <i style="width:7px;height:7px;border-radius:50%;flex:none;background:${PERF_BENCH}"></i>基準 · S&amp;P 500</div>
+    <b style="display:block;font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;
+      line-height:1.15;color:var(--ink);margin-top:1px">${perfPct(spNow,1)}</b></div>`;
+  const chips=`<section class="perfcard" style="${CARD}padding:14px 20px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
+      <div style="min-width:0">
+        <h2 style="display:block;margin:0;font-size:17px;font-weight:700;color:var(--ink)">報酬表現</h2>
+        <div style="font-size:11.5px;color:#9aa1ab;margin-top:3px">點一項看線圖 ·
+          <span style="color:${PERF_DN};font-weight:700">紅</span>虧 ·
+          <span style="color:${PERF_MID};font-weight:700">琥珀</span>賺但輸大盤 ·
+          <span style="color:${PERF_UP};font-weight:700">綠</span>賺又贏大盤 ·
+          <span style="color:${PERF_GRY};font-weight:700">灰</span>剛買</div>
+      </div>${benchBadge}
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:12px">
+      ${groups.map(g=>`<div style="display:flex;flex-direction:column;gap:6px;flex:0 1 auto;min-width:0">
+        <div style="font-size:10px;letter-spacing:.07em;font-weight:700;color:#9aa1ab">${g.label}</div>${g.html}</div>`).join("")}
+    </div></section>`;
+
+  const segs=[["day","日"],["week","週"],["month","月"],["year","年"]].map(([k,t])=>
+    `<button data-perfx="${k}" style="height:26px;padding:0 14px;border:none;border-radius:7px;cursor:pointer;
+      font-size:12px;line-height:1;background:${PERF_X===k?"#fff":"transparent"};
+      box-shadow:${PERF_X===k?"0 1px 2px rgba(16,20,24,.12)":"none"};
+      color:${PERF_X===k?"#101418":"var(--faint)"};font-weight:${PERF_X===k?700:600}">${t}</button>`).join("");
+
+  const heroRow=list=>`<div style="display:flex;flex-wrap:wrap;gap:20px;padding:14px 2px 12px;
+    border-bottom:1px solid #f4f6f8;margin-top:6px">${list.map(e=>`<div style="min-width:160px;flex:1">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--faint);font-weight:600;white-space:nowrap">
+        <i style="width:8px;height:8px;border-radius:50%;flex:none;background:${e.dot}"></i>${perfEsc(e.label)}</div>
+      <div style="font-variant-numeric:tabular-nums;font-size:24px;font-weight:800;line-height:1.15;color:${e.bigC};margin-top:2px">${e.big}</div>
+      <div style="font-size:11px;color:${e.subC};margin-top:1px;white-space:nowrap">${perfEsc(e.sub)}</div></div>`).join("")}</div>`;
+  const trio=(name,dot,mine,mineSub,bChg,bSub,dd,ddSub,benchName)=>[
+    {label:name,dot,big:perfPct(mine,1),bigC:perfTone({chg:mine,alpha:mine-bChg}),sub:mineSub,subC:"#9aa1ab"},
+    {label:(benchName||"S&P 500")+" 同期",dot:PERF_BENCH,big:perfPct(bChg,1),bigC:"var(--ink)",sub:bSub,subC:"#9aa1ab"},
+    {label:"相對大盤",dot:"transparent",
+     big:(dd>=0?"+":"−")+Math.abs(dd).toFixed(1)+" pp",bigC:dd>=0?PERF_UP:PERF_DN,sub:ddSub,subC:dd>=0?PERF_UP:PERF_DN}];
+
+  const shell=(title,sub,body)=>`<section class="perfcard" style="${CARD}padding:18px 20px 15px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div style="min-width:0">
+        <h3 style="margin:0;font-size:15.5px;font-weight:700;color:var(--ink)">${perfEsc(title)}</h3>
+        <div style="font-size:11.5px;color:#9aa1ab;margin-top:4px">${perfEsc(sub)}</div></div>
+      <div style="display:flex;gap:3px;padding:3px;background:#f4f6f8;border-radius:9px;flex:none">${segs}</div>
+    </div>${body}</section>`;
+  const footHTML=t=>`<div style="font-size:11px;color:var(--faint);line-height:1.6;margin-top:8px">${t}</div>`;
+
+  const bChg=chgOf("sp500")||0;
+  // ── 帳戶或流動資產:兩條時間加權指數疊在一起比 ──
+  if(PERF_SUBJ==="ib"||PERF_SUBJ==="yuanta"||PERF_SUBJ==="liq"){
+    const isLiq=PERF_SUBJ==="liq";
+    const pts=isLiq?combo:P[PERF_SUBJ];
+    const name=isLiq?"流動資產（券商 A+B）":(nm[PERF_SUBJ]||PERF_SUBJ);
+    const col=PERF_SC[PERF_SUBJ];
+    const series=[
+      {k:"bench",label:"S&P 500",color:PERF_BENCH,pts:perfResample(P.sp500,PERF_X),w:2.8,dots:true,labels:true,lblBelow:true,lblFill:"#5a6472"},
+      {k:"mine",label:name,color:col,pts:perfResample(pts,PERF_X),w:2.2,dots:true,labels:true,area:true}];
+    const mine=isLiq?liqChg:chgOf(PERF_SUBJ), dd=mine-bChg;
+    const body=heroRow(trio(name,col,mine,isLiq?"券商 A、B 合併表現":"時間加權，入金已扣",
+        bChg,pts[0].d+" 起",dd,dd>=0?"贏大盤":"落後大盤"))
+      +perfChartSVG(series,{xmode:PERF_X,smooth:false,dens:8})
+      +footHTML(isLiq
+        ?"合併線 = IB 與券商 B兩條指數的等權平均（缺日用前一筆補）。起點都設成 100，100 以上就是賺；入金已扣。"
+        :"兩條線起點都設成 100，100 以上就是賺。入金記在 <b>asset-flows.json</b>，沒記的話薪水會被算成獲利。");
+    return wrap(chips+shell(name+" vs S&P 500",
+      pts[0].d+" 起 · "+(isLiq?"兩帳戶合併 · 已扣掉入金":"已扣掉入金 · 時間加權報酬"), body));
+  }
+
+  // ── 單一 ETF:從首買日那天的收盤設成 100 開始比 ──
+  const it=items.find(x=>x.k===PERF_SUBJ);
+  const B=it.buy, hh=D.hist[B.s], firstBuy=B.buys[0].d;
+  const bm=perfBench(B.s);                    // 這檔該跟哪個指數比
+  const idx=bm.idx, benchSym=bm.bench, isSelf=benchSym===B.s;
+  const win=hh.filter(p=>p.d>=firstBuy);
+  if(win.length<2) return wrap(chips+shell(B.dn+" vs "+idx,"資料不足",""));
+  const c0=win[0].c;
+  const ep=perfResample(win.map(p=>({d:p.d,v:100*p.c/c0})),PERF_X);
+  const bh=(D.hist[benchSym]||[]).filter(p=>p.d>=firstBuy);
+  const b0=bh.length?bh[0].c:1;
+  const bp=perfResample(bh.map(p=>({d:p.d,v:100*p.c/b0})),PERF_X);
+  const col=PERF_SC[B.s]||"#2f6fed";
+  const series=[
+    {k:"bench",label:idx,color:PERF_BENCH,pts:bp,w:2.8,labels:"last",lblFill:"#5a6472"},
+    {k:"etf",label:B.dn,color:col,pts:ep,w:2.2,labels:"last"}];
+  const marks=B.buys.map(b=>{ const q=win.find(p=>p.d>=b.d)||win[win.length-1];
+    return {d:q.d,v:100*q.c/c0,color:col,tip:b.d+" 買 "+b.q+" 股 @ "+b.p}; });
+  const lineEnd=ep[ep.length-1].v-100;
+  const mine=(win[win.length-1].c/B.cost-1)*100;
+  const bEnd=bp.length?bp[bp.length-1].v-100:0;
+  const dd=lineEnd-bEnd;
+  const ddSub=isSelf?"它本身就是這個指數":(dd>=0?"贏大盤":"輸大盤");
+  const body=heroRow(trio(B.dn+" 報酬",col,mine,"現價 vs 加權成本 "+B.cost,
+      bEnd,firstBuy+"（首買日）起",dd,ddSub,idx))
+    +perfChartSVG(series,{timeX:true,smooth:true,dens:8,marks})
+    +footHTML((isSelf?B.dn+" 本身就追蹤"+idx+"，兩條線會重疊。"
+      :"對照線是 "+idx+"（用 "+benchSym.replace(/\..*/,'')+" 這檔歐元 ETF 當代理）。")
+      +"起點 = 首買日收盤設 100，▲ 滑過看股數與價格。");
+  const levTag=(B.lev||1)>1?" ·正二 2x":"";
+  return wrap(chips+shell(B.dn+" vs "+idx+levTag,
+    firstBuy+" 首買起 · 共 "+B.buys.length+" 筆買入 · ▲ 是加碼點", body));
 }
 
 function renderMacro(){
-  // 「線圖」這一段跟其他段不一樣:它不是篩選清單,是整頁換成報酬對照卡,
-  // 這樣可以單獨拉出來看,不被下面一長串持股卡干擾。
-  if((FILTER.macro||"all")==="perf"){
-    const el=document.getElementById("macro");
-    el.innerHTML=`<div class="blk perfblk">${perfCardHTML()}</div>`;
-    bindPerf(el, renderMacro);
-    return;
-  }
+  // 報酬線圖 2026-08-27 搬到槓桿風險頁(RISK_VIEW="perf"):
+  // 股票面板講市場、要不要買;線圖講自己做得怎樣,跟槓桿風險同一件事。
   const mh=(WL.market_holdings||[]);
   // 依帳戶分區:.TW 結尾歸台灣,其餘歸 IB(歐股)。
   // 個股(holdings)2026-08-25 起併進同一個分頁,靠篩選列第四段切換,不再是獨立分頁。
@@ -2792,6 +3122,14 @@ function stockCardHTML(mob){
 }
 function renderRisk(){
   const el=document.getElementById("riskPanel");
+  if(RISK_VIEW==="perf"){
+    const head=isMobile()
+      ? `<div style="display:flex;justify-content:flex-end;margin:0 2px 8px">${riskSegHTML()}</div>`
+      : riskHeadHTML();
+    el.innerHTML=head+perfCardHTML();
+    bindPerf(el, renderRisk);
+    return;
+  }
   const snaps=rkSnaps();
   if(!snaps.length){ el.innerHTML=`<div class="rk-card">無槓桿資料(本機檔未載入)。</div>`; return; }
   const s=rkNorm(snaps[0]);
@@ -2910,14 +3248,9 @@ function renderRisk(){
         <span class="p">${(x.mv/totMv*100).toFixed(0)}%</span>
         <span class="m">${rkMoney(x.mv*lev,"")}</span></div>`; }).join("");
 
-    // ⑤ 我的 To-Do:自動項在前,手寫項編號在後,同一種標題加內文格式
-    const autoList=autoTodos(), TD=todoDone();
-    const todoRows=todoList().map((t,i)=>{ const on=!!TD[t.title];
-      return `<div class="dm-todo${i<autoList.length?" auto":""}${on?" done":""}" data-todo="${encodeURIComponent(t.title)}">
-        <span class="i ck">${on?"\u2713":""}</span>
-        <div><div class="t"><b class="no">${String(i+1).padStart(2,"0")}</b>${t.title}</div>${t.body?`<div class="b">${t.body}</div>`:""}</div></div>`;}).join("");
 
     el.innerHTML=`
+      <div style="display:flex;justify-content:flex-end;margin:0 2px 8px">${riskSegHTML()}</div>
       ${heroCard}
 
       <div class="dm-card">
@@ -2958,14 +3291,6 @@ function renderRisk(){
         <div class="dm-foot">融資借款 −${rkMoney(Math.max(s.loan,0),cur)} · 所有金額單位 ${cur}</div>
       </div>
 
-      <div class="dm-card c2">
-        <div class="dm-hd bl"><span class="dm-t">我的 To-Do</span>
-          <span class="dm-link">示範清單 · ${RK_TODO_DATE} ↗</span></div>
-        ${todoRows}
-        <div class="dm-todofoot"><span>已完成 ${todoCount().done} / ${todoCount().all}　點一下打勾,只存這台裝置</span>
-          ${todoCount().done?`<button id="rkTodoClear">清除勾選</button>`:""}</div>
-      </div>
-
       ${stockCardHTML(true)}
       <div class="dm-disc">40% 規則是風險緩衝,不是保證不會被追繳。這是公開示範版,所有數字都是編的。</div>`;
     return;
@@ -2994,9 +3319,14 @@ function renderRisk(){
   function allocCard(title,sub,list,unit,foot,mix){
     // 依「等效曝險」由大到小排(市值 x 槓桿),正二會被放大,所以排序跟市值不一定一樣。
     // 上面的色條與下面的表用同一份順序,兩者才對得起來。
-    const HH=(list||[]).filter(h=>(+h.market_value||0)>0)
-      .sort((a,b)=>((+b.market_value||0)*(+b.leverage||1))-((+a.market_value||0)*(+a.leverage||1)));
+    const expo=h=>(+h.market_value||0)*(+h.leverage||1);
+    const HH=(list||[]).filter(h=>(+h.market_value||0)>0).sort((a,b)=>
+      ALLOC_SORT==="lev"
+        // 正二先排在上面,同一群裡面再照等效曝險由大到小
+        ? (((+b.leverage||1)>1)-((+a.leverage||1)>1)) || (expo(b)-expo(a))
+        : expo(b)-expo(a));
     if(!HH.length) return "";
+    const nLev=HH.filter(h=>(+h.leverage||1)>1).length;
     const tot=HH.reduce((a,h)=>a+(+h.market_value||0),0)||1;
     // 占比要看「佔全帳戶流動資產」,不是佔這個券商帳戶。分母抓 ASSET_DATA 的流動資產,
     // 沒有資產資料就退回帳戶內占比(至少不會空白)。上面的色條維持帳戶內組成,那是這張卡的結構。
@@ -3006,6 +3336,14 @@ function renderRisk(){
     const sg=HH.map((h,i)=>{ const mv=+h.market_value||0, w=mv/tot*100;
       const lbl=w>=9?`${h.name} ${Math.round(w)}%`:"";
       return `<div class="seg" style="width:${w}%;background:${segColor(h.name,i)}">${lbl}</div>`; }).join("");
+    // 分組模式下,正二那一群結束後插一列小計,一眼看到槓桿部位有多大
+    const subtotal=(sel,label)=>{
+      const g=HH.filter(sel); if(!g.length) return "";
+      const mv=g.reduce((a,h)=>a+(+h.market_value||0),0), ex=g.reduce((a,h)=>a+expo(h),0);
+      return `<tr class="alloc-sum"><td>${label} · ${g.length} 檔</td>
+        <td>${rkMoney(mv,"")}</td><td class="dim">${(mv/base*100).toFixed(1)}%</td>
+        <td class="dim"></td><td class="dim">${rkMoney(ex,"")}</td></tr>`;
+    };
     const tr=HH.map((h,i)=>{ const mv=+h.market_value||0, lev=+h.leverage||1;
       const levTag=lev>1?`<span class="rk-lev">槓桿 ${lev}x</span>`:"";
       const sym=h.sym||IB_SYM[String(h.name||"").toUpperCase()]||"";
@@ -3017,9 +3355,15 @@ function renderRisk(){
         <td class="dim">${(mv/base*100).toFixed(1)}%</td>
         <td class="dim">${lev}x</td>
         <td class="dim">${rkMoney(mv*lev,"")}</td>
-      </tr>`; }).join("");
+      </tr>` + (ALLOC_SORT==="lev"&&i===nLev-1
+        ? subtotal(h=>(+h.leverage||1)>1,"槓桿部位小計") : ""); }).join("")
+      + (ALLOC_SORT==="lev"&&nLev<HH.length
+        ? subtotal(h=>(+h.leverage||1)<=1,"一倍部位小計") : "");
+    const seg=[["risk","風險排序"],["lev","槓桿分組"]].map(([k,t])=>
+      `<button data-allocsort="${k}" class="${ALLOC_SORT===k?"on":""}">${t}</button>`).join("");
     return `<div class="rk-card">
-      <div class="rk-h"><h2 style="font-size:15px">${title}</h2><span class="rk-sub">${sub}</span></div>
+      <div class="rk-h"><h2 style="font-size:15px">${title}</h2><span class="rk-sub">${sub}</span>
+        <div class="tl-seg alloc-seg">${seg}</div></div>
       ${mix?`<div class="rk-mix">${mix}</div>`:""}
       <div class="rk-alloc">${sg}</div>
       <table class="rk-tbl alloc">
@@ -3028,7 +3372,7 @@ function renderRisk(){
       <div class="rk-foot2">${foot}</div>
     </div>`;
   }
-  el.innerHTML=`
+  el.innerHTML=riskHeadHTML()+`
     <div class="rk-h" style="padding:0 2px">
       <h2>槓桿風險</h2><span class="rk-sub">示範讀值 · ${rkRel(s.updated_at)}</span></div>
 
@@ -3114,19 +3458,6 @@ function renderRisk(){
     </div>
 
     ${stockCardHTML(false)}
-
-    <div class="rk-card todo">
-      <div class="rk-h"><h2 style="font-size:14px">我的 To-Do</h2>
-        <span class="rk-sub">跟 示範清單 同步 · ${RK_TODO_DATE}</span></div>
-      ${(()=>{const D=todoDone();
-        return todoList().map((t,i)=>{const on=!!D[t.title];
-          return `<div class="rk-auto${on?" done":""}" data-todo="${encodeURIComponent(t.title)}">
-            <div class="t"><span class="ck">${on?"\u2713":""}</span>
-              <span class="n">${String(i+1).padStart(2,"0")}</span>${t.title}</div>
-            <div class="b">${t.body}</div></div>`;}).join("");})()}
-      <div class="rk-todofoot"><span>已完成 ${todoCount().done} / ${todoCount().all}　點一下打勾,只畫刪除線不會刪掉。勾選只存這台裝置</span>
-        ${todoCount().done?`<button id="rkTodoClear">清除勾選</button>`:""}</div>
-    </div>
 
     <div class="rk-note">所有數字都是這個帳戶內的。金額單位 ${cur}。</div>
   `;
@@ -3563,6 +3894,9 @@ const exMonths= () => (window.EXPENSE_DATA ? EXPENSE_DATA.months.slice().sort((a
 const exLabel = m => m.slice(0,4)+"年"+parseInt(m.slice(5),10)+"月";
 const exShort = m => parseInt(m.slice(5),10)+"月";
 const exDay   = d => d.slice(5).replace("-","/");
+/* 總支出把「代墊」那組的淨額也算進來。
+   幫大家先付了整張帳單,朋友 Tikkie 還回來的是他們那幾份,剩下的淨額就是他自己那一份,
+   那份是真的花掉的錢。全部排掉會少算,全部算進去會多算,取淨額才對。 */
 const exTotal = m => m.transactions.reduce((s,t)=>s+t.amount,0);
 const esc = s => String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 const pctS = (v,base) => base>0 ? Math.round(v/base*100)+"%" : "0%";
@@ -3581,10 +3915,15 @@ function groupSums(m){
 /* 趨勢柱狀圖的堆疊順序:由下往上就是 groups 的順序,固定帳單墊底、購物娛樂其他壓最上面。
    顏色固定不跟金額排序走,月份之間才比得出同一層的高低 */
 function stackLayers(m){
-  /* 代墊(kind=neutral)有正有負,堆進柱子會讓高低亂掉,整組排除,改用圖上面那行小字交代。
-     淨額 0 或負的層也不畫,不然堆疊會往回縮,柱頂對不上折線 */
-  return groupSums(m).filter(g=>g.kind!=="neutral")
-    .map(g=>({name:g.key,color:g.color,v:g.v})).filter(x=>x.v>0.005);
+  /* 只堆淨額為正的組。某一組會變負數是因為朋友把錢還回來、可是那張帳單記在別的月份,
+     這種負數沒辦法畫成一塊,改成從最上面那幾層扣掉,柱頂才會永遠等於折線。 */
+  const gs=groupSums(m);
+  const ls=gs.map(g=>({name:g.key,color:g.color,v:g.v})).filter(x=>x.v>0.005);
+  let left=-gs.filter(g=>g.v<0).reduce((a,g)=>a+g.v,0);
+  for(let i=ls.length-1;i>=0&&left>0.005;i--){
+    const cut=Math.min(ls[i].v,left); ls[i].v-=cut; left-=cut;
+  }
+  return ls.filter(x=>x.v>0.005);
 }
 
 /* ── 主畫面 ─────────────────────────────────────────────── */
@@ -3605,6 +3944,9 @@ function render(){
 
   const i=ms.findIndex(x=>x.month===EXP_MONTH), m=ms[i], prev=ms[i-1];
   const total=exTotal(m), budget=D.fixedBudget;
+  /* 總支出目標(2026-08-21 定的 4,000):hero 與趨勢虛線都對這條算。
+     必要開銷 budget 留給必要開銷卡當參考,不再當主線,不然醫美旅行一出現每個月都紅 */
+  const goal=D.totalBudget||budget;
   /* 必要(need)= 固定帳單 + 生活費,想要(want)= 購物娛樂其他。
      代墊(neutral)兩邊都不算:錢只是先墊出去再收回來,有正有負 */
   const gsums=groupSums(m);
@@ -3612,7 +3954,7 @@ function render(){
   const wantRows=gsums.filter(g=>g.kind==="want");
   const needSum=needRows.reduce((a,g)=>a+g.v,0);
   const wantSum=wantRows.reduce((a,g)=>a+g.v,0);
-  const over=total-budget;
+  const over=total-goal;
   const running = EXP_MONTH===(D.updated||"").slice(0,7);
 
   /* 月份導航:箭頭管相鄰月份,點中間的字打開年月選單。
@@ -3647,12 +3989,12 @@ function render(){
   }
   if(running) delta+=" · 月還沒結";
 
-  const scale=Math.max(total,budget)||1;
-  const inBase=Math.min(total,budget);
-  const inPct=inBase/scale*100, tickPct=budget/scale*100;
+  const scale=Math.max(total,goal)||1;
+  const inBase=Math.min(total,goal);
+  const inPct=inBase/scale*100, tickPct=goal/scale*100;
   const chip = over>0
-    ? `<span class="chip-over">超出必要 ${exEur(over)}</span>`
-    : `<span class="chip-under">低於必要 ${exEur(-over)}</span>`;
+    ? `<span class="chip-over">超出目標 ${exEur(over)}</span>`
+    : `<span class="chip-under">目標內,還有 ${exEur(-over)}</span>`;
   const hero=`
     <section class="card hero">
       <div class="left">
@@ -3661,14 +4003,14 @@ function render(){
         <div class="chips">${chip}<span class="delta">${delta}</span></div>
       </div>
       <div class="right">
-        <div class="bar-top"><span>0</span><span class="mid">必要開銷 ${exEur(budget)}</span><span>${exEur(total)}</span></div>
+        <div class="bar-top"><span>0</span><span class="mid">目標 ${exEur(goal)}</span><span>${exEur(total)}</span></div>
         <div class="bar">
           <div class="seg-in" style="width:${inPct.toFixed(1)}%;border-radius:${over>0?"9px 0 0 9px":"9px"}"></div>
           ${over>0?`<div class="seg-over" style="left:${inPct.toFixed(1)}%"></div>`:""}
           <div class="tick" style="left:calc(${Math.min(tickPct,100).toFixed(1)}% - ${tickPct>=100?2:1}px)"></div>
         </div>
         <div class="bar-leg">
-          <span class="i"><i style="background:var(--blue)"></i>必要 ${exEur(inBase)}</span>
+          <span class="i"><i style="background:var(--blue)"></i>目標內 ${exEur(inBase)}</span>
           ${over>0?`<span class="i"><i style="background:var(--red)"></i>超出 ${exEur(over)}</span>`:""}
         </div>
       </div>
@@ -3698,9 +4040,11 @@ function render(){
       </div>
     </details>` : "";
 
-  /* ── 這個月多花在哪:想要的那幾組,代墊不進這張卡 ── */
+  /* ── 這個月花在哪:全部五組都列(固定帳單、生活費也是花掉的錢),代墊不進這張卡。
+     他 2026-08-27 說清楚了:這張卡是「記錄實際花了多少」,目標與差距歸右邊那張卡管 ── */
   const wants=wantRows.filter(g=>g.v>0.005);
-  const maxWant=wants.reduce((a,g)=>Math.max(a,g.v),0)||1;
+  const allRows=gsums.filter(g=>g.kind!=="neutral" && g.v>0.005);
+  const maxWant=allRows.reduce((a,g)=>Math.max(a,g.v),0)||1;
   /* 明細列的細類用小字掛在 desc 後面,知道這筆是超市還是外食 */
   const itemRow=(d,desc,cat,src,amt)=>`
     <div class="item"><span class="d">${d}</span>
@@ -3710,35 +4054,6 @@ function render(){
     .filter(t=>t.group===key)
     .slice().sort((a,b)=>a.date<b.date?-1:1)
     .map(t=>itemRow(exDay(t.date),t.desc,t.cat,t.src,t.amount)).join("");
-  const wantCardRows=wants.map(g=>`
-    <details class="catrow">
-      <summary>
-        <span class="nm"><i style="background:${g.color}"></i>${esc(g.key)}</span>
-        <span class="track"><i style="background:${g.color};width:${(g.v/maxWant*100).toFixed(1)}%"></i></span>
-        <span class="amt">${exEur(g.v)}</span>
-        <span class="pct">${pctS(g.v,total)}</span>
-      </summary>
-      <div class="items">${groupItems(g.key)}</div>
-    </details>`).join("");
-
-  /* wants 本來就只有 want 三組,直接挑金額最大的兩組當主因 */
-  const top2=wants.slice().sort((a,b)=>b.v-a.v).slice(0,2)
-    .map(g=>`<strong>${esc(g.key)}</strong>`);
-  const insight = over>0
-    ? `超出必要的 <strong class="r">${exEur(over)}</strong>${top2.length?` 主要來自 ${top2.join(" 與 ")}`:""}。`
-    : `<span style="color:#9aa0ad">這個月沒有超出必要開銷。</span>`;
-
-  const varCard=`
-    <section class="card">
-      <div class="chead"><h2>這個月多花在哪</h2><span class="tot">${exEur(wantSum)}</span></div>
-      <div class="csub">點一列展開</div>
-      <div class="rows">${wantCardRows}</div>
-      <div class="insight">${insight}</div>
-    </section>`;
-
-  /* ── 必要開銷:固定帳單(該月實際)+ 生活費(對 livingBudget 預算)兩大列,點開才看得到細項 ── */
-  /* 固定帳單那組拆 Mortgage、住房雜費、其他帳單(同名合併),
-     生活費那組拆底下的細類小計。哪一組走哪一種看有沒有 fixed,不寫死組名 */
   const needBody = g => {
     const tx=m.transactions.filter(t=>t.group===g.key);
     if(tx.some(t=>t.fixed)){
@@ -3765,34 +4080,85 @@ function render(){
     }
     const cm={};
     tx.forEach(t=>{ cm[t.cat]=(cm[t.cat]||0)+t.amount; });
-    /* 朋友分帳收支相抵會是 0,這種細類不列 */
+    /* 朋友分帳收支相抵會是 0,這種細類不列。每個細類再點開看逐筆(2026-08-27 他要的) */
     const lines=Object.keys(cm).filter(k=>Math.abs(cm[k])>0.005).sort((a,b)=>cm[b]-cm[a])
-      .map(k=>`<div class="fixline"><span>${esc(k)}</span><span class="fixv">${exEur(cm[k])}</span></div>`).join("");
+      .map(k=>{
+        const items=tx.filter(t=>t.cat===k).slice().sort((a,b)=>a.date<b.date?-1:1)
+          .map(t=>itemRow(exDay(t.date),t.desc,"",t.src,t.amount)).join("");
+        return `<details class="fixrow sub">
+          <summary><span class="nm">${esc(k)}</span><span class="fixv">${exEur(cm[k])}</span></summary>
+          <div class="items">${items}</div>
+        </details>`;
+      }).join("");
     return `<div class="fixsub">${lines}</div>`;
   };
-  /* 第二列是生活費,右邊金額後面接「/ 預算」:超過預算轉紅,沒超過轉綠。
-     預算讀 livingBudget(他訂的目標,不是算出來的),沒設就只顯示金額 */
-  const lbud=(D.livingBudget>0)?D.livingBudget:0;
-  const needCardRows=needRows.map((g,k)=>{
-    const isLiving=(k===1 && lbud>0);
-    const col=isLiving ? (g.v>lbud?"var(--dn)":"var(--up)") : "";
-    return `
-    <details class="fixrow">
-      <summary><span class="nm"><i style="background:${g.color}"></i>${esc(g.key)}</span>
-        <span class="fixv"${col?` style="color:${col}"`:""}>${exEur(g.v)}${
-          isLiving?`<span class="budnote">/ 預算 ${exEur(lbud)}</span>`:""}</span></summary>
-      ${needBody(g)}
-    </details>`;
-  }).join("");
-  /* 卡片底下那行只留目標的拆法(bills + living),生活費超過預算才補一段紅字 */
+  /* 固定帳單與生活費展開用整理過的小計(needBody);
+     旅行展開先按國家分(他要看去了哪些國家),再點開看逐筆;其他組直接逐筆 */
+  const bodyFor=g=>{
+    if(g.kind==="need") return needBody(g);
+    const tx=m.transactions.filter(t=>t.group===g.key);
+    if(tx.some(t=>t.country)){
+      const cm={}; tx.forEach(t=>{ const c=t.country||"其他"; cm[c]=(cm[c]||0)+t.amount; });
+      const rows=Object.keys(cm).filter(c=>Math.abs(cm[c])>0.005).sort((a,b)=>cm[b]-cm[a])
+        .map(c=>{
+          const items=tx.filter(t=>(t.country||"其他")===c).slice().sort((a,b)=>a.date<b.date?-1:1)
+            .map(t=>itemRow(exDay(t.date),t.desc,t.cat,t.src,t.amount)).join("");
+          return `<details class="fixrow sub">
+            <summary><span class="nm">${esc(c)}</span><span class="fixv">${exEur(cm[c])}</span></summary>
+            <div class="items">${items}</div>
+          </details>`;
+        }).join("");
+      return `<div class="fixsub">${rows}</div>`;
+    }
+    return `<div class="items">${groupItems(g.key)}</div>`;
+  };
+  const wantCardRows=allRows.map(g=>`
+    <details class="catrow">
+      <summary>
+        <span class="nm"><i style="background:${g.color}"></i>${esc(g.key)}</span>
+        <span class="track"><i style="background:${g.color};width:${(g.v/maxWant*100).toFixed(1)}%"></i></span>
+        <span class="amt">${exEur(g.v)}</span>
+        <span class="pct">${pctS(g.v,total)}</span>
+      </summary>
+      ${bodyFor(g)}
+    </details>`).join("");
+
+  /* wants 本來就只有 want 三組,直接挑金額最大的兩組當主因 */
+  const top2=wants.slice().sort((a,b)=>b.v-a.v).slice(0,2)
+    .map(g=>`<strong>${esc(g.key)}</strong>`);
+  const insight = over>0
+    ? `超出目標的 <strong class="r">${exEur(over)}</strong>${top2.length?` 主要來自 ${top2.join(" 與 ")}`:""}。`
+    : `<span style="color:#9aa0ad">這個月在總支出目標內。</span>`;
+
+  const varCard=`
+    <section class="card">
+      <div class="chead"><h2>這個月花在哪</h2><span class="tot">${exEur(total)}</span></div>
+      <div class="csub">點一列展開</div>
+      <div class="rows">${wantCardRows}</div>
+      <div class="insight">${insight}</div>
+    </section>`;
+
+  /* ── 必要開銷:固定帳單(該月實際)+ 生活費(對 livingBudget 預算)兩大列,點開才看得到細項 ── */
+  /* 固定帳單那組拆 Mortgage、住房雜費、其他帳單(同名合併),
+     生活費那組拆底下的細類小計。哪一組走哪一種看有沒有 fixed,不寫死組名 */
+  /* ── 目標卡(2026-08-27 重做):他要的是「目標 + 我跟目標的差距」,
+     實際花在哪已經整包搬去左卡。三條線:總支出 4,000 / 必要 3,300 / 生活費 1,000 ── */
   const bd=D.budgetBreakdown||{};
-  const bk=needRows[0]?needRows[0].key:"固定帳單", lk=needRows[1]?needRows[1].key:"生活費";
-  const bv=needRows[0]?needRows[0].v:0, lv=needRows[1]?needRows[1].v:0;
-  const lOver=lbud>0?lv-lbud:0;
-  const footTxt = ((bd.bills>0 && bd.living>0)
-    ? `目標 ${exEur(budget)} = ${bk} ${exEur(bd.bills)} + ${lk} ${exEur(bd.living)}`
-    : `目標 ${exEur(budget)}`)
-    + (Math.round(lOver)>0?` <span class="r">超出 ${exEur(lOver)}</span>`:"");
+  const lbud=(D.livingBudget>0)?D.livingBudget:0;
+  const bv=needRows[0]?needRows[0].v:0;
+  const lv=needRows[1]?needRows[1].v:0;
+  const goalRow=(name,act,tgt)=>{
+    if(!(tgt>0)) return "";
+    const d=act-tgt, ok=d<=0;
+    return `<div class="goalrow"><span class="gn">${name}</span>
+      <span class="ga">${exEur(act)}<span class="gt"> / ${exEur(tgt)}</span></span>
+      <span class="gd" style="color:${ok?"var(--up)":"var(--dn)"}">${ok?"−":"+"}${exEur(Math.abs(d))}</span></div>`;
+  };
+  const goalRows =
+      goalRow("總支出",total,goal)
+    + goalRow("固定帳單",bv,bd.bills||0)
+    + goalRow("生活費",lv,lbud);
+  const footTxt="固定帳單與生活費每月會浮動,抓大方向就好";
   /* ── 月收入:壓成三行(標題+大數字 / 組成 / ruling 提醒),不要長成一張表。
      Airbnb 只有那個月真的有(m.airbnb > 0)才出現,平常不佔一行。
      數字在 expense-data.js 的 income,薪資單改了就改那裡。 ── */
@@ -3814,9 +4180,9 @@ function render(){
   }
   const fixCard=`
     <section class="card">
-      <div class="chead"><h2>必要開銷</h2><span class="tot">${exEur(needSum)}</span></div>
-      <div class="csub">${bk} + ${lk}</div>
-      <div class="rows">${needCardRows}</div>
+      <div class="chead"><h2>目標</h2></div>
+      <div class="csub">實際 / 目標,右邊是差距</div>
+      <div class="rows">${goalRows}</div>
       <div class="foot">${footTxt}</div>
     </section>`;
 
@@ -3842,7 +4208,7 @@ function render(){
       <div class="thead"><h2>每月支出</h2>${ys.chips}</div>
       <div class="tnote">${EX_FOCUS
         ? `${esc(EX_FOCUS)} ${yr} 年 ${exEur(ysum[EX_FOCUS]||0)}`
-        : `開銷目標 ${exEur(budget)}`}</div>
+        : `總支出目標 ${exEur(goal)} · 必要 ${exEur(budget)}`}</div>
       <div class="exlegend">${legend}</div>
       <svg id="exTrend" role="img" aria-label="每月總支出組成堆疊柱狀圖"></svg>
       <div class="extip" id="exTip" hidden></div>
@@ -3911,7 +4277,8 @@ function drawTrend(ms){
     ? ms.map(mm=>{ const v=gv(mm,fk); return v>0.005?[{name:fk,color:fCol,v:v}]:[]; })
     : ms.map(stackLayers);
   const tops=stacks.map(ls=>ls.reduce((a,l)=>a+l.v,0));
-  const maxV=(fk?Math.max(...vals,...tops,1):Math.max(...vals,...tops,D.fixedBudget))*1.15;
+  const goal=D.totalBudget||D.fixedBudget;
+  const maxV=(fk?Math.max(...vals,...tops,1):Math.max(...vals,...tops,goal))*1.15;
   const n=ms.length;
   /* 格數 = 月份數 + 1:右邊永遠留一格呼吸,月份少時柱子也攤得開 */
   const slot=iw/Math.max(n+1,3);
@@ -3952,7 +4319,7 @@ function drawTrend(ms){
   });
 
   if(!fk){
-    const yb=y(D.fixedBudget);
+    const yb=y(goal);
     s+=`<line x1="${padL}" y1="${yb.toFixed(1)}" x2="${W-padR}" y2="${yb.toFixed(1)}" stroke="#d98a8a" stroke-width="1.5" stroke-dasharray="5 4"/>`;
   }
 
@@ -3967,7 +4334,7 @@ function drawTrend(ms){
   const curM=(D.updated||"").slice(0,7);
   ms.forEach((mm,k)=>{
     const v=vals[k], cx=pts[k][0], cy=pts[k][1];
-    const on=mm.month===EXP_MONTH, overB=!fk && v>D.fixedBudget, run=mm.month===curM;
+    const on=mm.month===EXP_MONTH, overB=!fk && v>goal, run=mm.month===curM;
     const col=fk?fCol:(overB?"#c3312f":"#2f6fed");
     over+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${run?5:4}" fill="${run?"#ffffff":col}" stroke="${run?col:"#fff"}" stroke-width="${run?2.5:1.5}"/>`;
     /* 每個月都標金額,選中的那個月大一號深色,其他月小一號灰色 */
@@ -4019,7 +4386,7 @@ function drawTrend(ms){
 window.exSummary=function(){
   const ms=exMonths(); if(!ms.length) return null;
   const m=ms.find(x=>x.month===EXP_MONTH)||ms[ms.length-1];
-  const total=exTotal(m), base=(window.EXPENSE_DATA&&EXPENSE_DATA.fixedBudget)||0;
+  const total=exTotal(m), base=(window.EXPENSE_DATA&&(EXPENSE_DATA.totalBudget||EXPENSE_DATA.fixedBudget))||0;
   return {month:m.month, label:exLabel(m.month), short:exShort(m.month),
           total, base, over:total-base};
 };
@@ -4067,9 +4434,9 @@ function renderAF(){
   // 順序刻意先支出再資產(使用者 2026-08-20):先看花掉多少,再看有多少
   const cells=[];
   if(E){
-    cells.push(kpi(`${E.short}總支出`, eur(E.total), "", `必要開銷 ${eur(E.base)}`));
-    cells.push(kpi("超出必要", (E.over>=0?"+":"")+eur(Math.abs(E.over)), "",
-      E.over>=0?"超過必要開銷":"低於必要開銷", E.over>=0?"afdn":"afup"));
+    cells.push(kpi(`${E.short}總支出`, eur(E.total), "", `目標 ${eur(E.base)}`));
+    cells.push(kpi("超出目標", (E.over>=0?"+":"")+eur(Math.abs(E.over)), "",
+      E.over>=0?"超過總支出目標":"在目標內", E.over>=0?"afdn":"afup"));
   }
   if(S[0]) cells.push(kpi(S[0].label, S[0].value, S[0].unit,
     `<span class="${S[0].deltaDir==="down"?"afdn":"afup"}">${S[0].delta||""}</span> ${S[0].sub||""}`));
@@ -4099,6 +4466,7 @@ function switchPanel(p){
   syncHeader();
   syncTabbar();
   syncHash();
+  try{ syncTodoBadge(); }catch(e){}
 }
 
 /* 手機版的頁首會跟著面板換標題(設計稿 1d:槓桿頁標題是「槓桿風險」) */
@@ -4156,7 +4524,7 @@ function syncTabbar(){
 
 /* 導覽只有一層:分頁列的四顆按鈕就是四段,選哪段就重畫大盤那個 pane。
    FILTER.macro 是唯一的狀態,分頁列的 active 樣式跟著它走。 */
-const MACRO_SEGS=["all","eu","tw","stock","perf"];
+const MACRO_SEGS=["all","eu","tw","stock"];
 function syncSegTabs(){
   const cur=FILTER.macro||"all";
   document.querySelectorAll(".tabs button[data-seg]")
@@ -4489,6 +4857,46 @@ function renderRules(){
        <button class="sclose" id="rulesClose" aria-label="關閉">✕</button>
      </div>`+rulesHtml();
 }
+function renderTodoSheet(){
+  const el=document.getElementById("todoSheet"); if(!el) return;
+  let L=[]; try{ L=todoList(); }catch(e){ L=RK_TODO; }
+  const D=todoDone();
+  const rows=L.map((t,i)=>{ const on=!!D[t.title];
+    return `<div class="td-row${on?" done":""}" data-todo="${encodeURIComponent(t.title)}">
+      <span class="ck">${on?"\u2713":""}</span>
+      <div><div class="t"><span class="no">${String(i+1).padStart(2,"0")}</span>${t.title}</div>
+      ${t.body?`<div class="b">${t.body}</div>`:""}</div></div>`; }).join("");
+  const done=L.filter(t=>D[t.title]).length;
+  el.innerHTML=`<div class="td-hd"><h3>To-Do</h3>
+      <span class="sub">示範清單 · ${RK_TODO_DATE}</span>
+      <button class="td-x" id="todoClose" aria-label="關閉">✕</button></div>
+    ${rows||'<div style="padding:18px 0;color:var(--faint);font-size:13px">目前沒有待辦。</div>'}
+    <div class="td-add"><input id="todoNew" placeholder="新增一條,按 Enter 或加入" maxlength="120">
+      <button id="todoAdd">加入</button></div>
+    <div class="td-foot"><span>已完成 ${done} / ${L.length} · 新增與刪除只存這台裝置</span>
+      <span style="display:flex;gap:8px">
+        ${done?`<button id="todoDelDone" style="color:#c2373b;border-color:#e8c4c5">刪除已勾選</button>`:""}
+        ${done?`<button id="rkTodoClear">清除勾選</button>`:""}</span></div>`;
+  const inp=el.querySelector("#todoNew");
+  if(inp) inp.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){ e.preventDefault(); todoAddFromInput(); }
+    e.stopPropagation();   // Esc 留給輸入框,不要直接關掉彈窗
+  });
+}
+function todoAddFromInput(){
+  const inp=document.getElementById("todoNew"); if(!inp) return;
+  const t=inp.value.trim(); if(!t) return;
+  myTodoAdd(t); renderTodoSheet(); syncTodoBadge();
+  const again=document.getElementById("todoNew"); if(again) again.focus();
+}
+function syncTodoBadge(){
+  const b=document.getElementById("todoBadge"); if(!b) return;
+  let L=[]; try{ L=todoList(); }catch(e){ L=RK_TODO; }
+  const D=todoDone(); const n=L.filter(t=>!D[t.title]).length;
+  b.hidden=!n; b.textContent=n;
+}
+function openTodo(){ renderTodoSheet(); document.getElementById("todoModal").classList.add("show"); }
+function closeTodo(){ document.getElementById("todoModal").classList.remove("show"); }
 function openRules(){ renderRules(); document.getElementById("rulesModal").classList.add("show"); }
 function closeRules(){ document.getElementById("rulesModal").classList.remove("show"); }
 
@@ -4509,10 +4917,12 @@ document.addEventListener("click",e=>{
   const tm=e.target.closest("[data-tlmode]");
   if(tm){ TL_MODE=tm.dataset.tlmode; renderAsset(); return; }
   // 手機槓桿頁的帳戶明細展開區
+  const rvb=e.target.closest("[data-riskview]");
+  if(rvb){ RISK_VIEW=rvb.dataset.riskview; renderRisk(); window.scrollTo(0,0); return; }
+  const asb=e.target.closest("[data-allocsort]");
+  if(asb){ ALLOC_SORT=asb.dataset.allocsort; renderRisk(); return; }
   if(e.target.closest("#rkIbToggle")){ RK_IBOPEN=!RK_IBOPEN; renderRisk(); return; }
-  if(e.target.closest("#rkTodoClear")){ todoClear(); renderRisk(); return; }
-  const tdEl=e.target.closest("[data-todo]");
-  if(tdEl){ todoToggle(decodeURIComponent(tdEl.dataset.todo)); renderRisk(); return; }
+
   // 手機資產頁的展開區(歷年線圖 / 資產結構明細 / 帳戶 / 持倉 / ETF / 風險提示)
   if(e.target.closest("#asTlToggle")){ AS_TLOPEN=!AS_TLOPEN; renderAsset(); return; }
   const hbtn=e.target.closest("button[id^='asHold']");
@@ -4524,6 +4934,20 @@ document.addEventListener("click",e=>{
   const tb=e.target.closest("#tabbar button"); if(tb){ goNav(tb.dataset.go); return; }
   // 訊號區展開/收合(在頂部訊號列,不在彈窗內)
   if(e.target.closest("#sigToggle")){ SIGOPEN=!SIGOPEN; renderTopStrip(); return; }
+  if(e.target.closest("#todoBtn")){ openTodo(); return; }
+  if(e.target.closest("#todoSheet")){
+    if(e.target.closest("#todoClose")){ closeTodo(); return; }
+    if(e.target.closest("#todoAdd")){ todoAddFromInput(); return; }
+    if(e.target.closest("#todoDelDone")){
+      const D=todoDone();
+      todoDelete(Object.keys(D));
+      renderTodoSheet(); syncTodoBadge(); return; }
+    if(e.target.closest("#rkTodoClear")){ todoClear(); renderTodoSheet(); syncTodoBadge(); return; }
+    const td=e.target.closest("[data-todo]");
+    if(td){ todoToggle(decodeURIComponent(td.dataset.todo)); renderTodoSheet(); syncTodoBadge(); }
+    return;
+  }
+  if(e.target.closest("#todoModal")){ closeTodo(); return; }
   if(e.target.closest("#rulesToggle")||e.target.closest("#rulesTop")){ openRules(); return; }
   // 規則彈窗:點 ✕ 或背景關閉,點內容不關
   if(e.target.closest("#rulesSheet")){ if(e.target.closest("#rulesClose")) closeRules(); return; }
@@ -4544,7 +4968,7 @@ document.addEventListener("click",e=>{
     if(el.classList.contains("row")) el.classList.toggle("open");
   }
 });
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeChart(); closeRules(); } });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeChart(); closeRules(); closeTodo(); } });
 
 /* 有本機槓桿資料(leverage-data.js 有載到)才顯示面板切換鈕。
    線上公開版讀不到那個檔,切換鈕整組隱藏,只剩股票面板,帳戶數字永遠不外流。 */
@@ -4695,6 +5119,7 @@ function loadData(){
       return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
     })(DATA._updated);
     syncHeader();
+    try{ syncTodoBadge(); }catch(e){}   // 資料到了,自動待辦才算得出來,徽章要重數一次
     document.getElementById("status").style.display="none";
     renderTopStrip();
     renderMacro();
