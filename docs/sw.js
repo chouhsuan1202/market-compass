@@ -4,7 +4,7 @@
    不可以改成 cache first，那會讓面板顯示過期的價格與均線訊號。
    改動這個檔案時記得把 CACHE 的版本號加一，舊快取才會被清掉。 */
 
-var CACHE = "compass-v91";
+var CACHE = "compass-demo-v92";
 
 var PRECACHE = [
   "./",
