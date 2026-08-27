@@ -1824,7 +1824,7 @@ function interpret(r){
 
 /* ---------- macro tab ---------- */
 // 大盤分頁最頂的「持有大卡」（全寬,可點開彈窗）。歐元 ETF 都用這個。
-const BIG_HOLD_CARDS = ["IWDA.AS", "VWCE.DE", "EMIM.AS", "XDWT.DE"];   // 依序渲染在大盤分頁最頂
+const BIG_HOLD_CARDS = ["IWDA.AS", "VWRL.AS", "EMIM.AS", "XDWT.DE"];   // 依序渲染在大盤分頁最頂
 function bigHoldCard(sym){
   const r=DATA[sym];
   const e=(typeof wlEntry==="function")?wlEntry(sym):{s:sym};
@@ -2166,16 +2166,16 @@ const perfEsc = t => String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">"
 const PERF_BENCH_MAP={
   "00646.TW":{bench:"00646.TW", idx:"S&P 500"},
   "00713.TW":{bench:"00646.TW", idx:"S&P 500"},
-  "CL2.PA": {bench:"00646.TW", idx:"S&P 500"},
+  "2308.TW": {bench:"00646.TW", idx:"S&P 500"},
   "00670L.TW":{bench:"00670L.TW", idx:"NASDAQ 100"},
   "00878.TW": {bench:"00670L.TW", idx:"NASDAQ 100"},
   "0052.TW":{bench:"00670L.TW", idx:"NASDAQ 100（近似）"},
-  "VWCE.DE":{bench:"00646.TW", idx:"美國 S&P 500"}
+  "VWRL.AS":{bench:"00646.TW", idx:"美國 S&P 500"}
 };
 const perfBench=sym=>PERF_BENCH_MAP[sym]||{bench:"00646.TW", idx:"S&P 500"};
 const PERF_SC={liq:"#2f6fed", ib:"#7b5cd6", yuanta:"#e08b2f",
   "0052.TW":"#1d6fd8","00670L.TW":"#d95f18","00646.TW":"#12a670","00878.TW":"#d16ba5",
-  "CL2.PA":"#7b5cd6","00713.TW":"#6d4bc4","VWCE.DE":"#0f9d8f","0056.TW":"#e0a132",
+  "2308.TW":"#7b5cd6","00713.TW":"#6d4bc4","VWRL.AS":"#0f9d8f","0056.TW":"#e0a132",
   "2412.TW":"#e08b2f","2881.TW":"#c2662f","2454.TW":"#b8433f"};
 /* 四種狀態:
    灰 = 剛買不到 7 天,漲跌全是雜訊,先不評;
@@ -2989,7 +2989,7 @@ function renderTopStrip(){
    ========================================================== */
 /* 借款紅線:用質押成數口徑。
    成數 = 借款 ÷ 持倉(擔保品)市值。法規上限 60%,安全上限 30 到 40%,
-   「不要把額度借滿 6 成,借 3 到 4 成才能安穩睡覺」(ivan_EP09 [21:15] [21:30],pilot 集)。
+   「不要把額度借滿 6 成,借 3 到 4 成才能安穩睡覺」(參考來源,參考)。
    以前(2026-08-19 到 08-22)分母用的是 IB 淨值,同一個 40% 比較嚴格,已改掉。危險區 50%。
    「借款不超過總資產 20%」是另一條(分母是總資產),沒有改,在總曝險卡上。 */
 const RK_LIMIT={safeMax:.4, watchMax:.5};
@@ -3009,7 +3009,7 @@ function stockSymSet(){
   const b=stockBlock();
   return new Set(b?b.rows.map(r=>r.sym).filter(Boolean):[]);
 }
-/* 一筆券商持倉是不是個股。快照只有簡稱(IWDA / VWCE),先用 IB_SYM 對回 Yahoo 代號 */
+/* 一筆券商持倉是不是個股。快照只有簡稱(IWDA / VWRL),先用 IB_SYM 對回 Yahoo 代號 */
 function isStockHold(h,set){
   const nm=String(h.name||"").toUpperCase();
   const sym=h.sym||IB_SYM[nm]||nm;
@@ -3704,7 +3704,7 @@ function renderAsset(){
     // 原本那張只有一條長條的 hero 卡拿掉,大數字上面的總覽四格已經有了。
     const heroCard="";
 
-    // ② 流動資產配置:荷蘭 vs 台灣、現金 vs 股票、投資工具
+    // ② 流動資產配置:海外 vs 台灣、現金 vs 股票、投資工具
     const nlTw=pick("ETF vs"), tool=pick("資產類型");
     const cash=L.cash!=null?L.cash:0, stock=Math.max(liqVal-cash,0);
     const rows=[];
@@ -3945,7 +3945,7 @@ function render(){
   const i=ms.findIndex(x=>x.month===EXP_MONTH), m=ms[i], prev=ms[i-1];
   const total=exTotal(m), budget=D.fixedBudget;
   /* 總支出目標(2026-08-21 定的 4,000):hero 與趨勢虛線都對這條算。
-     必要開銷 budget 留給必要開銷卡當參考,不再當主線,不然醫美旅行一出現每個月都紅 */
+     必要開銷 budget 留給必要開銷卡當參考,不再當主線,不然某類某類一出現每個月都紅 */
   const goal=D.totalBudget||budget;
   /* 必要(need)= 固定帳單 + 生活費,想要(want)= 購物娛樂其他。
      代墊(neutral)兩邊都不算:錢只是先墊出去再收回來,有正有負 */
@@ -4093,7 +4093,7 @@ function render(){
     return `<div class="fixsub">${lines}</div>`;
   };
   /* 固定帳單與生活費展開用整理過的小計(needBody);
-     旅行展開先按國家分(他要看去了哪些國家),再點開看逐筆;其他組直接逐筆 */
+     某類展開先按國家分(他要看去了哪些國家),再點開看逐筆;其他組直接逐筆 */
   const bodyFor=g=>{
     if(g.kind==="need") return needBody(g);
     const tx=m.transactions.filter(t=>t.group===g.key);
