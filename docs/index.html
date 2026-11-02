@@ -24,11 +24,13 @@
   :root{
     color-scheme:light;
     --bg:#eef0f4; --card:#fff; --line:#edeff2; --line2:#e3e6ea;
-    --ink:#101418; --muted:#6b7280; --faint:#9aa1ab;
+    --ink:#101418; --muted:#5f6673; --faint:#676e79;   /* 2026-11 對比調深一階,過 WCAG AA */
     --up:#0b7a55; --up2:#12a670; --upbg:#e7f6ef; --dn:#c2373b; --dn2:#e5484d; --dnbg:#fdeeee;
     --dot-up:#12a670; --dot-dn:#e5484d; --dot-na:#cbd5e1;
     --add:#1d4ed8; --addbg:#eef4ff;
     --green:#0e9f6e; --yellow:#f59e0b; --red:#e5484d;
+    /* 白字標籤專用的深一階(VIX、站上 n/5、檔位),白字才過 WCAG AA */
+    --green-t:#0b7a55; --yellow-t:#b45309; --red-t:#c2373b;
     --nearbg:#fff4e5; --nearink:#b45309;
     --cline:#12a670;
     --num:"Manrope",system-ui,sans-serif;
@@ -37,6 +39,8 @@
   /* hidden 屬性一定要贏。像 #riskPanel{display:flex} 這種帶 id 的規則優先度比瀏覽器
      內建的 [hidden]{display:none} 高,會讓「隱藏」失效(槓桿面板曾因此掛在股票面板下面)。 */
   [hidden]{display:none !important;}
+  /* 鍵盤焦點框:只在用鍵盤時出現,滑鼠點擊的外觀不變(WCAG 2.4.7) */
+  :focus-visible{outline:2px solid #2f6fed;outline-offset:2px;}
   body{margin:0;background:var(--bg);color:var(--ink);
     font-family:"Noto Sans TC","Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;
     font-size:15px;line-height:1.45;}
@@ -63,7 +67,7 @@
     display:flex;align-items:center;justify-content:center;padding:0 4px;}
   /* To-Do 彈窗:全站通用,不再綁在槓桿風險頁裡 */
   #todoSheet .td-hd{display:flex;align-items:baseline;gap:10px;}
-  #todoSheet .td-hd h3{margin:0;font-size:16px;font-weight:800;color:var(--ink);}
+  #todoSheet .td-hd h2{margin:0;font-size:16px;font-weight:800;color:var(--ink);}
   #todoSheet .td-hd .sub{font-size:12px;color:var(--faint);}
   #todoSheet .td-x{margin-left:auto;border:none;background:none;font-size:18px;color:var(--faint);cursor:pointer;padding:4px;}
   #todoSheet .td-row{display:grid;grid-template-columns:20px 1fr;gap:10px;padding:12px 0;
@@ -142,7 +146,7 @@
   .brow-st{display:flex;justify-content:flex-end;}
   .brow-badge{height:30px;padding:0 13px;border-radius:9px;display:inline-flex;align-items:center;
     font-size:12.5px;font-weight:700;background:var(--card);border:1px solid #d9dde3;color:#3f4652;white-space:nowrap;}
-  .brow-badge.full{background:var(--green);border-color:var(--green);color:#fff;}
+  .brow-badge.full{background:var(--green-t);border-color:var(--green-t);color:#fff;}
   /* 窄螢幕:三欄撐不開,改成堆疊(代號價格在上,均線點+狀態在下一列) */
   @media(max-width:720px){
     .blist{padding:2px 14px 6px;}
@@ -185,7 +189,7 @@
   /* dot */
   /* 均線點:站上=實心綠+光暈,跌破=空心紅環,無資料=灰(完稿) */
   .brow-ma .dots{display:flex;gap:22px;}
-  .dot{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;color:#8b929c;line-height:1;font-weight:600;font-family:var(--num);}
+  .dot{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;color:#676e79;line-height:1;font-weight:600;font-family:var(--num);}
   .dot i{width:16px;height:16px;border-radius:50%;display:block;box-sizing:border-box;}
   .dot.up i{background:var(--dot-up);box-shadow:0 0 0 4px rgba(18,166,112,.13);}
   .dot.dn i{background:var(--card);border:2.5px solid var(--dot-dn);}
@@ -347,7 +351,7 @@
   .mac .macv.up{color:var(--up);} .mac .macv.dn{color:var(--dn);} .mac .macv.na{color:var(--faint);}
   .mac .macl{font-size:11px;color:var(--faint);}
   .mac .macs{font-size:10px;line-height:1;}
-  .mac .macs.muted{color:#aab0b9;}
+  .mac .macs.muted{color:#676e79;}
   .mac .macs.on{padding:2px 7px;border-radius:5px;font-weight:500;}
   .mac .macs.on.up{background:var(--upbg);color:var(--up);}
   .mac .macs.on.dn{background:var(--dnbg);color:var(--dn);}
@@ -370,7 +374,7 @@
   #expensePanel{
     color-scheme:light;
     --bg:#f4f5f7; --card:#ffffff; --line:#e3e6ec; --hair:#f0f2f5; --hair2:#d9dce3;
-    --ink:#16181d; --dim:#4a5060; --body:#6a7080; --muted:#7a8090; --faint:#9aa0ad;
+    --ink:#16181d; --dim:#4a5060; --body:#6a7080; --muted:#5f6673; --faint:#676e79;
     /* 進度條的藍紅跟著槓桿風險面板那套走(RK_SEG),不然跟堆疊柱的配色打架 */
     --blue:#1d6fd8; --red:#d95f18; --dn:#c3312f; --dnbg:#fdeeee; --up:#0b7a55; --upbg:#e7f6ef;
     --warnbg:#fff7ec; --warnline:#f2ddba; --warnink:#9a5a05; --warnink2:#b06e10; --warndot:#d97a08;
@@ -441,12 +445,12 @@
     font-variant-numeric:tabular-nums;flex:none;}
 #expensePanel .ask .body{padding:0 18px 14px;}
 #expensePanel .ask .row{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid var(--warnline);}
-#expensePanel .ask .row .d{font-family:var(--mono);font-size:12.5px;color:#b98b4a;flex:none;width:46px;
+#expensePanel .ask .row .d{font-family:var(--mono);font-size:12.5px;color:#93590d;flex:none;width:46px;
     font-variant-numeric:tabular-nums;}
 #expensePanel .ask .row .n2{font-size:13.5px;color:#7a5c2a;min-width:0;}
 #expensePanel .ask .row .a{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:600;
     color:var(--warnink);font-variant-numeric:tabular-nums;white-space:nowrap;}
-#expensePanel .ask .oth{font-size:12px;color:#b08a52;line-height:1.6;padding-top:10px;}
+#expensePanel .ask .oth{font-size:12px;color:#93590d;line-height:1.6;padding-top:10px;}
 /* ── 兩欄 ── */
   #expensePanel .cols{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;}
 /* 目標卡的三行:名稱 / 實際/目標 / 差距 */
@@ -717,7 +721,7 @@
   .as-row:last-child{border-bottom:none;}
   .as-row .tg{font-size:10px;font-weight:700;padding:1.5px 6px;border-radius:5px;background:#e9f0fe;color:#2f6fed;white-space:nowrap;}
   .as-row .tg.tw{background:#e6f6ee;color:#12805e;}
-  .as-row .tg.twetf{background:#fdf0e3;color:#b5701d;}
+  .as-row .tg.twetf{background:#fdf0e3;color:#93590d;}
   .as-row .tg.gold{background:#fdeaf1;color:#b8407a;}
   .as-row .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .as-row .vv{text-align:right;font-weight:600;}
@@ -820,7 +824,7 @@
     .wrap{padding-top:calc(8px + env(safe-area-inset-top));}
   }
 
-  /* ══════ 手機版 redesign(依 2026-08-13 設計稿 1a–1e) ══════
+  /* ══════ 手機版 redesign(依 2026-08-13 設計稿 1a-1e) ══════
      手機不再沿用桌面的三欄卡片,改成:
        · 頂部收成一張「脈搏卡」(VIX/NDX + 今日訊號 + 一句摘要)
        · 標的列壓到 56px,均線的 5/20/60/120/240 標籤移到表頭只印一次
@@ -921,7 +925,7 @@
     .rkm-hero .n i{font-size:28px;font-weight:700;color:var(--muted);font-style:normal;}
     .rkm-hero .side{font-size:10.5px;color:var(--muted);white-space:nowrap;}
     .rkm-hero .side b{color:var(--ink);font-family:var(--num);}
-    /* 敞口量表 1.0x–3.0x */
+    /* 敞口量表 1.0x-3.0x */
     .rkm-g{position:relative;height:8px;border-radius:4px;display:flex;margin-top:12px;}
     .rkm-g .z1{background:#cdeee0;border-radius:4px 0 0 4px;}
     .rkm-g .z2{background:#fdeac2;}
@@ -1007,7 +1011,7 @@
   header{position:relative;}
   #panelToggle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);}
   .ptog button{height:28px;padding:0 13px;border:none;border-radius:7px;background:transparent;
-    font:600 12.5px/1 "Noto Sans TC",sans-serif;color:#6b7280;cursor:pointer;}
+    font:600 12.5px/1 "Noto Sans TC",sans-serif;color:#5f6673;cursor:pointer;}
   .ptog button.on{background:#fff;box-shadow:0 1px 2px rgba(16,20,24,.12);color:#101418;font-weight:700;}
   header .brandcol{min-width:0;}
 
@@ -1052,7 +1056,7 @@
   .rk-strip .note{font-size:12px;color:var(--muted);}
   .rk-strip .sep{width:1px;height:16px;background:var(--line2);}
   .rk-pill{padding:3px 9px;border-radius:6px;font-size:11.5px;font-weight:700;}
-  .rk-safe{background:#e7f6ef;color:#0b7a55;} .rk-watch{background:#fdf6ea;color:#a4681a;}
+  .rk-safe{background:#e7f6ef;color:#0b7a55;} .rk-watch{background:#fdf6ea;color:#93590d;}
   .rk-danger{background:#fdeeee;color:#c2373b;}
   /* 主卡:左=曝險+借款量表(上下疊),右=下跌承受力側欄(依設計 1fr / 328px) */
   .rk-main{display:grid;grid-template-columns:1fr 328px;padding:0;overflow:hidden;}
@@ -1155,8 +1159,8 @@
   .rk-tbl .tname i{width:8px;height:8px;border-radius:50%;flex:none;}
   .rk-tbl .tname .tn{font-weight:700;color:var(--ink);font-size:14px;}
   .rk-tbl .tname .tg{font-size:11.5px;color:var(--faint);font-weight:400;font-family:"Noto Sans TC",sans-serif;}
-  .rk-tbl td.dim{color:#9aa1ab;font-weight:500;}
-  .rk-lev{height:18px;padding:0 6px;border-radius:5px;background:#fdf6ea;color:#a4681a;font:500 10px/18px "Noto Sans TC";display:inline-block;}
+  .rk-tbl td.dim{color:#676e79;font-weight:500;}
+  .rk-lev{height:18px;padding:0 6px;border-radius:5px;background:#fdf6ea;color:#93590d;font:500 10px/18px "Noto Sans TC";display:inline-block;}
   /* 詳細數字折疊 */
   .rk-toggle{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;
     background:#fafbfc;border:1px solid var(--line2);border-radius:14px;cursor:pointer;}
@@ -1167,7 +1171,7 @@
   .rk-acct .ac{border:1px solid var(--line2);border-radius:11px;padding:12px 13px;display:flex;flex-direction:column;gap:6px;}
   .rk-acct .ac .ak{font-size:11px;color:var(--faint);}
   .rk-acct .ac .av{font-family:var(--num);font-weight:700;font-size:16px;font-variant-numeric:tabular-nums;}
-  .rk-acct .ac .an{font-size:10.5px;color:#aab0b9;}
+  .rk-acct .ac .an{font-size:10.5px;color:#676e79;}
   .rk-note{font-size:11.5px;color:var(--faint);line-height:1.6;padding:2px 2px 0;}
   @media(max-width:720px){
     .rk-card{padding:15px 15px;}
@@ -1215,7 +1219,7 @@
     .dm-pill{flex:none;white-space:nowrap;font-size:11.5px;font-weight:700;
       padding:3px 9px;border-radius:20px;}
     .dm-pill.up{background:var(--upbg);color:var(--up);}
-    .dm-pill.warn{background:#fdf6ea;color:#a4681a;}
+    .dm-pill.warn{background:#fdf6ea;color:#93590d;}
     .dm-pill.dn{background:var(--dnbg);color:var(--dn);}
     .dm-btn{display:block;border:none;background:none;padding:11px 0 1px;color:var(--muted);
       cursor:pointer;font:600 11.5px/1.4 "Noto Sans TC",sans-serif;white-space:nowrap;}
@@ -1240,7 +1244,7 @@
     .dm-tag.cut{color:var(--dn);background:var(--dnbg);}
     .dm-tag.st{color:#2f6fed;background:#e9f0fe;}
     .dm-tag.tw{color:#12805e;background:#e6f6ee;}
-    .dm-tag.twetf{color:#b5701d;background:#fdf0e3;}
+    .dm-tag.twetf{color:#93590d;background:#fdf0e3;}
     .dm-tag.gold{color:#b8407a;background:#fdeaf1;}
 
     /* ── 槓桿頁 ── */
@@ -1359,7 +1363,7 @@
     .dm-r1{display:flex;align-items:center;gap:6px;min-width:0;}
     .dm-r1 b{font-family:var(--num),"Noto Sans TC",sans-serif;font-size:15px;font-weight:700;
       white-space:nowrap;}
-    .dm-note{font-size:10.5px;color:#c3c8cf;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .dm-note{font-size:10.5px;color:#676e79;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .dm-dots{display:flex;align-items:center;gap:7px;justify-self:end;}
     .dm-dots i{width:11px;height:11px;border-radius:50%;display:block;box-sizing:border-box;}
     .dm-dots i.up{background:var(--dot-up);}
@@ -1685,16 +1689,24 @@
   .rk-holds{grid-template-columns:1fr;}
   /* 借款量表拿掉之後左欄變短,置中比較不會空一大塊 */
   .rk-main-left{display:flex;flex-direction:column;justify-content:center;}
+  /* 手機槓桿頁的「風險/線圖」切換鈕:.tl-seg 的樣式原本只寫在桌面(721px 以上),
+     手機上變成瀏覽器預設的方框按鈕。沿用同一套分段鈕樣式 */
+  @media(max-width:720px){
+    .tl-seg{display:inline-flex;gap:3px;padding:3px;background:#e4e7ec;border-radius:8px;}
+    .tl-seg button{height:28px;padding:0 14px;border:none;border-radius:6px;background:transparent;
+      color:var(--muted);font:600 12.5px/1 "Noto Sans TC",sans-serif;cursor:pointer;}
+    .tl-seg button.on{background:#fff;box-shadow:0 1px 2px rgba(16,20,24,.12);color:var(--ink);font-weight:700;}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
+<main class="wrap">
  <!-- 整個上半部收進同一張白卡,內部用分隔線切段(依設計稿) -->
  <div class="shell">
   <header>
     <div class="brandcol">
       <h1>Compass (Beta)</h1>
-      <div class="sub"><span id="datadate">—</span> 更新</div>
+      <div class="sub"><span id="datadate">-</span> 更新</div>
     </div>
     <!-- 兩面板切換:股票面板 / 槓桿風險。槓桿資料是本機檔,線上讀不到就整組隱藏 -->
     <div id="panelToggle" class="ptog" hidden>
@@ -1731,7 +1743,7 @@
   <!-- .main 在手機是 display:contents(等於不存在),桌面才變成 1232px 版心容器 -->
   <div class="main">
   <div id="stockPanel">
-   <div id="status" class="loading">讀取資料中…</div>
+   <div id="status" class="loading" role="status">讀取資料中…</div>
    <div id="paneCol">
     <div id="macro" class="pane"></div>
    </div>
@@ -1745,7 +1757,7 @@
 
   <footer>Compass (Beta) · 示範資料</footer>
   </div>
-</div>
+</main>
 
 <!-- 手機底部分頁列(桌面隱藏):把頂部的分頁與面板切換收成單手可按的一排。
      槓桿那格只有讀得到槓桿資料時才出現。 -->
@@ -1767,9 +1779,9 @@
     <span>支出</span></button>
 </nav>
 
-<div id="chartModal" class="modal"><div class="sheet" id="chartSheet"></div></div>
-<div id="rulesModal" class="modal"><div class="sheet" id="rulesSheet"></div></div>
-<div id="todoModal" class="modal"><div class="sheet" id="todoSheet"></div></div>
+<div id="chartModal" class="modal"><div class="sheet" id="chartSheet" role="dialog" aria-modal="true" aria-label="走勢圖"></div></div>
+<div id="rulesModal" class="modal"><div class="sheet" id="rulesSheet" role="dialog" aria-modal="true" aria-label="看板規則"></div></div>
+<div id="todoModal" class="modal"><div class="sheet" id="todoSheet" role="dialog" aria-modal="true" aria-label="To-Do"></div></div>
 
 <!-- 槓桿快照:本機檔(gitignore),線上讀不到就 404,槓桿面板自動隱藏。裡面是 window.MANUAL_SNAPSHOTS -->
 <script src="leverage-data.js"></script>
@@ -1785,6 +1797,132 @@ const IDX_META = {
 
 let WL=null, DATA=null;
 
+/* 外部資料(json、data 檔、localStorage)一律先跳脫再進 innerHTML。
+   名稱、備註、錯誤訊息都可能帶 < > " 這類字元,不跳脫就會被當成 HTML 執行。 */
+function escH(s){ return s==null?"":String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+/* 顏色只收 #hex、CSS 變數或顏色名,其他退回灰色,資料檔塞怪字串進 style 也不會出事 */
+function safeColor(c,fb){
+  const s=String(c==null?"":c).trim();
+  return (/^#[0-9a-f]{3,8}$/i.test(s)||/^var\(--[a-z0-9-]+\)$/i.test(s)||/^[a-z]{3,20}$/i.test(s))?s:(fb||"#9aa1ab");
+}
+function toNum(v){
+  if(v===null||v===undefined||v===""||typeof v==="boolean") return null;
+  const n=+v; return isFinite(n)?n:null;
+}
+/* 文字疊在資料色上(色條標籤、甜甜圈比例大字)時,顏色不夠深就自動壓暗到過 WCAG AA。
+   色塊本身的顏色不變,只調字。 */
+function hexLum(h){
+  const m=/^#([0-9a-f]{6})$/i.exec(h||""); if(!m) return null;
+  return [0,2,4].map(i=>parseInt(m[1].slice(i,i+2),16)/255)
+    .map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4))
+    .reduce((a,v,i)=>a+v*[0.2126,0.7152,0.0722][i],0);
+}
+function contrastRatio(a,b){ const x=hexLum(a), y=hexLum(b); if(x==null||y==null) return 21;
+  return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); }
+function inkOn(bg){ return contrastRatio("#ffffff",bg)>=4.5?"#fff":"#101418"; }
+function readableOn(fg,min,bg){
+  let c=fg; if(hexLum(c)==null) return fg;
+  for(let k=0;k<20&&contrastRatio(c,bg||"#ffffff")<min;k++){
+    c="#"+[1,3,5].map(i=>Math.round(parseInt(c.slice(i,i+2),16)*0.9).toString(16).padStart(2,"0")).join("");
+  }
+  return c;
+}
+const objArr=v=>Array.isArray(v)?v.filter(x=>x&&typeof x==="object"&&!Array.isArray(x)):[];
+const isISODay=d=>typeof d==="string"&&/^\d{4}-\d{2}-\d{2}/.test(d);
+
+/* ── 資料進來先整理一遍 ─────────────────────────────────────────
+   報價腳本換了格式、欄位少了、數字變成字串、API 回錯誤,畫面都不能整頁壞掉。
+   這裡只做「型別修正」:數字轉數字、陣列保證是陣列、壞掉的那筆標成 error。
+   判斷規則(站上/跌破、加碼/減碼)完全沒動,score/valid 用同一套規則重數一次。 */
+function normData(raw){
+  if(!raw||typeof raw!=="object"||Array.isArray(raw)) throw new Error("data.json 格式不對");
+  const out={};
+  Object.keys(raw).forEach(k=>{
+    const r=raw[k];
+    if(k[0]==="_"){ out[k]=r; return; }
+    if(!r||typeof r!=="object"||Array.isArray(r)){ out[k]={error:"資料格式不對"}; return; }
+    if(r.error){ out[k]={error:String(r.error)}; return; }
+    const price=toNum(r.price);
+    const mas=objArr(r.mas).map(m=>{
+      let v=toNum(m.v), diff=toNum(m.diff);
+      if(v!=null&&diff==null&&price!=null&&v!==0) diff=(price/v-1)*100;
+      if(diff==null) v=null;   // 算不出乖離就當這條線還沒成形
+      const above=(typeof m.above==="boolean")?m.above:(v!=null&&price!=null&&price>=v);
+      return {...m, k:toNum(m.k), v, diff, above,
+        label:m.label==null?"":String(m.label),
+        cross:(m.cross==="bull"||m.cross==="bear")?m.cross:null};
+    });
+    let hist=null;
+    if(r.hist&&Array.isArray(r.hist.d)&&Array.isArray(r.hist.c)){
+      const d=[], c=[], n=Math.min(r.hist.d.length,r.hist.c.length);
+      for(let i=0;i<n;i++){
+        const dd=r.hist.d[i], cc=toNum(r.hist.c[i]);
+        if(isISODay(dd)&&cc!=null&&cc>0){ d.push(dd.slice(0,10)); c.push(cc); }
+      }
+      if(c.length) hist={...r.hist, d, c};
+    }
+    const live=mas.filter(m=>m.v!=null);
+    out[k]={...r, price, mas, hist, pe:toNum(r.pe),
+      score:live.filter(m=>m.above).length, valid:live.length};
+  });
+  return out;
+}
+function normWL(raw){
+  if(!raw||typeof raw!=="object"||Array.isArray(raw)) throw new Error("watchlist.json 格式不對");
+  const list=a=>objArr(a).filter(h=>typeof h.s==="string"&&h.s).map(h=>{
+    const o={...h};
+    ["dn","note","group"].forEach(f=>{ if(o[f]!=null) o[f]=String(o[f]); });
+    if(o.lev!=null) o.lev=toNum(o.lev)||1;
+    if(o.cost!=null) o.cost=toNum(o.cost);
+    if(o.buys!=null) o.buys=objArr(o.buys).filter(b=>isISODay(b.d))
+      .map(b=>({...b, q:toNum(b.q)||0, p:toNum(b.p)}));
+    return o;
+  });
+  return {...raw, indexes:(Array.isArray(raw.indexes)?raw.indexes:[]).filter(x=>typeof x==="string"),
+    market_holdings:list(raw.market_holdings), holdings:list(raw.holdings)};
+}
+function normAsset(A){
+  if(!A||typeof A!=="object"||Array.isArray(A)) return undefined;
+  const slice=x=>({...x, name:x.name==null?"":String(x.name), value:Math.max(toNum(x.value)||0,0), color:safeColor(x.color)});
+  A.meta=(A.meta&&typeof A.meta==="object")?A.meta:{};
+  A.summary=objArr(A.summary);
+  A.donuts=objArr(A.donuts).map(d=>({...d, title:d.title==null?"":String(d.title), slices:objArr(d.slices).map(slice)}));
+  A.accounts=objArr(A.accounts).map(slice);
+  A.timeline=objArr(A.timeline).filter(p=>isISODay(p.d)&&toNum(p.v)!=null)
+    .map(p=>({...p, d:p.d.slice(0,10), v:toNum(p.v)})).sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:0);
+  A.holdings=objArr(A.holdings).map(h=>({...h, title:h.title==null?"":String(h.title),
+    rows:objArr(h.rows).map(r=>({...r, value:toNum(r.value)||0}))}));
+  A.risks=objArr(A.risks);
+  const P=(A.perf&&typeof A.perf==="object"&&!Array.isArray(A.perf))?A.perf:{};
+  Object.keys(P).forEach(k=>{ P[k]=objArr(P[k]).filter(p=>isISODay(p.d)&&toNum(p.v)!=null).map(p=>({...p, v:toNum(p.v)})); });
+  A.perf=P;
+  if(!A.leverage||typeof A.leverage!=="object") A.leverage={};
+  return A;
+}
+function normExpense(E){
+  if(!E||typeof E!=="object"||Array.isArray(E)) return undefined;
+  const tx=a=>objArr(a).filter(t=>toNum(t.amount)!=null).map(t=>({...t, amount:toNum(t.amount),
+    date:typeof t.date==="string"?t.date:"", desc:t.desc==null?"":String(t.desc)}));
+  E.groups=objArr(E.groups).filter(g=>g.key!=null).map(g=>({...g, key:String(g.key), color:safeColor(g.color)}));
+  E.months=objArr(E.months).filter(m=>typeof m.month==="string"&&/^\d{4}-\d{2}$/.test(m.month))
+    .map(m=>({...m, transactions:tx(m.transactions), transfers:tx(m.transfers)}));
+  E.updated=typeof E.updated==="string"?E.updated:"";
+  ["fixedBudget","totalBudget","livingBudget"].forEach(f=>{ E[f]=toNum(E[f])||0; });
+  if(E.income!=null&&typeof E.income!=="object") E.income=null;
+  return E;
+}
+function normSnaps(L){
+  if(!Array.isArray(L)) return L;
+  return objArr(L).map(s=>({...s, holdings:objArr(s.holdings)}));
+}
+/* data 檔(asset / expense / leverage)是 <script> 直接載進來的,載入後與每次重抓後都整理一次 */
+function normGlobals(){
+  try{ window.ASSET_DATA=normAsset(window.ASSET_DATA); }catch(e){ window.ASSET_DATA=undefined; }
+  try{ window.EXPENSE_DATA=normExpense(window.EXPENSE_DATA); }catch(e){ window.EXPENSE_DATA=undefined; }
+  try{ window.MANUAL_SNAPSHOTS=normSnaps(window.MANUAL_SNAPSHOTS); }catch(e){ window.MANUAL_SNAPSHOTS=[]; }
+}
+normGlobals();
+
 /* ---------- helpers ---------- */
 function maByK(r,k){ return (r&&r.mas)?r.mas.find(m=>m.k===k):null; }
 function dotCls(m){ if(!m||m.v==null) return "na"; return m.above?"up":"dn"; }
@@ -1796,7 +1934,7 @@ function dotsHtml(r){
 }
 function yrHtml(r){
   const m=maByK(r,240);
-  if(!m||m.v==null) return `<span class="yr na">—</span>`;
+  if(!m||m.v==null) return `<span class="yr na">-</span>`;
   const cls=m.above?"up":"dn", s=m.diff>=0?"+":"";
   return `<span class="yr ${cls}">${s}${m.diff.toFixed(1)}%</span>`;
 }
@@ -1828,10 +1966,10 @@ const BIG_HOLD_CARDS = ["IWDA.AS", "VWRL.AS", "EMIM.AS", "XDWT.DE"];   // 依序
 function bigHoldCard(sym){
   const r=DATA[sym];
   const e=(typeof wlEntry==="function")?wlEntry(sym):{s:sym};
-  const short=e.dn||sym;
+  const short=escH(e.dn||sym);
   const cur=(r&&r.currency)||"";
   // 右上小字:備註或分類 + P/E(有才顯示),清單資訊不因改大卡而流失
-  const full=[e.note||e.group||"", (r&&r.pe!=null)?`P/E ${r.pe}`:""].filter(Boolean).join(" · ");
+  const full=escH([e.note||e.group||"", (r&&r.pe!=null)?`P/E ${r.pe}`:""].filter(Boolean).join(" · "));
   // 內建槓桿產品(正二/正三)標記:每日重設,長抱有耗損,均線訊號要比原型更嚴格看待
   const lev=Number(e.lev||1);
   const levLbl=lev>=3?"正三":"正二";
@@ -1841,19 +1979,19 @@ function bigHoldCard(sym){
   if(!r||r.error){
     return `<div class="icard span2">
       <div class="top"><span class="short">${short}${levTag}</span><span class="full">${full}</span></div>
-      <div class="naidx">${(r&&r.error)||"無資料"}</div></div>`;
+      <div class="naidx">${escH((r&&r.error)||"無資料")}</div></div>`;
   }
-  const px=r.price!=null?r.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"—";
+  const px=r.price!=null?r.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"-";
   const m240=maByK(r,240);
   const yr=(m240&&m240.v!=null)?`<span class="yr ${m240.above?'up':'dn'}"><span class="lbl">vs 年線 </span>${m240.diff>=0?'+':''}${m240.diff.toFixed(1)}%</span>`
-                               :`<span class="yr"><span class="lbl">vs 年線 </span>—</span>`;
+                               :`<span class="yr"><span class="lbl">vs 年線 </span>-</span>`;
   const ip=interpret(r);
   const ipHtml=ip?`<div class="interp">↳ ${ip}</div>`:"";
   const X=r.score, Y=r.valid;
-  const pillBg=(X===Y)?"var(--green)":(X===0)?"var(--red)":"var(--yellow)";
+  const pillBg=(X===Y)?"var(--green-t)":(X===0)?"var(--red-t)":"var(--yellow-t)";
   const pillHtml=`<span class="mapill" style="background:${pillBg}">站上 ${X}/${Y} 均線</span>`;
   // 分隔線列版型(完稿):左=代號+價格+解讀,中=P/E+5均線點,右=站上 X/5
-  const note=e.note||e.group||"";
+  const note=escH(e.note||e.group||"");
   const peHtml=(r&&r.pe!=null)?`<div class="brow-pe num">P/E ${r.pe}</div>`:`<div class="brow-pe"></div>`;
   // 當日漲跌(hist 末兩筆)
   let dayHtml="";
@@ -1863,10 +2001,10 @@ function bigHoldCard(sym){
   }
   const yr2=(m240&&m240.v!=null)
     ? `<span class="brow-yr">vs 年線 <b class="num ${m240.above?'up':'dn'}">${m240.diff>=0?'+':''}${m240.diff.toFixed(1)}%</b></span>`
-    : `<span class="brow-yr">vs 年線 —</span>`;
+    : `<span class="brow-yr">vs 年線 -</span>`;
   const badgeFull=(X===Y&&Y>0);
   const badge=`<span class="brow-badge${badgeFull?' full':''}">站上 ${X}/${Y}</span>`;
-  const clickable=(r.hist)?` clickable" data-sym="${sym}`:'';
+  const clickable=(r.hist)?` clickable" data-sym="${escH(sym)}`:'';
   return `<div class="brow${clickable}">
     <div class="brow-id">
       <div class="brow-h"><span class="brow-t num">${short}</span>${levTag}${addTag}${note?`<span class="brow-note">${note}</span>`:""}</div>
@@ -1905,18 +2043,18 @@ function mSignalTags(sym){
    第二行 價格 + 當日漲跌 + 右側 vs 年線大字。點列開走勢彈窗。 */
 function mRow(sym){
   const r=DATA[sym], e=wlEntry(sym);
-  const name=e.dn||sym;
+  const name=escH(e.dn||sym);
   if(!r||r.error){
     return `<div class="dm-row"><div class="dm-r1"><b>${name}</b>
-      <span class="dm-note">${(r&&r.error)||"無資料"}</span></div></div>`;
+      <span class="dm-note">${escH((r&&r.error)||"無資料")}</span></div></div>`;
   }
   const lev=Number(e.lev||1);
   const a=addLevelOf(sym), c=cutLevelOf(sym);
   const tags=(lev>1?`<span class="dm-tag lev">${lev>=3?"正三":"正二"} ${lev}x</span>`:"")
     +(a?`<span class="dm-tag add">加碼${a.lv>1?" "+a.lv:""}</span>`:"")
     +(c?`<span class="dm-tag cut">減碼${c.lv>1?" "+c.lv:""}</span>`:"");
-  const note=shortNote(e.note||e.group||"");
-  const px=r.price!=null?r.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"—";
+  const note=escH(shortNote(e.note||e.group||""));
+  const px=r.price!=null?r.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"-";
   let chg="";
   if(r.hist&&r.hist.c&&r.hist.c.length>1){
     const cc=r.hist.c, d=(cc[cc.length-1]/cc[cc.length-2]-1)*100;
@@ -1925,9 +2063,9 @@ function mRow(sym){
   const m=maByK(r,240);
   const yr=(m&&m.v!=null)
     ? `<div class="dm-yr ${m.above?"up":"dn"}">${m.diff>=0?"+":"−"}${Math.abs(m.diff).toFixed(1)}%</div>`
-    : `<div class="dm-yr na">—</div>`;
+    : `<div class="dm-yr na">-</div>`;
   const dots=[5,20,60,120,240].map(k=>`<i class="${dotCls(maByK(r,k))}"></i>`).join("");
-  return `<div class="dm-row" data-sym="${sym}">
+  return `<div class="dm-row" data-sym="${escH(sym)}">
     <div class="dm-r1"><b>${name}</b>${tags}${note?`<span class="dm-note">${note}</span>`:""}</div>
     <div class="dm-dots">${dots}</div>
     <div class="dm-r2"><span class="px">${px}</span>${chg}</div>
@@ -1957,19 +2095,19 @@ function blistHtml(rowsHtml){
   </div>`;
 }
 function indexCard(sym){
-  const meta=IDX_META[sym]||{short:sym,full:""};
+  const meta=IDX_META[sym]||{short:escH(sym),full:""};
   const r=DATA[sym];
   if(!r||r.error){
     return `<div class="icard"><div class="top"><span class="short">${meta.short}</span><span class="full">${meta.full}</span></div>
-      <div class="naidx">${(r&&r.error)||"無資料"}</div></div>`;
+      <div class="naidx">${escH((r&&r.error)||"無資料")}</div></div>`;
   }
-  const px=r.price!=null?r.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"—";
+  const px=r.price!=null?r.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"-";
   if(sym==="^VIX"){
     const v=r.price;
     let txt,col;
-    if(v>30){txt="高波動";col="var(--red)";}
-    else if(v>=20){txt="偏高";col="var(--yellow)";}
-    else {txt="平靜";col="var(--green)";}
+    if(v>30){txt="高波動";col="var(--red-t)";}
+    else if(v>=20){txt="偏高";col="var(--yellow-t)";}
+    else {txt="平靜";col="var(--green-t)";}
     return `<div class="icard">
       <div class="top"><span class="short">${meta.short}</span><span class="full">${meta.full}</span></div>
       <div class="px">${px}</div>
@@ -1978,12 +2116,12 @@ function indexCard(sym){
   }
   const m240=maByK(r,240);
   const yr=(m240&&m240.v!=null)?`<span class="yr ${m240.above?'up':'dn'}"><span class="lbl">vs 年線 </span>${m240.diff>=0?'+':''}${m240.diff.toFixed(1)}%</span>`
-                               :`<span class="yr"><span class="lbl">vs 年線 </span>—</span>`;
-  const fb=r.fallback?`<span class="fb">指數免費方案未支援,以 ${r.src} 代替</span>`:"";
+                               :`<span class="yr"><span class="lbl">vs 年線 </span>-</span>`;
+  const fb=r.fallback?`<span class="fb">指數免費方案未支援,以 ${escH(r.src)} 代替</span>`:"";
   const ip=interpret(r);
   const ipHtml=ip?`<div class="interp">↳ ${ip}</div>`:"";
   const X=r.score, Y=r.valid;
-  const pillBg = (X===Y)?"var(--green)":(X===0)?"var(--red)":"var(--yellow)";
+  const pillBg = (X===Y)?"var(--green-t)":(X===0)?"var(--red-t)":"var(--yellow-t)";
   const pillHtml=`<span class="mapill" style="background:${pillBg}">站上 ${X}/${Y} 均線</span>`;
   return `<div class="icard">
     <div class="top"><span class="short">${meta.short}</span><span class="full">${meta.full}</span></div>
@@ -2008,7 +2146,7 @@ let RK_IBOPEN=false;
 let RISK_VIEW="risk";
 const riskSegHTML=()=>`<div class="tl-seg" style="margin-left:auto;align-self:center">
   ${[["risk","風險"],["perf","線圖"]].map(([k,t])=>
-    `<button data-riskview="${k}" class="${RISK_VIEW===k?"on":""}">${t}</button>`).join("")}</div>`;
+    `<button data-riskview="${k}" class="${RISK_VIEW===k?"on":""}" aria-pressed="${RISK_VIEW===k}">${t}</button>`).join("")}</div>`;
 /* 桌面版仿資產支出那頁:四格總覽把兩個檢視的重點拉到第一屏,切換鈕置中吸頂。
    左二講風險(曝險倍數、借款成數),右二講報酬(流動資產、相對大盤),
    這樣不管停在哪個檢視,另一邊的重點都看得到。 */
@@ -2027,15 +2165,15 @@ function riskHeadHTML(){
     <div class="d" style="font-weight:400;color:var(--muted)">${sub||""}</div></div>`;
   const cells=[];
   if(ex&&ex.effRatio!=null) cells.push(kpi("券商 A 曝險", ex.effRatio.toFixed(2),"x",
-    `帳面 ${ex.bookRatio!=null?ex.bookRatio.toFixed(2):"—"}x · 正二額外 ${rkPct(ex.boostRatio)}`));
+    `帳面 ${ex.bookRatio!=null?ex.bookRatio.toFixed(2):"-"}x · 正二額外 ${rkPct(ex.boostRatio)}`));
   if(s0) cells.push(kpi("借款成數", rkPct(s0.borrowRatio),"",
-    "安全區 0–40%", (s0.borrowRatio||0)>0.4?"var(--dn)":undefined));
+    "安全區 0-40%", (s0.borrowRatio||0)>0.4?"var(--dn)":undefined));
   if(liq!=null) cells.push(kpi("流動資產報酬", perfPct(liq,1),"",
     `S&P 500 同期 ${perfPct(sp,1)}`, perfTone({chg:liq,alpha:dd})));
   if(dd!=null) cells.push(kpi("相對大盤", (dd>=0?"+":"−")+Math.abs(dd).toFixed(1),"pp",
     dd>=0?"贏大盤":"落後大盤", dd>=0?PERF_UP:PERF_DN));
   const seg=[["risk","風險"],["perf","線圖"]].map(([k,t])=>
-    `<button data-riskview="${k}" class="${RISK_VIEW===k?"on":""}">${t}</button>`).join("");
+    `<button data-riskview="${k}" class="${RISK_VIEW===k?"on":""}" aria-pressed="${RISK_VIEW===k}">${t}</button>`).join("");
   return `<div class="as-kpis" style="margin-bottom:14px">${cells.join("")}</div>
     <div id="rkSeg">${seg}</div>`;
 }
@@ -2160,7 +2298,7 @@ function ladderState(){
    上面一張卡把所有能比較的東西做成 chip:流動資產、兩個券商帳戶、每一檔有買點的 ETF。
    點一個,下面那張圖就換成「它 vs S&P 500」,並且給三個大數字:我的、大盤同期、差幾個百分點。
    資料全部沿用既有的 ASSET_DATA(帳戶報酬)、DATA(每日收盤)、WL(買點),不另外做資料檔。 */
-const perfEsc = t => String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const perfEsc = t => escH(t);
 /* 每檔 ETF 該跟哪個指數比。用同幣別的 ETF 當代理。
    示範版的 watchlist 沒有買點,這張表用不到,留著只是跟正本版面骨架一致。 */
 const PERF_BENCH_MAP={
@@ -2258,7 +2396,7 @@ function perfChartSVG(series,o){
     const pv=+(k*step).toFixed(4), y=Y(100+pv), zero=k===0;
     if(!zero) g+=`<line x1="${L}" x2="${W-R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#eef1f4"/>`;
     g+=`<text x="${L-8}" y="${(y+3.5).toFixed(1)}" text-anchor="end" font-size="10.5"
-      fill="${zero?"#6b7280":"#9aa1ab"}" font-family="Manrope,system-ui,sans-serif"
+      fill="${zero?"#5f6673":"#676e79"}" font-family="Manrope,system-ui,sans-serif"
       font-weight="${zero?700:600}">${(pv>0?"+":pv<0?"−":"")+Math.abs(pv)}%</text>`;
   }
   g+=`<line x1="${L}" x2="${W-R}" y1="${Y(100).toFixed(1)}" y2="${Y(100).toFixed(1)}"
@@ -2276,7 +2414,7 @@ function perfChartSVG(series,o){
     days.forEach(d=>xt.push([X(d), o.xmode==="month"?(+d.slice(5,7))+"月":d.slice(0,4)]));
   }
   xt.forEach(([x,t])=>{ g+=`<text x="${x.toFixed(1)}" y="${H-B+18}" text-anchor="middle" font-size="10.5"
-    fill="#9aa1ab" font-family="Manrope,system-ui,sans-serif" font-weight="600">${t}</text>`; });
+    fill="#676e79" font-family="Manrope,system-ui,sans-serif" font-weight="600">${t}</text>`; });
   let lines="";
   series.forEach(s=>{
     if(!s.pts.length) return;
@@ -2370,7 +2508,7 @@ function perfCardHTML(){
 
   const tile=x=>{
     const sel=PERF_SUBJ===x.k, col=sel?perfToneL(x):perfTone(x);
-    return `<button data-perfsubj="${x.k}" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+    return `<button data-perfsubj="${escH(x.k)}" aria-pressed="${sel}" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;
       min-width:96px;border:1px solid ${sel?"#101418":"var(--line)"};background:${sel?"#101418":"#fff"};
       border-radius:10px;padding:8px 12px;cursor:pointer;text-align:left">
       <span style="display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;
@@ -2401,7 +2539,7 @@ function perfCardHTML(){
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
       <div style="min-width:0">
         <h2 style="display:block;margin:0;font-size:17px;font-weight:700;color:var(--ink)">報酬表現</h2>
-        <div style="font-size:11.5px;color:#9aa1ab;margin-top:3px">點一項看線圖 ·
+        <div style="font-size:11.5px;color:#676e79;margin-top:3px">點一項看線圖 ·
           <span style="color:${PERF_DN};font-weight:700">紅</span>虧 ·
           <span style="color:${PERF_MID};font-weight:700">琥珀</span>賺但輸大盤 ·
           <span style="color:${PERF_UP};font-weight:700">綠</span>賺又贏大盤 ·
@@ -2410,7 +2548,7 @@ function perfCardHTML(){
     </div>
     <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:12px">
       ${groups.map(g=>`<div style="display:flex;flex-direction:column;gap:6px;flex:0 1 auto;min-width:0">
-        <div style="font-size:10px;letter-spacing:.07em;font-weight:700;color:#9aa1ab">${g.label}</div>${g.html}</div>`).join("")}
+        <div style="font-size:10px;letter-spacing:.07em;font-weight:700;color:#676e79">${g.label}</div>${g.html}</div>`).join("")}
     </div></section>`;
 
   const segs=[["day","日"],["week","週"],["month","月"],["year","年"]].map(([k,t])=>
@@ -2426,8 +2564,8 @@ function perfCardHTML(){
       <div style="font-variant-numeric:tabular-nums;font-size:24px;font-weight:800;line-height:1.15;color:${e.bigC};margin-top:2px">${e.big}</div>
       <div style="font-size:11px;color:${e.subC};margin-top:1px;white-space:nowrap">${perfEsc(e.sub)}</div></div>`).join("")}</div>`;
   const trio=(name,dot,mine,mineSub,bChg,bSub,dd,ddSub,benchName)=>[
-    {label:name,dot,big:perfPct(mine,1),bigC:perfTone({chg:mine,alpha:mine-bChg}),sub:mineSub,subC:"#9aa1ab"},
-    {label:(benchName||"S&P 500")+" 同期",dot:PERF_BENCH,big:perfPct(bChg,1),bigC:"var(--ink)",sub:bSub,subC:"#9aa1ab"},
+    {label:name,dot,big:perfPct(mine,1),bigC:perfTone({chg:mine,alpha:mine-bChg}),sub:mineSub,subC:"#676e79"},
+    {label:(benchName||"S&P 500")+" 同期",dot:PERF_BENCH,big:perfPct(bChg,1),bigC:"var(--ink)",sub:bSub,subC:"#676e79"},
     {label:"相對大盤",dot:"transparent",
      big:(dd>=0?"+":"−")+Math.abs(dd).toFixed(1)+" pp",bigC:dd>=0?PERF_UP:PERF_DN,sub:ddSub,subC:dd>=0?PERF_UP:PERF_DN}];
 
@@ -2435,7 +2573,7 @@ function perfCardHTML(){
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
       <div style="min-width:0">
         <h3 style="margin:0;font-size:15.5px;font-weight:700;color:var(--ink)">${perfEsc(title)}</h3>
-        <div style="font-size:11.5px;color:#9aa1ab;margin-top:4px">${perfEsc(sub)}</div></div>
+        <div style="font-size:11.5px;color:#676e79;margin-top:4px">${perfEsc(sub)}</div></div>
       <div style="display:flex;gap:3px;padding:3px;background:#f4f6f8;border-radius:9px;flex:none">${segs}</div>
     </div>${body}</section>`;
   const footHTML=t=>`<div style="font-size:11px;color:var(--faint);line-height:1.6;margin-top:8px">${t}</div>`;
@@ -2487,7 +2625,7 @@ function perfCardHTML(){
   const body=heroRow(trio(B.dn+" 報酬",col,mine,"現價 vs 加權成本 "+B.cost,
       bEnd,firstBuy+"（首買日）起",dd,ddSub,idx))
     +perfChartSVG(series,{timeX:true,smooth:true,dens:8,marks})
-    +footHTML((isSelf?B.dn+" 本身就追蹤"+idx+"，兩條線會重疊。"
+    +footHTML((isSelf?perfEsc(B.dn)+" 本身就追蹤"+idx+"，兩條線會重疊。"
       :"對照線是 "+idx+"（用 "+benchSym.replace(/\..*/,'')+" 這檔歐元 ETF 當代理）。")
       +"起點 = 首買日收盤設 100，▲ 滑過看股數與價格。");
   const levTag=(B.lev||1)>1?" ·正二 2x":"";
@@ -2571,12 +2709,12 @@ function nearSignals(){
 function symPlain(s){
   const e=(typeof wlEntry==="function")?wlEntry(s):{};
   const name=HOLD_DN.get(s)||e.dn||s;
-  return `<span class="sy" title="持有">${name}</span>`;
+  return `<span class="sy" title="持有">${escH(name)}</span>`;
 }
 // 合併同一標的的多條均線,並省略重複的「線」字(週線+月線 → 週/月)
 function mergeSym(arr){
   const map=new Map();
-  arr.forEach(x=>{ if(!map.has(x.s)) map.set(x.s,[]); map.get(x.s).push(x.l.replace("線","")); });
+  arr.forEach(x=>{ if(!map.has(x.s)) map.set(x.s,[]); map.get(x.s).push(escH(String(x.l).replace("線",""))); });
   return [...map.entries()].map(([s,ls])=>`${symPlain(s)} ${ls.join("/")}`);
 }
 function mergeNear(arr){
@@ -2589,9 +2727,9 @@ function vixNoteHtml(){
   let val="無資料", txt="", col="var(--faint)";
   if(v&&!v.error&&v.price!=null){
     const p=v.price; val=p.toFixed(1);
-    if(p>30){txt="高波動";col="var(--red)";}
-    else if(p>=20){txt="偏高";col="var(--yellow)";}
-    else {txt="平靜";col="var(--green)";}
+    if(p>30){txt="高波動";col="var(--red-t)";}
+    else if(p>=20){txt="偏高";col="var(--yellow-t)";}
+    else {txt="平靜";col="var(--green-t)";}
   }
   const tag=txt?`<span class="vixtag" style="background:${col}">${txt}</span>`:"";
   return `<div class="vixnote"><span class="vixk">◷ VIX 恐慌溫度計</span><b>${val}</b>${tag}</div>`;
@@ -2602,19 +2740,19 @@ function vixNdxLine(){
   let val="無資料", txt="", col="var(--faint)";
   if(v&&!v.error&&v.price!=null){
     const p=v.price; val=p.toFixed(1);
-    if(p>30){txt="高波動";col="var(--red)";}
-    else if(p>=20){txt="偏高";col="var(--yellow)";}
-    else {txt="平靜";col="var(--green)";}
+    if(p>30){txt="高波動";col="var(--red-t)";}
+    else if(p>=20){txt="偏高";col="var(--yellow-t)";}
+    else {txt="平靜";col="var(--green-t)";}
   }
   const L=ladderState();
-  const gcol=({up:"var(--green)",warn:"var(--yellow)",dn:"var(--red)"})[L&&L.kind]||"var(--dot-na)";
+  const gcol=({up:"var(--green-t)",warn:"var(--yellow-t)",dn:"var(--red-t)"})[L&&L.kind]||"var(--dot-na)";
   const ldr = L
     ? `<span class="mk">NDX 距高點</span><b>-${L.dd.toFixed(1)}%</b>
        <span class="msep"></span>
        <span class="mk">目標水位</span><b>${fmtLev(L.target)} 倍</b>
        ${L.act!=null?`<span class="vixtag" style="background:${gcol}">實際 ${fmtLev(L.act)} 倍 · ${L.gapTxt}</span>`:""}
        ${L.proxy?`<span class="mwhy">高點取自 ${NDX_HIST_PROXY} 序列</span>`:""}`
-    : `<span class="mk">NDX 距高點</span><b>—</b><span class="mwhy">歷史序列尚未產生</span>`;
+    : `<span class="mk">NDX 距高點</span><b>-</b><span class="mwhy">歷史序列尚未產生</span>`;
   return `<div class="metaline">
     <span class="mk">VIX</span><b>${val}</b>${txt?`<span class="vixtag" style="background:${col}">${txt}</span>`:""}
     <span class="msep"></span>
@@ -2673,7 +2811,7 @@ function cutSignalsHtml(){
   const list=cutSignals();
   if(!list.length) return "";
   const txt=list.map(x=>
-    `<span class="cutit"><b>${x.dn}</b> 年線 +${x.diff.toFixed(0)}%<span class="lv">${"●".repeat(x.lv)}</span></span>`
+    `<span class="cutit"><b>${escH(x.dn)}</b> 年線 +${x.diff.toFixed(0)}%<span class="lv">${"●".repeat(x.lv)}</span></span>`
   ).join("");
   return `<div class="sigrow addrow"><span class="tag c">減碼 ⤒</span><span class="sigtxt">${txt}</span></div>`;
 }
@@ -2697,7 +2835,7 @@ function addSignalsHtml(){
   const list=addSignals();
   if(!list.length) return "";
   const txt=list.map(x=>
-    `<span class="addit"><b>${x.dn}</b> 跌破${x.lbl}<span class="lv">${"●".repeat(x.lv)}</span></span>`
+    `<span class="addit"><b>${escH(x.dn)}</b> 跌破${x.lbl}<span class="lv">${"●".repeat(x.lv)}</span></span>`
   ).join("");
   return `<div class="sigrow addrow"><span class="tag a">加碼 ⤓</span><span class="sigtxt">${txt}</span></div>`;
 }
@@ -2747,7 +2885,7 @@ function rulesHtml(){
 /* 手機脈搏卡上半段:VIX / NDX 距高點 / 目標檔位 / 現金,收成 2x2 格 */
 function mPulseCells(){
   const v=DATA["^VIX"];
-  let val="—", vtag="", vcol="var(--faint)";
+  let val="-", vtag="", vcol="var(--faint)";
   if(v&&!v.error&&v.price!=null){
     const p=v.price; val=p.toFixed(1);
     if(p>30){vtag="高波動";vcol="var(--dn)";}
@@ -2757,11 +2895,11 @@ function mPulseCells(){
   const L=ladderState(), hh=hhLev();
   const cells=[
     {k:"VIX 恐慌指數", v:val, tag:vtag, tagColor:vcol, sub:"< 20 平靜 · > 30 高波動"},
-    {k:"NDX 距高點", v:L?`-${L.dd.toFixed(1)}%`:"—", tag:"", tagColor:"",
+    {k:"NDX 距高點", v:L?`-${L.dd.toFixed(1)}%`:"-", tag:"", tagColor:"",
       sub:L?(L.proxy?`高點取自 ${NDX_HIST_PROXY} 序列`:"資料窗內高點"):"歷史序列尚未產生"},
-    {k:"目標檔位", v:L?`${fmtLev(L.target)}x`:"—", tag:"", tagColor:"",
+    {k:"目標檔位", v:L?`${fmtLev(L.target)}x`:"-", tag:"", tagColor:"",
       sub:(L&&L.act!=null)?`實際 ${fmtLev(L.act)}x · ${L.gapTxt}`:"依檔位表"},
-    {k:"現金", v:(hh&&hh.cashPct!=null)?`${hh.cashPct.toFixed(0)}%`:"—", tag:"", tagColor:"",
+    {k:"現金", v:(hh&&hh.cashPct!=null)?`${hh.cashPct.toFixed(0)}%`:"-", tag:"", tagColor:"",
       sub:"還沒進場的錢"},
   ];
   return `<div class="dm-cells">`+cells.map((c,i)=>
@@ -2781,8 +2919,8 @@ function mPulseCard(){
   const chips=chip("加碼",add.length,1)+chip("減碼",cut.length)+chip("站上",bullM.length)
     +chip("跌破",bearM.length)+chip("接近",nearM.length);
   const groups=[
-    {label:"加碼", color:"var(--add)", txt:add.map(x=>`${x.dn} 跌破${x.lbl}`).join("、")},
-    {label:"減碼", color:"var(--dn)", txt:cut.map(x=>`${x.dn} 年線 +${x.diff.toFixed(0)}%`).join("、")},
+    {label:"加碼", color:"var(--add)", txt:add.map(x=>`${escH(x.dn)} 跌破${x.lbl}`).join("、")},
+    {label:"減碼", color:"var(--dn)", txt:cut.map(x=>`${escH(x.dn)} 年線 +${x.diff.toFixed(0)}%`).join("、")},
     {label:"站上", color:"var(--up)", txt:bullM.join("、")},
     {label:"跌破", color:"var(--dn)", txt:bearM.join("、")},
     {label:"接近", color:"var(--nearink)", txt:nearM.join("、")},
@@ -2793,9 +2931,9 @@ function mPulseCard(){
     : `<div class="dm-none">今日無訊號</div>`;
   const parts=[];
   if(add.length) parts.push("加碼最強："+add.slice(0,2).map(x=>
-    `<b>${x.dn}</b> 跌破${x.lbl} ${x.diff.toFixed(1)}%`).join("、"));
+    `<b>${escH(x.dn)}</b> 跌破${x.lbl} ${x.diff.toFixed(1)}%`).join("、"));
   if(cut.length) parts.push("減碼："+cut.slice(0,1).map(x=>
-    `<b>${x.dn}</b> 高於年線 +${x.diff.toFixed(0)}%`).join("、"));
+    `<b>${escH(x.dn)}</b> 高於年線 +${x.diff.toFixed(0)}%`).join("、"));
   const headline=parts.length?`<div class="dm-hl">${parts.join("　·　")}</div>`:"";
   return `<div class="dm-card dm-pulse">
     ${mPulseCells()}
@@ -2826,10 +2964,10 @@ function signalsHtml(){
   const parts=[];
   if(add.length){
     parts.push("加碼最強："+add.slice(0,2).map(x=>
-      `<b>${x.dn}</b> 跌破${x.lbl} ${x.diff.toFixed(1)}%`).join("、"));
+      `<b>${escH(x.dn)}</b> 跌破${x.lbl} ${x.diff.toFixed(1)}%`).join("、"));
   }
   if(cut.length){
-    parts.push("減碼："+cut.slice(0,1).map(x=>`<b>${x.dn}</b> 高於年線 +${x.diff.toFixed(0)}%`).join("、"));
+    parts.push("減碼："+cut.slice(0,1).map(x=>`<b>${escH(x.dn)}</b> 高於年線 +${x.diff.toFixed(0)}%`).join("、"));
   }
   const headline=parts.length?`<div class="sighl">${parts.join("　·　")}</div>`:"";
   const none=(!add.length&&!cut.length&&!bullM.length&&!bearM.length&&!nearM.length);
@@ -2904,15 +3042,15 @@ function autoTodos(){
 }
 function railPulseHtml(){
   const v=DATA["^VIX"];
-  let val="—", txt="", col="var(--dot-na)";
+  let val="-", txt="", col="var(--dot-na)";
   if(v&&!v.error&&v.price!=null){
     const p=v.price; val=p.toFixed(1);
-    if(p>30){txt="高波動";col="var(--red)";}
-    else if(p>=20){txt="偏高";col="var(--yellow)";}
-    else {txt="平靜";col="var(--green)";}
+    if(p>30){txt="高波動";col="var(--red-t)";}
+    else if(p>=20){txt="偏高";col="var(--yellow-t)";}
+    else {txt="平靜";col="var(--green-t)";}
   }
   const L=ladderState();
-  const gcol=({up:"var(--green)",warn:"var(--yellow)",dn:"var(--red)"})[L&&L.kind]||"var(--dot-na)";
+  const gcol=({up:"var(--green-t)",warn:"var(--yellow-t)",dn:"var(--red-t)"})[L&&L.kind]||"var(--dot-na)";
   const chips=[
     (L&&L.act!=null)?`<span class="rl-chip" style="background:${gcol}">實際 ${fmtLev(L.act)} 倍 · ${L.gapTxt}</span>`:"",
   ].join("");
@@ -2925,7 +3063,7 @@ function railPulseHtml(){
       <div class="rl-div"></div>
       <div class="rl-r">
         <div class="rl-lbl">NDX 距高點</div>
-        <div class="rl-v2"><b class="num">${L?`-${L.dd.toFixed(1)}%`:"—"}</b>
+        <div class="rl-v2"><b class="num">${L?`-${L.dd.toFixed(1)}%`:"-"}</b>
           ${L?`<span class="rl-side">目標水位 <b>${fmtLev(L.target)} 倍</b></span>`
              :`<span class="rl-side">歷史序列尚未產生</span>`}</div>
       </div>
@@ -2946,9 +3084,9 @@ function railSigHtml(){
   const itemRow=(cls,lbl,items)=>items?`<div class="rl-row"><span class="rl-t ${cls}">${lbl}</span>
       <span class="rl-items">${items}</span></div>`:"";
   const addRow=itemRow("a","加碼 ⤓",add.map(x=>
-    `<span class="rl-it a"><b>${x.dn}</b> 跌破${x.lbl}<span class="lv">${"●".repeat(x.lv)}</span></span>`).join(""));
+    `<span class="rl-it a"><b>${escH(x.dn)}</b> 跌破${x.lbl}<span class="lv">${"●".repeat(x.lv)}</span></span>`).join(""));
   const cutRow=itemRow("c","減碼 ⤒",cut.map(x=>
-    `<span class="rl-it c"><b>${x.dn}</b> 年線 +${x.diff.toFixed(0)}%<span class="lv">${"●".repeat(x.lv)}</span></span>`).join(""));
+    `<span class="rl-it c"><b>${escH(x.dn)}</b> 年線 +${x.diff.toFixed(0)}%<span class="lv">${"●".repeat(x.lv)}</span></span>`).join(""));
   const moveRow=(cls,lbl,arr)=>arr.length?`<div class="rl-mrow"><span class="rl-t ${cls}">${lbl}</span>
       <span class="rl-moves">${arr.map(t=>`<span class="mv">${t}</span>`).join("")}</span></div>`:"";
   const hasMoves=bullM.length||bearM.length||nearM.length;
@@ -2958,9 +3096,9 @@ function railSigHtml(){
     : "";
   const parts=[];
   if(add.length) parts.push("加碼最強："+add.slice(0,2).map(x=>
-    `<b>${x.dn}</b> 跌破${x.lbl} ${x.diff.toFixed(1)}%`).join("、"));
+    `<b>${escH(x.dn)}</b> 跌破${x.lbl} ${x.diff.toFixed(1)}%`).join("、"));
   if(cut.length) parts.push("減碼："+cut.slice(0,1).map(x=>
-    `<b>${x.dn}</b> 高於年線 +${x.diff.toFixed(0)}%`).join("、"));
+    `<b>${escH(x.dn)}</b> 高於年線 +${x.diff.toFixed(0)}%`).join("、"));
   const headline=parts.length?`<div class="rl-hl">${parts.join("　·　")}</div>`:"";
   return `<div class="rl-card rl-sig">
     <div class="rl-sh"><span class="rl-st">今日訊號</span>${chips}</div>
@@ -3064,9 +3202,9 @@ function rkStress(s){
     cashBuffer: net>0 ? s.cash/net : null,                       // 現金緩衝
   };
 }
-function rkMoney(v,cur){ if(v==null||isNaN(+v)) return "—";
+function rkMoney(v,cur){ if(v==null||isNaN(+v)) return "-";
   return (+v).toLocaleString(undefined,{maximumFractionDigits:0})+(cur?" "+cur:""); }
-function rkPct(v){ return v==null||isNaN(+v)?"—":(v*100).toFixed(0)+"%"; }
+function rkPct(v){ return v==null||isNaN(+v)?"-":(v*100).toFixed(0)+"%"; }
 function rkRel(t){
   const d=new Date((t||"").replace(" ","T")); if(isNaN(d)) return t||"";
   const min=Math.max(Math.floor((Date.now()-d.getTime())/6e4),0);
@@ -3099,8 +3237,8 @@ function stockCardHTML(mob){
   const fmtN=n=>Math.round(n).toLocaleString("en-US");
   const row=r=>{
     const link=!!(typeof DATA!=="undefined"&&DATA&&DATA[r.sym]&&DATA[r.sym].hist);
-    return `<div class="as-row notag${link?" link":""}"${link?` data-sym="${r.sym}"`:""}>
-      <span class="nm">${r.name}</span>
+    return `<div class="as-row notag${link?" link":""}"${link?` data-sym="${escH(r.sym)}"`:""}>
+      <span class="nm">${escH(r.name)}</span>
       <span class="vv num">${fmtN(r.value)}</span>
       <span class="pp num">${(r.value/base*100).toFixed(1)}%</span>
       <span class="ar">${link?"\u203a":""}</span></div>`;
@@ -3133,7 +3271,7 @@ function renderRisk(){
   const snaps=rkSnaps();
   if(!snaps.length){ el.innerHTML=`<div class="rk-card">無槓桿資料(本機檔未載入)。</div>`; return; }
   const s=rkNorm(snaps[0]);
-  const cur=s.currency||"TWD";
+  const cur=escH(s.currency||"TWD");
   const expo=rkExpo(s), st=rkStress(s);
   const bk=rkBorrowKind(s.borrowRatio);
   const bLbl={safe:"安全",watch:"注意",danger:"危險"}[bk];
@@ -3152,16 +3290,16 @@ function renderRisk(){
   const HSNAP=rkHoldSnap();
   const H=HSNAP.list;
   // 明細不是這一筆快照的就在卡上標來源時間,不要讓人以為是最新的組成
-  const holdSub=HSNAP.stale?` · 持倉明細取自 ${HSNAP.from}`:"";
+  const holdSub=HSNAP.stale?` · 持倉明細取自 ${escH(HSNAP.from)}`:"";
   // 兩張券商卡只看 ETF,個股統一在最下面那張(2026-08-20 定案)
   const STKSET=stockSymSet();
   const H_ETF=H.filter(h=>!isStockHold(h,STKSET));
   const YT_ETF=yuantaHoldings().filter(h=>!isStockHold(h,STKSET));
   const totMv=H.reduce((a,h)=>a+(+h.market_value||0),0)||1;
-  const segColor=(name,i)=>RK_SEG[String(name||"").toUpperCase()]||RK_FB[i%RK_FB.length];
+  const segColor=(name,i)=>RK_SEG[String(name||"").toUpperCase()]||RK_FB[i%RK_FB.length];   // 只回固定色票,不會吐資料字串
   const segs=H.map((h,i)=>{ const mv=+h.market_value||0, w=mv/totMv*100;
-    const lbl=w>=9?`${h.name} ${Math.round(w)}%`:"";
-    return `<div class="seg" style="width:${w}%;background:${segColor(h.name,i)}">${lbl}</div>`; }).join("");
+    const lbl=w>=9?`${escH(h.name)} ${Math.round(w)}%`:"";
+    return `<div class="seg" style="width:${w}%;background:${segColor(h.name,i)};color:${inkOn(segColor(h.name,i))}">${lbl}</div>`; }).join("");
   // ── 全帳戶總敞口:資料來自 ASSET_DATA.leverage ──
   const hh=hhLev();
   const hhL=ladderState();
@@ -3199,7 +3337,7 @@ function renderRisk(){
         <div class="dm-stats">
           <div><span class="k">總曝險</span><span class="v">${rkMoney(hh.exposure,"")}</span></div>
           <div><span class="k">全部資金</span><span class="v">${rkMoney(hh.liquid,"")}</span></div>
-          <div><span class="k">現金</span><span class="v">${hh.cashPct!=null?hh.cashPct.toFixed(0)+"%":"—"}</span></div>
+          <div><span class="k">現金</span><span class="v">${hh.cashPct!=null?hh.cashPct.toFixed(0)+"%":"-"}</span></div>
         </div>
         <div class="rkm-src">借款佔總資產 ${(Math.max(s.loan,0)/hh.liquid*100).toFixed(1)}% · 上限 20%</div>
       </div>`:"";
@@ -3208,7 +3346,7 @@ function renderRisk(){
     const EXPO_MIN=1, EXPO_MAX=3;
     const expoPct=(expo.effRatio!=null)
       ? Math.max(Math.min((expo.effRatio-EXPO_MIN)/(EXPO_MAX-EXPO_MIN)*100,100),0) : 0;
-    const effTxt=(expo.effRatio!=null)?expo.effRatio.toFixed(2):"—";
+    const effTxt=(expo.effRatio!=null)?expo.effRatio.toFixed(2):"-";
     const ibKv=[
       {k:"持倉市值", v:rkMoney(s.gross,""), c:"var(--ink)"},
       {k:"帳戶淨值", v:rkMoney(s.net,""), c:"var(--ink)"},
@@ -3220,7 +3358,7 @@ function renderRisk(){
     const ibLine=(+s.excess_liquidity||0);
     const ibLoanMax=Math.max(s.loan,0)+ibLine;
     const ibNote=hh?`<div class="dm-foot">上面的 <b>40%</b> 線是質押成數線(借款 ÷ 持倉市值),只算 IB 帳戶內。
-      <b>IB 真正的追繳線</b>在借款 ${rkMoney(ibLoanMax,cur)}(${s.gross>0?(ibLoanMax/s.gross*100).toFixed(0):"—"}%,超出這個刻度),
+      <b>IB 真正的追繳線</b>在借款 ${rkMoney(ibLoanMax,cur)}(${s.gross>0?(ibLoanMax/s.gross*100).toFixed(0):"-"}%,超出這個刻度),
       現在還可以再借 <b>${rkMoney(ibLine,cur)}</b> 才碰到。</div>`:"";
 
     // ③ 離警戒多遠:現金緩衝沒有條,只有數字與說明
@@ -3243,7 +3381,7 @@ function renderRisk(){
       `<i style="width:${(x.mv/totMv*100).toFixed(2)}%;background:${segColor(x.h.name,x.i)}"></i>`).join("");
     const holdRows=holdSorted.map(x=>{ const lev=+x.h.leverage||1;
       return `<div class="dm-hold"><i class="d" style="background:${segColor(x.h.name,x.i)}"></i>
-        <span class="n">${x.h.name}</span>
+        <span class="n">${escH(x.h.name)}</span>
         ${lev>1?`<span class="dm-tag lev">槓桿 ${lev}x</span>`:""}
         <span class="p">${(x.mv/totMv*100).toFixed(0)}%</span>
         <span class="m">${rkMoney(x.mv*lev,"")}</span></div>`; }).join("");
@@ -3257,7 +3395,7 @@ function renderRisk(){
         <div class="dm-hd"><span class="dm-t">曝險</span>
           <span class="dm-pill ${pillKind[bk]}">${bLbl}</span></div>
         <div class="dm-hero sm"><span class="n">${effTxt}</span><span class="x">x</span>
-          <span class="side">帳面 ${expo.bookRatio!=null?expo.bookRatio.toFixed(2):"—"}x + 正二額外 ${rkPct(expo.boostRatio)} · 上限 2.0x</span></div>
+          <span class="side">帳面 ${expo.bookRatio!=null?expo.bookRatio.toFixed(2):"-"}x + 正二額外 ${rkPct(expo.boostRatio)} · 上限 2.0x</span></div>
         <div class="dm-g thin">
           <span class="z1" style="width:50%"></span><span class="z2" style="width:25%"></span><span class="z3"></span>
           <span class="fill" style="width:${expoPct}%"></span>
@@ -3301,7 +3439,7 @@ function renderRisk(){
     const levTag=lev>1?`<span class="rk-lev">槓桿 ${lev}x</span>`:"";
     return `<tr>
       <td><span class="tname"><i style="background:${segColor(h.name,i)}"></i>
-        <span><span class="tn">${h.name}</span> ${levTag}<br><span class="tg">${h.ticker||""}</span></span></span></td>
+        <span><span class="tn">${escH(h.name)}</span> ${levTag}<br><span class="tg">${escH(h.ticker||"")}</span></span></span></td>
       <td>${rkMoney(mv,"")}</td>
       <td class="dim">${(share*100).toFixed(0)}%</td>
       <td class="dim">${lev}x</td>
@@ -3334,8 +3472,8 @@ function renderRisk(){
     const base=(_hh&&_hh.liquid)?_hh.liquid:tot;
     const baseAll=!!(_hh&&_hh.liquid);
     const sg=HH.map((h,i)=>{ const mv=+h.market_value||0, w=mv/tot*100;
-      const lbl=w>=9?`${h.name} ${Math.round(w)}%`:"";
-      return `<div class="seg" style="width:${w}%;background:${segColor(h.name,i)}">${lbl}</div>`; }).join("");
+      const lbl=w>=9?`${escH(h.name)} ${Math.round(w)}%`:"";
+      return `<div class="seg" style="width:${w}%;background:${segColor(h.name,i)};color:${inkOn(segColor(h.name,i))}">${lbl}</div>`; }).join("");
     // 分組模式下,正二那一群結束後插一列小計,一眼看到槓桿部位有多大
     const subtotal=(sel,label)=>{
       const g=HH.filter(sel); if(!g.length) return "";
@@ -3348,9 +3486,9 @@ function renderRisk(){
       const levTag=lev>1?`<span class="rk-lev">槓桿 ${lev}x</span>`:"";
       const sym=h.sym||IB_SYM[String(h.name||"").toUpperCase()]||"";
       const link=!!(typeof DATA!=="undefined"&&DATA&&DATA[sym]&&DATA[sym].hist);
-      return `<tr${link?` class="link" data-sym="${sym}"`:""}>
+      return `<tr${link?` class="link" data-sym="${escH(sym)}"`:""}>
         <td><span class="tname"><i style="background:${segColor(h.name,i)}"></i>
-          <span><span class="tn">${h.name}</span> ${levTag}<br><span class="tg">${h.ticker||""}</span></span></span></td>
+          <span><span class="tn">${escH(h.name)}</span> ${levTag}<br><span class="tg">${escH(h.ticker||"")}</span></span></span></td>
         <td>${rkMoney(mv,"")}</td>
         <td class="dim">${(mv/base*100).toFixed(1)}%</td>
         <td class="dim">${lev}x</td>
@@ -3374,12 +3512,12 @@ function renderRisk(){
   }
   el.innerHTML=riskHeadHTML()+`
     <div class="rk-h" style="padding:0 2px">
-      <h2>槓桿風險</h2><span class="rk-sub">示範讀值 · ${rkRel(s.updated_at)}</span></div>
+      <h2>槓桿風險</h2><span class="rk-sub">示範讀值 · ${escH(rkRel(s.updated_at))}</span></div>
 
     <div class="rk-strip">
       <span class="k">風險狀態</span><span class="rk-pill ${rkBadge(bk)}">${bLbl}</span>
       <span class="sep"></span>
-      <span class="k">借款成數</span><b>${rkPct(s.borrowRatio)}</b><span class="note">安全區 0–40%</span>
+      <span class="k">借款成數</span><b>${rkPct(s.borrowRatio)}</b><span class="note">安全區 0-40%</span>
       <span class="sep"></span>
       <span class="k">距追繳</span><b>${rkPct(st.marginCallDrop)}</b><span class="note">市場需再跌這麼多才觸發</span>
     </div>
@@ -3388,8 +3526,8 @@ function renderRisk(){
       <div class="rk-main-left">
         <div class="rk-hero-row">
           <div><div class="k" style="font-size:11.5px;color:var(--faint)">曝險</div>
-            <div class="rk-expo" style="margin-top:8px">${expo.effRatio!=null?expo.effRatio.toFixed(2)+"x":"—"}</div>
-            <div class="rk-expo-note">帳面 <b>${expo.bookRatio!=null?expo.bookRatio.toFixed(2)+"x":"—"}</b>　正二額外 <b>${rkPct(expo.boostRatio)}</b></div></div>
+            <div class="rk-expo" style="margin-top:8px">${expo.effRatio!=null?expo.effRatio.toFixed(2)+"x":"-"}</div>
+            <div class="rk-expo-note">帳面 <b>${expo.bookRatio!=null?expo.bookRatio.toFixed(2)+"x":"-"}</b>　正二額外 <b>${rkPct(expo.boostRatio)}</b></div></div>
           ${hh?`<div><div class="k" style="font-size:11.5px;color:var(--faint)">全帳戶總曝險</div>
             <div class="rk-expo" style="margin-top:8px">${hh.lev.toFixed(2)}x</div>
             <div class="rk-expo-note">借款佔總資產 <b>${(Math.max(s.loan,0)/hh.liquid*100).toFixed(1)}%</b> · 上限 20%</div></div>`:""}
@@ -3422,8 +3560,8 @@ function renderRisk(){
               <span style="font-size:8px">▲</span><span>券商追繳 ${(ibRatio*100).toFixed(0)}% · ${rkMoney(ibLoanMax,cur)}</span></div>`:""}
           </div>
           <div class="rk-zones">
-            <span class="zt rk-safe">安全區 0–40%</span>
-            <span class="zt rk-watch">注意區 40–50%</span>
+            <span class="zt rk-safe">安全區 0-40%</span>
+            <span class="zt rk-watch">注意區 40-50%</span>
             <span class="zt rk-danger">危險區 50%↑</span>
             <span class="zmax">刻度到 ${(gMax*100).toFixed(0)}% · ${rkMoney(s.gross*gMax,cur)}</span>
           </div>
@@ -3473,7 +3611,7 @@ function assetPos(sym){
 /* 線圖彈窗裡的「持有市值 / 佔股票部位」一列,只有資產面板有這支才出現 */
 function assetLineHTML(sym){
   const r=assetPos(sym); if(!r) return "";
-  return `<div class="apos num">持有市值 ${r.value.toLocaleString("en-US")} TWD · 佔股票部位 ${r.pctAll}%
+  return `<div class="apos num">持有市值 ${r.value.toLocaleString("en-US")} TWD · 佔股票部位 ${escH(r.pctAll)}%
     <button class="aposlink" data-goasset>資產面板 ↗</button></div>`;
 }
 /* 桌面資產頁:持倉兩卡的收合狀態,預設收起(2026-08-16 使用者要求) */
@@ -3491,10 +3629,10 @@ function renderAsset(){
   // 桌面把 delta(▲▼ vs 上次)接在 sub 後面同一行,手機維持獨立一行(設計稿 D1)
   const kpis=A.summary.map(k=>`
     <div class="as-kpi">
-      <div class="k">${k.label}</div>
-      <div class="v num">${k.value}${k.unit?`<span class="u">${k.unit}</span>`:""}</div>
-      <div class="s num">${k.sub}${(!mob&&k.delta)?` · ${k.delta}`:""}</div>
-      ${(mob&&k.delta)?`<div class="d ${k.deltaDir||""} num">${k.delta}</div>`:""}
+      <div class="k">${escH(k.label)}</div>
+      <div class="v num">${escH(k.value)}${k.unit?`<span class="u">${escH(k.unit)}</span>`:""}</div>
+      <div class="s num">${escH(k.sub)}${(!mob&&k.delta)?` · ${escH(k.delta)}`:""}</div>
+      ${(mob&&k.delta)?`<div class="d ${escH(k.deltaDir||"")} num">${escH(k.delta)}</div>`:""}
     </div>`).join("");
   // 甜甜圈:SVG 弧線,邏輯搬自 asset-dashboard,不用外部圖表庫
   function arc(cx,cy,r,a0,a1){const p=a=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
@@ -3503,21 +3641,23 @@ function renderAsset(){
   function donutSVG(slices,size){
     const S=190,cx=S/2,cy=S/2,R=78,r=48,px=size||S;
     const total=slices.reduce((s,x)=>s+x.value,0);let a=-Math.PI/2;
-    const paths=slices.map(sl=>{const sweep=sl.value/total*Math.PI*2;
+    // 金額全是 0 時不畫扇形(除以 0 會讓路徑變 NaN,瀏覽器會報錯)
+    const paths=(total>0?slices.filter(sl=>sl.value>0):[]).map(sl=>{const sweep=sl.value/total*Math.PI*2;
       const o=arc(cx,cy,R,a,a+sweep-0.012),i=arc(cx,cy,r,a+sweep-0.012,a);a+=sweep;
-      return `<path class="sl" data-n="${sl.name}" data-v="${fmt(sl.value)}" data-p="${(sl.value/total*100).toFixed(1)}" d="M${o.x0} ${o.y0} A${R} ${R} 0 ${o.big} 1 ${o.x1} ${o.y1} L${i.x0} ${i.y0} A${r} ${r} 0 ${o.big} 0 ${i.x1} ${i.y1} Z" fill="${sl.color}"></path>`;
+      return `<path class="sl" data-n="${escH(sl.name)}" data-v="${fmt(sl.value)}" data-p="${(sl.value/total*100).toFixed(1)}" d="M${o.x0} ${o.y0} A${R} ${R} 0 ${o.big} 1 ${o.x1} ${o.y1} L${i.x0} ${i.y0} A${r} ${r} 0 ${o.big} 0 ${i.x1} ${i.y1} Z" fill="${sl.color}"></path>`;
     }).join("");
     // 縮小版(手機)中間不放字,字級跟著縮會糊掉
     const mid=size?"":`<text class="as-cv" x="${cx}" y="${cy-1}">${fmt(total)}</text>
       <text class="as-cl" x="${cx}" y="${cy+14}">TWD</text>`;
-    return `<svg viewBox="0 0 ${S} ${S}" width="${px}" height="${px}" role="img">${paths}${mid}</svg>`;
+    const lbl=slices.map(x=>`${x.name} ${total?Math.round(x.value/total*100):0}%`).join("、");
+    return `<svg viewBox="0 0 ${S} ${S}" width="${px}" height="${px}" role="img" aria-label="${escH(lbl)}">${paths}${mid}</svg>`;
   }
   /* 甜甜圈卡:游標移到扇形,下面那行就顯示名稱與金額。帳戶那張是用 A.accounts 現場組的,
      組出來之後桌面版就不再另外畫「帳戶明細」表格(使用者 2026-08-19 定案)。 */
   function donutCard(d){
     const tot=d.slices.reduce((s,x)=>s+x.value,0)||1;
-    const lg=d.slices.map(sl=>`<span data-n="${sl.name}"><i style="background:${sl.color}"></i>${sl.name} ${Math.round(sl.value/tot*100)}%</span>`).join("");
-    return `<div class="as-card as-donut"><h3>${d.title}</h3>
+    const lg=d.slices.map(sl=>`<span data-n="${escH(sl.name)}"><i style="background:${sl.color}"></i>${escH(sl.name)} ${Math.round(sl.value/tot*100)}%</span>`).join("");
+    return `<div class="as-card as-donut"><h3>${escH(d.title)}</h3>
       <div class="db">${donutSVG(d.slices)}</div>
       <div class="lg">${lg}</div>
       <div class="as-hv">游標移到色塊看金額</div></div>`;
@@ -3531,7 +3671,7 @@ function renderAsset(){
       const paths=[...card.querySelectorAll("path.sl")];
       const lgs=[...card.querySelectorAll(".lg span")];
       paths.forEach(pa=>pa.addEventListener("mouseenter",()=>{
-        hv.innerHTML=`${pa.dataset.n} · <b>${pa.dataset.v}</b> TWD · ${pa.dataset.p}%`;
+        hv.innerHTML=`${escH(pa.dataset.n)} · <b>${escH(pa.dataset.v)}</b> TWD · ${escH(pa.dataset.p)}%`;
         hv.classList.add("on");
         paths.forEach(q=>q.style.opacity=(q===pa?"1":".25"));
         lgs.forEach(sp=>sp.style.opacity=(sp.dataset.n===pa.dataset.n?"1":".3"));
@@ -3547,9 +3687,9 @@ function renderAsset(){
   const tagCls={"台股":"tw","台股ETF":"twetf","黃金":"gold"};
   const rowHtml=r=>{
         const link=!!(typeof DATA!=="undefined"&&DATA&&DATA[r.sym]&&DATA[r.sym].hist);
-        return `<div class="as-row${link?" link":""}"${link?` data-sym="${r.sym}"`:""}>
-          <span class="tg ${tagCls[r.tag]||""}">${r.tag}</span><span class="nm">${r.name}</span>
-          <span class="vv num">${fmt(r.value)}</span><span class="pp num">${r.pct}%</span>
+        return `<div class="as-row${link?" link":""}"${link?` data-sym="${escH(r.sym)}"`:""}>
+          <span class="tg ${tagCls[r.tag]||""}">${escH(r.tag)}</span><span class="nm">${escH(r.name)}</span>
+          <span class="vv num">${fmt(r.value)}</span><span class="pp num">${escH(r.pct)}%</span>
           <span class="ar">${link?"\u203a":""}</span></div>`;
       };
   // 桌面:持倉卡可收合,標頭給筆數與合計,點了展開
@@ -3561,7 +3701,7 @@ function renderAsset(){
     const tot=h.rows.reduce((a,r)=>a+r.value,0);
     return `<div class="as-card as-hold${open?"":" folded"}">
       <div class="as-fold" data-asfold="${i}">
-        <h3>${h.title}</h3>
+        <h3>${escH(h.title)}</h3>
         <span class="fs num">${h.rows.length} 筆 · ${fmt(tot)} TWD<i>${open?"\u25be":"\u25b8"}</i></span>
       </div>
       ${open?`<div class="as-rows">${h.rows.map(rowHtml).join("")}</div>`:""}
@@ -3632,7 +3772,7 @@ function renderAsset(){
     pts.forEach(p=>{
       const x=X(p.d),y=Y(p.v),d=p.yr?`${p.yr} 平均`:p.d.slice(0,7).replace("-","/");
       dots+=`<circle class="tl-d" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4">
-        <title>${d}:${p.v} \u842c\u53f0\u5e63${p.note?"\u3000"+p.note:""}</title></circle>`;
+        <title>${d}:${p.v} \u842c\u53f0\u5e63${p.note?"\u3000"+escH(p.note):""}</title></circle>`;
     });
     // \u300c\u4eca\u5929\u300d\u5148\u5361\u4f4d(\u5b83\u6700\u91cd\u8981),\u5176\u4ed6\u9ede\u518d\u627e\u7a7a\u4f4d
     const order=[pts.length-1,...pts.keys()].filter((v,i,a)=>a.indexOf(v)===i);
@@ -3696,9 +3836,9 @@ function renderAsset(){
     const prop=Math.max(netVal-liqVal,0);
     const pctOf=(v,b)=>b?(v/b*100):0;
     const legend=(name,v,base,color)=>
-      `<span><i style="background:${color}"></i>${name} ${pctOf(v,base).toFixed(0)}% · ${fmt(v)} TWD</span>`;
+      `<span><i style="background:${color}"></i>${escH(name)} ${pctOf(v,base).toFixed(0)}% · ${fmt(v)} TWD</span>`;
     const barOf=segs=>`<div class="ax-bar">${segs.map(x=>
-      `<i style="width:${x.w.toFixed(2)}%;background:${x.color}" title="${x.tip}"></i>`).join("")}</div>`;
+      `<i style="width:${x.w.toFixed(2)}%;background:${x.color}" title="${escH(x.tip)}"></i>`).join("")}</div>`;
 
     // 淨資產組成(流動 vs 房產)也做成圓餅,跟下面三張排在一起。
     // 原本那張只有一條長條的 hero 卡拿掉,大數字上面的總覽四格已經有了。
@@ -3724,13 +3864,13 @@ function renderAsset(){
       let ratio;
       if(r.segs.length<=2){
         ratio=r.segs.map(x=>
-          `<span style="color:${x.color}">${Math.round(pctOf(x.value,base))}</span>`).join('<em>:</em>');
+          `<span style="color:${readableOn(x.color,3)}">${Math.round(pctOf(x.value,base))}</span>`).join('<em>:</em>');
       }else{
         const top=r.segs.slice().sort((a,b)=>b.value-a.value)[0];
-        ratio=`<span style="color:${top.color}">${Math.round(pctOf(top.value,base))}%</span>`
-             +`<em class="who">${top.name}</em>`;
+        ratio=`<span style="color:${readableOn(top.color,3)}">${Math.round(pctOf(top.value,base))}%</span>`
+             +`<em class="who">${escH(top.name)}</em>`;
       }
-      const lg=r.segs.map(x=>`<span data-n="${x.name}"><i style="background:${x.color}"></i>${x.name} ${Math.round(pctOf(x.value,base))}%</span>`).join("");
+      const lg=r.segs.map(x=>`<span data-n="${escH(x.name)}"><i style="background:${x.color}"></i>${escH(x.name)} ${Math.round(pctOf(x.value,base))}%</span>`).join("");
       return `<div class="as-donut"><div class="dt">${r.t}</div>
         <div class="rt">${ratio}</div>
         <div class="db">${donutSVG(r.segs,170)}</div>
@@ -3741,7 +3881,7 @@ function renderAsset(){
       <div class="ax-hd"><h3>資產配置</h3>
         <span class="ax-sub">淨資產 ${fmt(netVal)} TWD · 流動資產 ${fmt(liqVal)} TWD(不含房產)</span></div>
       <div class="ax-dn">${rows.map(miniDonut).join("")}</div>
-      <div class="ax-sub" style="margin-top:10px">${A.accountsNote||""}</div>
+      <div class="ax-sub" style="margin-top:10px">${escH(A.accountsNote||"")}</div>
     </div>`;
 
     // ③ 類別與帳戶:兩張長條清單並排
@@ -3752,8 +3892,8 @@ function renderAsset(){
         <div class="ax-sub" style="margin-top:2px">${sub}</div>
         <div style="margin-top:12px">${items.map(x=>{
           const p=pctOf(x.value,base);
-          return `<div class="ax-brow" title="${x.name} ${fmt(x.value)} TWD">
-            <span class="n"><i style="background:${x.color}"></i><span>${x.name}</span></span>
+          return `<div class="ax-brow" title="${escH(x.name)} ${fmt(x.value)} TWD">
+            <span class="n"><i style="background:${x.color}"></i><span>${escH(x.name)}</span></span>
             <span class="t"><i style="width:${Math.max(x.value/max*100,p>0?2:0).toFixed(1)}%;background:${x.color}"></i></span>
             <span class="p">${p<1&&p>0?p.toFixed(1):Math.round(p)}%</span></div>`;}).join("")}</div>
       </div>`;
@@ -3790,17 +3930,17 @@ function renderAsset(){
       <path d="${line}" fill="none" stroke="#12a670" stroke-width="4"
         vector-effect="non-scaling-stroke" stroke-linejoin="round"></path></svg>`;
   }
-  const S=A.summary, TP=A.timeline||[];
+  const S=[0,1,2,3].map(i=>A.summary[i]||{label:"",value:"-"}), TP=A.timeline||[];
   const spark=sparkSVG(TP);
   const heroCard=`
     <div class="dm-card">
-      <div class="dm-hd"><span class="dm-t">${S[1].label}</span>
-        ${S[1].delta?`<span class="dm-delta ${S[1].deltaDir||""}">${S[1].delta}</span>`:""}</div>
-      <div class="dm-big"><span class="n">${S[1].value}</span>
-        <span class="u">${S[1].unit||""}</span></div>
-      <div class="dm-sub">${S[1].sub||""}</div>
-      <div class="dm-net"><span class="l">${S[0].label} <b>${S[0].value} ${S[0].unit||""}</b></span>
-        <span class="r">${S[0].sub||""}</span></div>
+      <div class="dm-hd"><span class="dm-t">${escH(S[1].label)}</span>
+        ${S[1].delta?`<span class="dm-delta ${escH(S[1].deltaDir||"")}">${escH(S[1].delta)}</span>`:""}</div>
+      <div class="dm-big"><span class="n">${escH(S[1].value)}</span>
+        <span class="u">${escH(S[1].unit||"")}</span></div>
+      <div class="dm-sub">${escH(S[1].sub||"")}</div>
+      <div class="dm-net"><span class="l">${escH(S[0].label)} <b>${escH(S[0].value)} ${escH(S[0].unit||"")}</b></span>
+        <span class="r">${escH(S[0].sub||"")}</span></div>
       ${spark?`${spark}
       <div class="dm-sparkl"><span>${TP[0].d.slice(0,4)}</span>
         <span>歷年流動資產 · 萬台幣</span><span>今天 ${TP[TP.length-1].v}</span></div>
@@ -3811,22 +3951,22 @@ function renderAsset(){
   const structRows=[
     {k:"ETF vs 個股", v:S[2].value, sub:S[2].sub, di:1},
     {k:"現金 vs 股票", v:S[3].value, sub:S[3].sub, di:2},
-    {k:"淨資產類別", v:A.donuts[0].slices.length+" 類",
-     sub:A.donuts[0].slices.map(x=>x.name).join(" · "), di:0},
+    {k:"淨資產類別", v:(A.donuts[0]?A.donuts[0].slices.length:0)+" 類",
+     sub:(A.donuts[0]?A.donuts[0].slices:[]).map(x=>x.name).join(" · "), di:0},
     {k:"帳戶分佈", v:A.accounts.length+" 個",
      sub:A.accounts.slice(0,3).map(x=>x.name).join(" · ")+" 等", di:3},
   ].map((r,i)=>{
-    const DN=[...A.donuts,acctDonut];
-    const d=DN[r.di], tot=d.slices.reduce((a,x)=>a+x.value,0)||1;
+    const DN=[0,1,2].map(k=>A.donuts[k]).concat([acctDonut]);
+    const d=DN[r.di]||{slices:[]}, tot=d.slices.reduce((a,x)=>a+x.value,0)||1;
     const open=AS_STRUCT===i;
     const seg=d.slices.map(x=>
       `<i style="width:${(x.value/tot*100).toFixed(2)}%;background:${x.color}"></i>`).join("");
     const lgd=d.slices.map(x=>
-      `<span><i style="background:${x.color}"></i>${x.name} <b>${fmt(x.value)}</b> · ${Math.round(x.value/tot*100)}%</span>`).join("");
+      `<span><i style="background:${x.color}"></i>${escH(x.name)} <b>${fmt(x.value)}</b> · ${Math.round(x.value/tot*100)}%</span>`).join("");
     return `<div class="dm-strow">
-      <div class="h"><span class="k">${r.k}</span><span class="v">${r.v}</span></div>
+      <div class="h"><span class="k">${r.k}</span><span class="v">${escH(r.v)}</span></div>
       <div class="dm-seg">${seg}</div>
-      <div class="f"><span class="s">${r.sub||""}</span>
+      <div class="f"><span class="s">${escH(r.sub||"")}</span>
         <button data-asstruct="${i}">${open?"收起 ▲":"看明細 ▾"}</button></div>
       ${open?`<div class="dm-donut">${donutSVG(d.slices,112)}<div class="dm-lgd">${lgd}</div></div>`:""}
     </div>`;
@@ -3834,10 +3974,10 @@ function renderAsset(){
   // 持倉列:Compass 有線圖資料的才可點,點了開走勢彈窗
   const posRow=r=>{
     const link=!!(typeof DATA!=="undefined"&&DATA&&DATA[r.sym]&&DATA[r.sym].hist);
-    return `<div class="dm-pos${link?" link":""}"${link?` data-sym="${r.sym}"`:""}>
-      <span class="dm-tag ${tagCls[r.tag]||"st"}">${r.tag}</span>
-      <span class="nm">${r.name}</span>
-      <span class="pc">${r.pctAll}%</span>
+    return `<div class="dm-pos${link?" link":""}"${link?` data-sym="${escH(r.sym)}"`:""}>
+      <span class="dm-tag ${tagCls[r.tag]||"st"}">${escH(r.tag)}</span>
+      <span class="nm">${escH(r.name)}</span>
+      <span class="pc">${escH(r.pctAll)}%</span>
       <span class="vl">${fmt(r.value)}</span></div>`;
   };
   const holdCard=(idx,open,btnId,n)=>{
@@ -3845,21 +3985,21 @@ function renderAsset(){
     const rows=(open?h.rows:h.rows.slice(0,n)).map(posRow).join("");
     const more=h.rows.length>n;
     return `<div class="dm-card c2">
-      <div class="dm-hd bl"><span class="dm-t">${h.title}</span>
+      <div class="dm-hd bl"><span class="dm-t">${escH(h.title)}</span>
         <span class="dm-hint">點列開走勢圖 · 佔流動資產 %</span></div>
       ${rows}
       ${more?`<button class="dm-btn" id="${btnId}">${open?"收起 ▲":`展開全部 ${h.rows.length} 檔 ▾`}</button>`:""}
     </div>`;
   };
   const riskRows=A.risks.map((r,i)=>`
-    <div class="dm-risk ${r.level}">
-      <div class="h" data-asrisk="${i}"><i>${ICO[r.level]||"i"}</i><span>${r.title}</span></div>
-      ${AS_RISKOPEN===i?`<div class="b">${r.body}</div>`:""}
+    <div class="dm-risk ${ICO[r.level]?r.level:""}">
+      <div class="h" data-asrisk="${i}" aria-expanded="${AS_RISKOPEN===i}"><i>${ICO[r.level]||"i"}</i><span>${escH(r.title)}</span></div>
+      ${AS_RISKOPEN===i?`<div class="b">${escH(r.body)}</div>`:""}
     </div>`).join("");
   el.innerHTML=`
     ${heroCard}
     <div class="dm-card c2"><div class="dm-t">資產結構</div>${structRows}
-      <div class="dm-foot">${A.accountsNote}</div></div>
+      <div class="dm-foot">${escH(A.accountsNote||"")}</div></div>
     ${HOLD.map((h,i)=>holdCard(A.holdings.indexOf(h),!!AS_HOLDS[i],"asHold"+i,6)).join("")}
     <div class="dm-card c3"><div class="dm-t">風險提示</div>${riskRows}</div>
     <div class="dm-disc">資料每天自動更新(股價與匯率),要改股數或現金請改 asset-portfolio.json / asset-balances.json。持倉列 Compass 也在追蹤的,點了直接開線圖。</div>`;
@@ -3898,7 +4038,7 @@ const exDay   = d => d.slice(5).replace("-","/");
    幫大家先付了整張帳單,朋友 Tikkie 還回來的是他們那幾份,剩下的淨額就是他自己那一份,
    那份是真的花掉的錢。全部排掉會少算,全部算進去會多算,取淨額才對。 */
 const exTotal = m => m.transactions.reduce((s,t)=>s+t.amount,0);
-const esc = s => String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pctS = (v,base) => base>0 ? Math.round(v/base*100)+"%" : "0%";
 
 /* 各組(固定帳單、生活費、購物娛樂其他、代墊)的順序、顏色、
@@ -3931,7 +4071,7 @@ function render(){
   const D=window.EXPENSE_DATA, app=document.getElementById("app"), nav=document.getElementById("mnav");
   /* 獨立頁是寫到 header 的 #subline,dashboard 的 header 是共用的,改寫面板自己那一列 */
   const exSub=document.getElementById("exSub");
-  if(exSub) exSub.textContent = D ? D.updated+" 更新 · 銀行 + 信用卡" : "沒有資料";
+  if(exSub) exSub.textContent = D ? (D.updated||"")+" 更新 · 銀行 + 信用卡" : "沒有資料";
   if(!D || !D.months || !D.months.length){ nav.innerHTML=""; app.innerHTML='<div class="card empty">沒有資料</div>'; return; }
 
   const ms=exMonths();
@@ -4128,7 +4268,7 @@ function render(){
     .map(g=>`<strong>${esc(g.key)}</strong>`);
   const insight = over>0
     ? `超出目標的 <strong class="r">${exEur(over)}</strong>${top2.length?` 主要來自 ${top2.join(" 與 ")}`:""}。`
-    : `<span style="color:#9aa0ad">這個月在總支出目標內。</span>`;
+    : `<span style="color:#676e79">這個月在總支出目標內。</span>`;
 
   const varCard=`
     <section class="card">
@@ -4348,9 +4488,9 @@ function drawTrend(ms){
       /* 折線的點有時候低於柱頂(那個月堆疊比總額高),字要壓在柱頂上面才不會蓋到顏色 */
       const yLab=Math.min(cy, y(tops[k]));
       over+=`<text class="vl${on?" now":""}${sm?" sm":""}" x="${tx.toFixed(1)}" y="${(yLab-(on?16:11)).toFixed(1)}" text-anchor="${anc}" fill="${
-        on?(fk?fCol:"#1d4fc4"):"#7a8090"}">${lab}</text>`;
+        on?(fk?fCol:"#1d4fc4"):"#676e79"}">${lab}</text>`;
     }
-    over+=`<text class="ax" x="${cx.toFixed(1)}" y="${H-14}" text-anchor="middle" fill="${on?"#7a8090":"#9aa0ad"}"${on?' font-weight="600"':""}>${exShort(mm.month)}</text>`;
+    over+=`<text class="ax" x="${cx.toFixed(1)}" y="${H-14}" text-anchor="middle" fill="${on?"#5f6673":"#676e79"}"${on?' font-weight="600"':""}>${exShort(mm.month)}</text>`;
   });
   s+=`<g pointer-events="none">${over}</g>`;
 
@@ -4438,10 +4578,10 @@ function renderAF(){
     cells.push(kpi("超出目標", (E.over>=0?"+":"")+eur(Math.abs(E.over)), "",
       E.over>=0?"超過總支出目標":"在目標內", E.over>=0?"afdn":"afup"));
   }
-  if(S[0]) cells.push(kpi(S[0].label, S[0].value, S[0].unit,
-    `<span class="${S[0].deltaDir==="down"?"afdn":"afup"}">${S[0].delta||""}</span> ${S[0].sub||""}`));
-  if(S[1]) cells.push(kpi(S[1].label, S[1].value, S[1].unit, S[1].sub||""));
-  const seg=(k,t)=>`<button data-af="${k}" class="${PANEL===k?"on":""}">${t}</button>`;
+  if(S[0]) cells.push(kpi(escH(S[0].label), escH(S[0].value), escH(S[0].unit),
+    `<span class="${S[0].deltaDir==="down"?"afdn":"afup"}">${escH(S[0].delta||"")}</span> ${escH(S[0].sub||"")}`));
+  if(S[1]) cells.push(kpi(escH(S[1].label), escH(S[1].value), escH(S[1].unit), escH(S[1].sub||"")));
+  const seg=(k,t)=>`<button data-af="${k}" class="${PANEL===k?"on":""}" aria-pressed="${PANEL===k}">${t}</button>`;
   el.innerHTML=`<div class="as-kpis" id="afSummary">${cells.join("")}</div>
     <div id="afSeg">${seg("expense","支出")}${seg("asset","資產")}</div>`;
 }
@@ -4453,7 +4593,8 @@ function switchPanel(p){
   PANEL=p;
   // 桌面「資產支出」是一頁,asset 與 expense 都讓同一顆亮著(那顆的 data-panel 是 expense)
   const togKey=(!isMobile()&&p==="asset")?"expense":p;
-  document.querySelectorAll("#panelToggle button").forEach(b=>b.classList.toggle("on",b.dataset.panel===togKey));
+  document.querySelectorAll("#panelToggle button").forEach(b=>{ const on=b.dataset.panel===togKey;
+    b.classList.toggle("on",on); b.setAttribute("aria-pressed",on); });
   document.getElementById("stockPanel").hidden = p!=="stock";
   document.getElementById("stockChrome").hidden = p!=="stock";
   const rp=document.getElementById("riskPanel"); rp.hidden = p!=="risk";
@@ -4475,20 +4616,20 @@ function syncHeader(){
   if(!h1||!sub) return;
   if(isMobile()&&PANEL==="asset"){
     h1.textContent="資產總覽";
-    sub.parentElement.innerHTML=`<span id="datadate">${(window.ASSET_DATA&&ASSET_DATA.meta.date)||""}</span>`;
+    sub.parentElement.innerHTML=`<span id="datadate">${escH((window.ASSET_DATA&&ASSET_DATA.meta&&ASSET_DATA.meta.date)||"")}</span>`;
   }else if(isMobile()&&PANEL==="expense"){
     h1.textContent="每月支出";
-    sub.parentElement.innerHTML=`<span id="datadate">${(window.EXPENSE_DATA&&EXPENSE_DATA.updated)||""} 更新</span>`;
+    sub.parentElement.innerHTML=`<span id="datadate">${escH((window.EXPENSE_DATA&&EXPENSE_DATA.updated)||"")} 更新</span>`;
   }else if(isMobile()&&PANEL==="risk"){
     h1.textContent="槓桿風險";
     const t=rkSnaps().length?(rkSnaps()[0].updated_at||""):"";
-    sub.parentElement.innerHTML=`<span id="datadate">示範讀值 · ${rkRel(t)}</span>`;
+    sub.parentElement.innerHTML=`<span id="datadate">示範讀值 · ${escH(rkRel(t))}</span>`;
   }else{
     h1.textContent="Compass (Beta)";
     // 有抓到即時報價就顯示報價時間,沒有就顯示資料檔的建置時間
     sub.parentElement.innerHTML=LIVE_AT
       ? `<span id="datadate">${LIVE_AT}</span> 即時報價`
-      : `<span id="datadate">${DATA_DATE||"—"}</span> 更新`;
+      : `<span id="datadate">${escH(DATA_DATE||"-")}</span> 更新`;
   }
 }
 let DATA_DATE="";
@@ -4513,7 +4654,8 @@ function syncTabbar(){
     : "stock";
   // 股票面板只剩大盤一頁,底部列對應「股票」那格
   if(!document.querySelector('#tabbar [data-go="'+cur+'"]')) cur="stock";
-  document.querySelectorAll("#tabbar button").forEach(b=>b.classList.toggle("on", b.dataset.go===cur));
+  document.querySelectorAll("#tabbar button").forEach(b=>{ const on=b.dataset.go===cur;
+    b.classList.toggle("on", on); if(on) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
   // 槓桿那格的狀態點跟著借款比例的安全/注意/危險走(設計稿 1e)
   const dot=document.getElementById("tabbarRiskDot");
   if(dot && typeof rkSnaps==="function" && rkSnaps().length){
@@ -4528,7 +4670,7 @@ const MACRO_SEGS=["all","eu","tw","stock"];
 function syncSegTabs(){
   const cur=FILTER.macro||"all";
   document.querySelectorAll(".tabs button[data-seg]")
-    .forEach(x=>x.classList.toggle("active", x.dataset.seg===cur));
+    .forEach(x=>{ const on=x.dataset.seg===cur; x.classList.toggle("active", on); x.setAttribute("aria-pressed",on); });
 }
 function setMacroSeg(k){
   FILTER.macro=MACRO_SEGS.includes(k)?k:"all";
@@ -4654,7 +4796,7 @@ function chartSVG(d,c,cost,buys,avgLine,w,h){
     costHtml=inBuys.map((b,k)=>{
       const bx=X(b.i), by=Y(b.p);
       const ty=by<pT+16 ? by+16 : by-9;
-      const tip=`${fmtDate(b.d)} 買${b.q?" "+b.q+" 股":""} @ ${num(b.p,2)}`;
+      const tip=escH(`${fmtDate(b.d)} 買${b.q?" "+b.q+" 股":""} @ ${num(b.p,2)}`);
       const prevFar=k===0||bx-X(inBuys[k-1].i)>=GAP;
       const nextFar=k===inBuys.length-1||X(inBuys[k+1].i)-bx>=GAP;
       const text=(prevFar&&nextFar)
@@ -4670,7 +4812,7 @@ function chartSVG(d,c,cost,buys,avgLine,w,h){
       <circle class="bdot" cx="${W-pR-3}" cy="${cy}" r="3.4"/>
       <text class="blabel" x="${pL+11}" y="${ty}">買點 ${num(cost,2)}</text>`;
   }
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="收盤價走勢 ${num(c[0],2)} 到 ${num(c[n-1],2)}">
     <defs><linearGradient id="cgrad" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="var(--cline)" stop-opacity="0.16"/>
       <stop offset="1" stop-color="var(--cline)" stop-opacity="0"/></linearGradient></defs>
@@ -4696,7 +4838,7 @@ function buyHistoryHTML(e,last,cost){
     const pl=(last!=null&&p)?(last/p-1)*100:null;
     const plHtml=pl!=null?`<span class="bh-pl ${pl>=0?'up':'dn'}">${pl>=0?'+':''}${pl.toFixed(1)}%</span>`:`<span class="bh-pl"></span>`;
     return `<div class="bh-row">
-      <span class="bh-d num"><span class="bh-dot"></span>${fmtDate(b.d)}</span>
+      <span class="bh-d num"><span class="bh-dot"></span>${escH(fmtDate(b.d))}</span>
       <span class="bh-q num">${qFmt(q)} 股</span>
       <span class="bh-p num">@ ${num(p,2)}</span>
       ${plHtml}</div>`;
@@ -4714,7 +4856,7 @@ function mMaCards(r){
   return `<div class="mmacards">`+[5,20,60,120,240].map(k=>{
     const m=maByK(r,k);
     if(!m||m.v==null)
-      return `<div class="mmac"><span class="l">${lab[k]}</span><span class="v na">—</span><span class="s na">—</span></div>`;
+      return `<div class="mmac"><span class="l">${lab[k]}</span><span class="v na">-</span><span class="s na">-</span></div>`;
     const cls=m.above?"up":"dn";
     return `<div class="mmac"><span class="l">${lab[k]}</span>
       <span class="v ${cls}">${m.v.toLocaleString(undefined,{maximumFractionDigits:1})}</span>
@@ -4731,7 +4873,7 @@ function mBuyBlock(e,last,cost){
   const pl=avg?(last/avg-1)*100:null;
   const qf=q=> q%1===0?String(q):q.toFixed(2);
   const rows=buys.map(b=>`<div class="mbrow"><i></i>
-    <span class="d">${b.d}</span>
+    <span class="d">${escH(b.d)}</span>
     <span class="p">${num(Number(b.p||0),2)}</span>
     <span class="q">× ${qf(Number(b.q||0))}</span></div>`).join("");
   const plHtml=(pl!=null)
@@ -4745,7 +4887,7 @@ function maCardsHTML(r){
   // 完稿:格子白底細框,顏色只落在數值;狀態(站上/跌破/今日穿越)用格底小標籤
   return `<div class="macards">`+[5,20,60,120,240].map(k=>{
     const m=maByK(r,k);
-    if(!m||m.v==null) return `<div class="mac"><div class="macv na num">—</div><div class="macl">${lab[k]}</div><div class="macs muted">—</div></div>`;
+    if(!m||m.v==null) return `<div class="mac"><div class="macv na num">-</div><div class="macl">${lab[k]}</div><div class="macs muted">-</div></div>`;
     const cls=m.above?"up":"dn", s=m.diff>=0?"+":"";
     const crossed=m.cross==="bull"||m.cross==="bear";
     const st=m.cross==="bull"?`<span class="macs on up">今日站上</span>`
@@ -4759,8 +4901,8 @@ function maCardsHTML(r){
 function renderChart(){
   const sym=CHART.sym, r=DATA[sym]; if(!r||!r.hist) return;
   const e=wlEntry(sym);
-  const title=e.dn||sym;
-  const sub=[sym.replace(/\.(TW|TWO)$/,""), e.note].filter(Boolean).join(" · ");
+  const title=escH(e.dn||sym);
+  const sub=escH([sym.replace(/\.(TW|TWO)$/,""), e.note].filter(Boolean).join(" · "));
   const {d,c}=slice(r.hist);
   const last=c[c.length-1], prev=c.length>1?c[c.length-2]:last;
   const chg=(last/prev-1)*100, cCls=chg>=0?"up":"dn", cS=chg>=0?"+":"";
@@ -4800,7 +4942,7 @@ function renderChart(){
     const mtags=trend+(lev>1?`<span class="mtag lev">${lev>=3?"正三":"正二"} ${lev}x</span>`:"")
       +mSignalTags(sym);
     // 標題已經印了代號,副標只留說明文字(設計稿 1c)
-    const msub=e.note||e.group||sym;
+    const msub=escH(e.note||e.group||sym);
     const msegs=`<div class="segs"><div class="segrow">`+Object.keys(RANGE_LBL_M).map(kk=>
         `<button data-range="${kk}" class="${CHART.range===kk?'on':''}">${RANGE_LBL_M[kk]}</button>`
       ).join("")+`</div></div>`;
@@ -4845,8 +4987,9 @@ function openChart(sym){
   CHART={ sym, range:(isMobile()&&!RANGE_LBL_M[CHART.range])?"6M":(CHART.range||"6M") };
   renderChart();
   document.getElementById("chartModal").classList.add("show");
+  modalFocus("chartModal");
 }
-function closeChart(){ document.getElementById("chartModal").classList.remove("show"); }
+function closeChart(){ modalBlur("chartModal"); }
 
 /* ---------- 規則彈窗:把看板規則從訊號卡搬進獨立 pop-up ---------- */
 function renderRules(){
@@ -4864,14 +5007,14 @@ function renderTodoSheet(){
   const rows=L.map((t,i)=>{ const on=!!D[t.title];
     return `<div class="td-row${on?" done":""}" data-todo="${encodeURIComponent(t.title)}">
       <span class="ck">${on?"\u2713":""}</span>
-      <div><div class="t"><span class="no">${String(i+1).padStart(2,"0")}</span>${t.title}</div>
-      ${t.body?`<div class="b">${t.body}</div>`:""}</div></div>`; }).join("");
+      <div><div class="t"><span class="no">${String(i+1).padStart(2,"0")}</span>${escH(t.title)}</div>
+      ${t.body?`<div class="b">${t.mine?escH(t.body):t.body}</div>`:""}</div></div>`; }).join("");
   const done=L.filter(t=>D[t.title]).length;
-  el.innerHTML=`<div class="td-hd"><h3>To-Do</h3>
+  el.innerHTML=`<div class="td-hd"><h2>To-Do</h2>
       <span class="sub">示範清單 · ${RK_TODO_DATE}</span>
       <button class="td-x" id="todoClose" aria-label="關閉">✕</button></div>
     ${rows||'<div style="padding:18px 0;color:var(--faint);font-size:13px">目前沒有待辦。</div>'}
-    <div class="td-add"><input id="todoNew" placeholder="新增一條,按 Enter 或加入" maxlength="120">
+    <div class="td-add"><input id="todoNew" aria-label="新增待辦" placeholder="新增一條,按 Enter 或加入" maxlength="120">
       <button id="todoAdd">加入</button></div>
     <div class="td-foot"><span>已完成 ${done} / ${L.length} · 新增與刪除只存這台裝置</span>
       <span style="display:flex;gap:8px">
@@ -4895,10 +5038,10 @@ function syncTodoBadge(){
   const D=todoDone(); const n=L.filter(t=>!D[t.title]).length;
   b.hidden=!n; b.textContent=n;
 }
-function openTodo(){ renderTodoSheet(); document.getElementById("todoModal").classList.add("show"); }
-function closeTodo(){ document.getElementById("todoModal").classList.remove("show"); }
-function openRules(){ renderRules(); document.getElementById("rulesModal").classList.add("show"); }
-function closeRules(){ document.getElementById("rulesModal").classList.remove("show"); }
+function openTodo(){ renderTodoSheet(); document.getElementById("todoModal").classList.add("show"); modalFocus("todoModal"); }
+function closeTodo(){ modalBlur("todoModal"); }
+function openRules(){ renderRules(); document.getElementById("rulesModal").classList.add("show"); modalFocus("rulesModal"); }
+function closeRules(){ modalBlur("rulesModal"); }
 
 /* ---------- interactions ---------- */
 // 只掛分頁鈕;同一列裡的「規則 ↗」不是分頁,由下面的全域 click 處理
@@ -4970,6 +5113,65 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeChart(); closeRules(); closeTodo(); } });
 
+/* ── 每個區塊各自防護 ────────────────────────────────────────
+   某一份資料格式壞掉時,只有那一塊顯示提示,其他分頁照常可用,不會整頁白掉。 */
+function guardRender(fn, target){
+  return function(){
+    try{ return fn.apply(this, arguments); }
+    catch(err){
+      console.warn("畫面更新失敗,資料格式可能有變:", err);
+      const id=(typeof target==="function")?target():target;
+      const el=id&&document.getElementById(id);
+      if(el) el.innerHTML='<div class="rk-card" role="alert">這一區的資料格式有問題,暫時顯示不出來。其他分頁不受影響。</div>';
+    }
+  };
+}
+renderTopStrip=guardRender(renderTopStrip, ()=>isMobile()?"topstrip":"rail");
+renderMacro=guardRender(renderMacro, "macro");
+renderRisk=guardRender(renderRisk, "riskPanel");
+renderAsset=guardRender(renderAsset, "assetPanel");
+renderAF=guardRender(renderAF, "afHead");
+renderChart=guardRender(renderChart, "chartSheet");
+renderTodoSheet=guardRender(renderTodoSheet, "todoSheet");
+if(typeof window.renderExpense==="function") window.renderExpense=guardRender(window.renderExpense, "expensePanel");
+
+/* ── 鍵盤可操作(WCAG 2.1.1)──────────────────────────────────
+   可點的列是 div / tr,滑鼠點得到但 Tab 走不到。畫面每次重畫後補上 tabindex 與 role,
+   Enter / 空白鍵等同點擊,外觀完全不變。 */
+const KB_SEL='[data-sym]:not(button),[data-todo],[data-asrisk],[data-asfold]';
+function kbFix(root){
+  (root||document).querySelectorAll(KB_SEL).forEach(el=>{
+    if(el.hasAttribute("tabindex")) return;
+    el.setAttribute("tabindex","0");
+    if(el.tagName!=="TR") el.setAttribute("role","button");
+  });
+}
+new MutationObserver(()=>kbFix()).observe(document.body,{childList:true,subtree:true});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"&&e.key!==" ") return;
+  const el=e.target;
+  if(!el||!el.matches||!el.matches(KB_SEL)) return;
+  e.preventDefault(); el.click();
+});
+/* 彈窗開啟時把焦點移進去,關閉時還給原本的按鈕(鍵盤與讀屏才不會迷路) */
+let MODAL_RET=null;
+function modalFocus(id){
+  if(!MODAL_RET) MODAL_RET=document.activeElement;
+  const m=document.getElementById(id);
+  const f=m&&m.querySelector(".sclose,.td-x,button");
+  if(f) f.focus({preventScroll:true});
+}
+function modalBlur(id){
+  const m=document.getElementById(id);
+  if(!m||!m.classList.contains("show")) return false;
+  m.classList.remove("show");
+  if(!document.querySelector(".modal.show")&&MODAL_RET&&MODAL_RET.focus){
+    try{ MODAL_RET.focus({preventScroll:true}); }catch(e){}
+    MODAL_RET=null;
+  }
+  return true;
+}
+
 /* 有本機槓桿資料(leverage-data.js 有載到)才顯示面板切換鈕。
    線上公開版讀不到那個檔,切換鈕整組隱藏,只剩股票面板,帳戶數字永遠不外流。 */
 if(rkHas()){
@@ -5029,7 +5231,7 @@ function reloadScript(src){
 }
 function toast(msg){
   let t=document.getElementById("toast");
-  if(!t){ t=document.createElement("div"); t.id="toast"; document.body.appendChild(t); }
+  if(!t){ t=document.createElement("div"); t.id="toast"; t.setAttribute("role","status"); document.body.appendChild(t); }
   t.textContent=msg; t.classList.add("show");
   clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2800);
 }
@@ -5104,17 +5306,20 @@ function loadData(){
   const prevStamp=DATA&&DATA._updated;
   const [watchlistUrl,dataUrl]=dataUrlsForProtocol(location.protocol);
   // 三個面板的資料一次全更新:股票(watchlist+data)、資產(asset-data)、槓桿(leverage-data)
-  const staticScripts=(location.protocol==="file:")?[]:[reloadScript("asset-data.js"),reloadScript("leverage-data.js")];
+  /* 第一次載入時這兩個檔剛被 <script> 讀過,不用再抓一次(省一倍流量)。按重新整理才重抓 */
+  const staticScripts=(location.protocol==="file:"||FIRST_LOAD)?[]:[reloadScript("asset-data.js"),reloadScript("leverage-data.js")];
   return Promise.all([
     fetchJSON(watchlistUrl+"?t="+Date.now()),
     fetchJSON(dataUrl+"?t="+Date.now(),25000),   // data.json 快 1MB,給久一點
     ...staticScripts,
   ]).then(([wl,data])=>{
-    WL=wl; DATA=data;
+    const nWL=normWL(wl), nData=normData(data);   // 格式不對就丟錯,走下面「讀不到資料」那條路,舊畫面不會被洗掉
+    WL=nWL; DATA=nData;
+    normGlobals();
     buildHoldMaps();
     DATA_DATE=(function(u){
-      if(!u) return "—";
-      const d=new Date(u); if(isNaN(d)) return u.slice(0,10);
+      if(!u) return "-";
+      const d=new Date(u); if(isNaN(d)) return String(u).slice(0,10);
       const p=n=>String(n).padStart(2,"0");
       return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
     })(DATA._updated);
@@ -5149,7 +5354,7 @@ function loadData(){
     if(!DATA){
       const st=document.getElementById("status");
       st.style.display="";
-      st.innerHTML=`<span class="nd">讀不到資料(${why})。</span>
+      st.innerHTML=`<span class="nd">讀不到資料(${escH(why)})。</span>
         <button id="retryBtn" style="margin-left:8px;border:1px solid var(--line2);background:var(--card);
           border-radius:8px;padding:5px 12px;font-size:12.5px;cursor:pointer">重試</button>`;
       const rb=document.getElementById("retryBtn");
