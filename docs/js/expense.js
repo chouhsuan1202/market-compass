@@ -10,7 +10,7 @@ function exShell(){
 }
 
 /* ── 每月支出 dashboard ──────────────────────────────────────────────
-   資料在 expense-data.js(月結時月結時手動更新)。
+   資料在 expense-data.js(月結時手動更新)。
    transactions = 真的花掉的錢(fixed:true 是每月固定帳單)。
    transfers = 錢只是換位置(投資、借出、帳戶之間搬錢、待確認匯款),不進總額。 */
 
@@ -31,7 +31,7 @@ const exDay   = d => d.slice(5).replace("-","/");
    幫大家先付了整張帳單,朋友 Tikkie 還回來的是他們那幾份,剩下的淨額就是他自己那一份,
    那份是真的花掉的錢。全部排掉會少算,全部算進去會多算,取淨額才對。 */
 const exTotal = m => m.transactions.reduce((s,t)=>s+t.amount,0);
-const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const esc = escH;   // 跟其他面板同一支跳脫函式(js/core.js)
 const pctS = (v,base) => base>0 ? Math.round(v/base*100)+"%" : "0%";
 
 /* 各組(固定帳單、生活費、購物娛樂其他、代墊)的順序、顏色、
@@ -39,25 +39,13 @@ const pctS = (v,base) => base>0 ? Math.round(v/base*100)+"%" : "0%";
    每筆交易靠 t.group 歸組,t.cat 留著當細類 */
 const exGroups   = () => (window.EXPENSE_DATA && EXPENSE_DATA.groups) ? EXPENSE_DATA.groups : [];
 /* 朋友還款是負數,同組先加總算淨額,所以各組合計 = 該月總支出 */
-function groupSums(m){
-  const map={};
-  m.transactions.forEach(t=>{ map[t.group]=(map[t.group]||0)+t.amount; });
-  return exGroups().map(g=>({key:g.key,color:g.color,kind:g.kind,v:map[g.key]||0}));
-}
+function groupSums(m){ return sumByGroup(m.transactions, exGroups()); }
 
 /* 趨勢柱狀圖的堆疊順序:由下往上就是 groups 的順序,固定帳單墊底、購物娛樂其他壓最上面。
-   顏色固定不跟金額排序走,月份之間才比得出同一層的高低 */
-function stackLayers(m){
-  /* 只堆淨額為正的組。某一組會變負數是因為朋友把錢還回來、可是那張帳單記在別的月份,
-     這種負數沒辦法畫成一塊,改成從最上面那幾層扣掉,柱頂才會永遠等於折線。 */
-  const gs=groupSums(m);
-  const ls=gs.map(g=>({name:g.key,color:g.color,v:g.v})).filter(x=>x.v>0.005);
-  let left=-gs.filter(g=>g.v<0).reduce((a,g)=>a+g.v,0);
-  for(let i=ls.length-1;i>=0&&left>0.005;i--){
-    const cut=Math.min(ls[i].v,left); ls[i].v-=cut; left-=cut;
-  }
-  return ls.filter(x=>x.v>0.005);
-}
+   顏色固定不跟金額排序走,月份之間才比得出同一層的高低。
+   只堆淨額為正的組。某一組會變負數是因為朋友把錢還回來、可是那張帳單記在別的月份,
+   這種負數沒辦法畫成一塊,改成從最上面那幾層扣掉,柱頂才會永遠等於折線。
+   算式在 js/core.js 的 stackOf,drawTrend 裡呼叫。 */
 
 /* ── 主畫面 ─────────────────────────────────────────────── */
 function render(){
@@ -78,7 +66,7 @@ function render(){
   const i=ms.findIndex(x=>x.month===EXP_MONTH), m=ms[i], prev=ms[i-1];
   const total=exTotal(m), budget=D.fixedBudget;
   /* 總支出目標(2026-08-21 定的 4,000):hero 與趨勢虛線都對這條算。
-     必要開銷 budget 留給必要開銷卡當參考,不再當主線,不然某類某類一出現每個月都紅 */
+     必要開銷 budget 留給必要開銷卡當參考,不再當主線,不然某一類一出現每個月都紅 */
   const goal=D.totalBudget||budget;
   /* 必要(need)= 固定帳單 + 生活費,想要(want)= 購物娛樂其他。
      代墊(neutral)兩邊都不算:錢只是先墊出去再收回來,有正有負 */
@@ -328,10 +316,10 @@ function render(){
   const lgs=exGroups().filter(g=>g.kind!=="neutral" && (ysum[g.key]||0)>0.005);
   if(EX_FOCUS && !lgs.some(g=>g.key===EX_FOCUS)) EX_FOCUS=null;
   /* 第一顆是「全部」,沒篩選時它是亮的,篩選中點它回到全部 */
-  const legend=`<button type="button" class="i all${EX_FOCUS?"":" on"}" data-gk="*">全部</button>`
+  const legend=`<button type="button" class="i all${EX_FOCUS?"":" on"}" data-gk="*" aria-pressed="${!EX_FOCUS}">全部</button>`
    +lgs.map(g=>{
     const on=EX_FOCUS===g.key;
-    return `<button type="button" class="i${on?" on":""}" data-gk="${esc(g.key)}"${
+    return `<button type="button" class="i${on?" on":""}" data-gk="${esc(g.key)}" aria-pressed="${on}"${
       on?` style="background:${g.color}1f;border-color:${g.color};color:${g.color}"`:""
     }><i style="background:${g.color}"></i>${esc(g.key)}</button>`;
   }).join("");
@@ -403,13 +391,15 @@ function drawTrend(ms){
   /* 篩選中:柱子與折線都只看這一組,虛線目標是對總額的,這時不畫 */
   const fk=EX_FOCUS;
   const fCol=fk?((exGroups().find(g=>g.key===fk)||{}).color||"#2f6fed"):null;
-  const gv=(mm,k)=>(groupSums(mm).find(g=>g.key===k)||{}).v||0;
+  /* 每個月的分組合計只算一次,柱子、折線、篩選都共用(以前同一個月會重算好幾次) */
+  const SUMS=ms.map(groupSums);
+  const gv=(mm,k)=>(SUMS[ms.indexOf(mm)].find(g=>g.key===k)||{}).v||0;
 
   const vals=fk?ms.map(mm=>gv(mm,fk)):ms.map(exTotal);
   /* 柱子排掉代墊後,堆疊合計可能高過該月總額,取兩者的大值當上界才不會畫出格子外 */
   const stacks=fk
     ? ms.map(mm=>{ const v=gv(mm,fk); return v>0.005?[{name:fk,color:fCol,v:v}]:[]; })
-    : ms.map(stackLayers);
+    : SUMS.map(stackOf);
   const tops=stacks.map(ls=>ls.reduce((a,l)=>a+l.v,0));
   const goal=D.totalBudget||D.fixedBudget;
   // 沒設目標、月份又全是 0 時 maxV 會是 0,y() 除以 0 整張圖變 NaN,所以至少 1

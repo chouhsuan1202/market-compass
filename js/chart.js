@@ -140,19 +140,19 @@ function buyHistoryHTML(e,last,cost){
   const qFmt=q=> q%1===0? String(q) : q.toFixed(2);
   let totQ=0;
   const rows=buys.map(b=>{
-    const q=Number(b.q||0), p=Number(b.p||0); totQ+=q;
+    const q=Number(b.q||0), p=Number(b.p)>0?Number(b.p):null; totQ+=q;   // 缺價格的那筆顯示「-」,不當成 0 元
     const pl=(last!=null&&p)?(last/p-1)*100:null;
     const plHtml=pl!=null?`<span class="bh-pl ${pl>=0?'up':'dn'}">${pl>=0?'+':''}${pl.toFixed(1)}%</span>`:`<span class="bh-pl"></span>`;
     return `<div class="bh-row">
       <span class="bh-d num"><span class="bh-dot"></span>${escH(fmtDate(b.d))}</span>
       <span class="bh-q num">${qFmt(q)} 股</span>
-      <span class="bh-p num">@ ${num(p,2)}</span>
+      <span class="bh-p num">@ ${p!=null?num(p,2):"-"}</span>
       ${plHtml}</div>`;
   }).join("");
-  const avg=cost!=null?cost:(totQ?buys.reduce((a,b)=>a+Number(b.q||0)*Number(b.p||0),0)/totQ:0);
+  const avg=cost!=null?cost:buyAvg(buys);
   return `<div class="bhist">
     <div class="bh-head"><span class="bh-t">我的買進紀錄</span>
-      <span class="bh-sum">${buys.length} 筆 · 共 ${qFmt(totQ)} 股 · 均價 ${num(avg,2)}</span></div>
+      <span class="bh-sum">${buys.length} 筆 · 共 ${qFmt(totQ)} 股 · 均價 ${avg!=null?num(avg,2):"-"}</span></div>
     ${rows}</div>`;
 }
 /* ══════ 手機版走勢彈窗的零件(設計稿 1c) ══════ */
@@ -174,17 +174,16 @@ function mBuyBlock(e,last,cost){
   const buys=Array.isArray(e.buys)?e.buys.slice():null;
   if(!buys||!buys.length) return "";
   buys.sort((a,b)=> a.d<b.d?-1 : a.d>b.d?1 : 0);
-  const totQ=buys.reduce((a,b)=>a+Number(b.q||0),0);
-  const avg=(cost!=null)?cost:(totQ?buys.reduce((a,b)=>a+Number(b.q||0)*Number(b.p||0),0)/totQ:0);
-  const pl=avg?(last/avg-1)*100:null;
+  const avg=(cost!=null)?cost:buyAvg(buys);
+  const pl=(avg&&last!=null)?(last/avg-1)*100:null;
   const qf=q=> q%1===0?String(q):q.toFixed(2);
   const rows=buys.map(b=>`<div class="mbrow"><i></i>
     <span class="d">${escH(b.d)}</span>
-    <span class="p">${num(Number(b.p||0),2)}</span>
+    <span class="p">${Number(b.p)>0?num(Number(b.p),2):"-"}</span>
     <span class="q">× ${qf(Number(b.q||0))}</span></div>`).join("");
   const plHtml=(pl!=null)
     ? ` · 現價 <b class="${pl>=0?"up":"dn"}">${pl>=0?"+":"−"}${Math.abs(pl).toFixed(1)}%</b>` : "";
-  return `<div class="mbuy-sum"><i></i>買進 ${buys.length} 筆 · 均價 <b>${num(avg,2)}</b>${plHtml}</div>
+  return `<div class="mbuy-sum"><i></i>買進 ${buys.length} 筆 · 均價 <b>${avg!=null?num(avg,2):"-"}</b>${plHtml}</div>
     <div class="mbuy-list">${rows}</div>`;
 }
 
@@ -213,15 +212,16 @@ function renderChart(){
   const last=c[c.length-1], prev=c.length>1?c[c.length-2]:last;
   const chg=(last/prev-1)*100, cCls=chg>=0?"up":"dn", cS=chg>=0?"+":"";
   const seg=(group,val,map)=>`<div class="segrow">`+Object.keys(map).map(kk=>
-      `<button data-${group}="${kk}" class="${CHART.range===kk?'on':''}">${map[kk]}</button>`).join("")+`</div>`;
+      `<button data-${group}="${kk}" class="${CHART.range===kk?'on':''}" aria-pressed="${CHART.range===kk}">${map[kk]}</button>`).join("")+`</div>`;
   const segs=`<div class="segs">
       ${seg("range",CHART.range,RANGE_LBL)}
     </div>`;
   const ip=interpret(r);   // 站上 n/5 改放右下的 sscore,解讀句不再重複帶分數
   // 持倉成本:彈窗頭顯示現價 vs 買點(cost,或 buys 的平均價)
   const buys=Array.isArray(e.buys)?e.buys:null;
-  let cost=(e.cost!=null)?Number(e.cost):null;
-  if(cost==null&&buys&&buys.length) cost=buys.reduce((a,b)=>a+Number(b.p||0),0)/buys.length;
+  // 沒填 cost 時用買點按股數加權的均價(以前是把每筆價格直接平均,缺價格的還當成 0)
+  let cost=(e.cost!=null&&Number(e.cost)>0)?Number(e.cost):null;
+  if(cost==null) cost=buyAvg(buys);
   // 買點與 vs 買點收成一個 chip
   let costLine="";
   if(cost!=null){
@@ -250,7 +250,7 @@ function renderChart(){
     // 標題已經印了代號,副標只留說明文字(設計稿 1c)
     const msub=escH(e.note||e.group||sym);
     const msegs=`<div class="segs"><div class="segrow">`+Object.keys(RANGE_LBL_M).map(kk=>
-        `<button data-range="${kk}" class="${CHART.range===kk?'on':''}">${RANGE_LBL_M[kk]}</button>`
+        `<button data-range="${kk}" class="${CHART.range===kk?'on':''}" aria-pressed="${CHART.range===kk}">${RANGE_LBL_M[kk]}</button>`
       ).join("")+`</div></div>`;
     document.getElementById("chartSheet").innerHTML=
       `<div class="grab"></div>

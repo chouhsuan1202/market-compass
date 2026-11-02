@@ -23,12 +23,6 @@ function dotsHtml(r){
     return `<span class="dot ${dotCls(m)}"><i></i>${lbl}</span>`;
   }).join("");
 }
-function yrHtml(r){
-  const m=maByK(r,240);
-  if(!m||m.v==null) return `<span class="yr na">-</span>`;
-  const cls=m.above?"up":"dn", s=m.diff>=0?"+":"";
-  return `<span class="yr ${cls}">${s}${m.diff.toFixed(1)}%</span>`;
-}
 
 /* ---------- macro tab ---------- */
 // 大盤分頁最頂的「持有大卡」（全寬,可點開彈窗）。歐元 ETF 都用這個。
@@ -164,45 +158,6 @@ function blistHtml(rowsHtml){
     ${rowsHtml}
   </div>`;
 }
-function indexCard(sym){
-  const meta=IDX_META[sym]||{short:escH(sym),full:""};
-  const r=DATA[sym];
-  if(!r||r.error){
-    return `<div class="icard"><div class="top"><span class="short">${meta.short}</span><span class="full">${meta.full}</span></div>
-      <div class="naidx">${escH((r&&r.error)||"無資料")}</div></div>`;
-  }
-  const px=r.price!=null?r.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"-";
-  if(sym==="^VIX"){
-    const v=r.price;
-    let txt,col;
-    if(v>30){txt="高波動";col="var(--red-t)";}
-    else if(v>=20){txt="偏高";col="var(--yellow-t)";}
-    else {txt="平靜";col="var(--green-t)";}
-    return `<div class="icard">
-      <div class="top"><span class="short">${meta.short}</span><span class="full">${meta.full}</span></div>
-      <div class="px">${px}</div>
-      <div><span style="display:inline-block;margin-top:4px;font-size:13px;font-weight:800;color:#fff;padding:4px 12px;border-radius:8px;background:${col}">${txt}</span></div>
-    </div>`;
-  }
-  const m240=maByK(r,240);
-  const yr=(m240&&m240.v!=null)?`<span class="yr ${m240.above?'up':'dn'}"><span class="lbl">vs 年線 </span>${m240.diff>=0?'+':''}${m240.diff.toFixed(1)}%</span>`
-                               :`<span class="yr"><span class="lbl">vs 年線 </span>-</span>`;
-  const fb=r.fallback?`<span class="fb">指數免費方案未支援,以 ${escH(r.src)} 代替</span>`:"";
-  const ip=interpret(r);
-  const ipHtml=ip?`<div class="interp">↳ ${ip}</div>`:"";
-  const X=r.score, Y=r.valid;
-  const pillBg = (X===Y)?"var(--green-t)":(X===0)?"var(--red-t)":"var(--yellow-t)";
-  const pillHtml=`<span class="mapill" style="background:${pillBg}">站上 ${X}/${Y} 均線</span>`;
-  return `<div class="icard">
-    <div class="top"><span class="short">${meta.short}</span><span class="full">${meta.full}</span></div>
-    <div class="px">${px}</div>
-    <div>${yr}</div>
-    <div class="dots">${dotsHtml(r)}</div>
-    <div class="foot">${pillHtml}</div>
-    ${fb}
-    ${ipHtml}
-  </div>`;
-}
 function renderMacro(){
   // 報酬線圖 2026-08-27 搬到槓桿風險頁(RISK_VIEW="perf"):
   // 股票面板講市場、要不要買;線圖講自己做得怎樣,跟槓桿風險同一件事。
@@ -254,7 +209,6 @@ function buildHoldMaps(){
   HOLD_DN  = new Map(held.map(h=>[h.s, h.dn||h.s]));
 }
 function allTracked(){ return [...(WL.market_holdings||[]), ...(WL.holdings||[])]; }
-function symLabel(s){ return HOLD_SET.has(s) ? `${HOLD_DN.get(s)}(持)` : s; }
 
 function crossSignals(){
   const bull=[], bear=[];
@@ -292,27 +246,13 @@ function mergeNear(arr){
   arr.forEach(x=>{ if(!map.has(x.s)) map.set(x.s,[]); map.get(x.s).push(x.lbl); });
   return [...map.entries()].map(([s,ls])=>`${symPlain(s)} ${ls.join("/")}`);
 }
-function vixNoteHtml(){
-  const v=DATA["^VIX"];
-  let val="無資料", txt="", col="var(--faint)";
-  if(v&&!v.error&&v.price!=null){
-    const p=v.price; val=p.toFixed(1);
-    if(p>30){txt="高波動";col="var(--red-t)";}
-    else if(p>=20){txt="偏高";col="var(--yellow-t)";}
-    else {txt="平靜";col="var(--green-t)";}
-  }
-  const tag=txt?`<span class="vixtag" style="background:${col}">${txt}</span>`:"";
-  return `<div class="vixnote"><span class="vixk">◷ VIX 恐慌溫度計</span><b>${val}</b>${tag}</div>`;
-}
 /* VIX 與 NDX 檔位併成一行,兩者中間用細分隔。VIX 只是參考數字,不進檔位判斷 */
 function vixNdxLine(){
   const v=DATA["^VIX"];
   let val="無資料", txt="", col="var(--faint)";
   if(v&&!v.error&&v.price!=null){
-    const p=v.price; val=p.toFixed(1);
-    if(p>30){txt="高波動";col="var(--red-t)";}
-    else if(p>=20){txt="偏高";col="var(--yellow-t)";}
-    else {txt="平靜";col="var(--green-t)";}
+    const lv=vixLevel(v.price); val=v.price.toFixed(1); txt=VIX_TXT[lv];
+    col=({high:"var(--red-t)",mid:"var(--yellow-t)",calm:"var(--green-t)"})[lv];
   }
   const L=ladderState();
   const gcol=({up:"var(--green-t)",warn:"var(--yellow-t)",dn:"var(--red-t)"})[L&&L.kind]||"var(--dot-na)";
@@ -335,15 +275,7 @@ function vixNdxLine(){
 function addLevelOf(sym){
   const held=(WL.market_holdings||[]).some(h=>h.s===sym);   // 加減碼只看大盤,個股不算
   if(!held) return null;
-  const r=DATA[sym];
-  if(!r||r.error||!r.mas) return null;
-  let best=null;
-  [60,120,240].forEach(k=>{
-    const m=maByK(r,k);
-    if(!m||m.v==null||m.above) return;
-    if(!best||ADD_LV[k].n>best.lv) best={k,lv:ADD_LV[k].n,lbl:ADD_LV[k].lbl,diff:m.diff};
-  });
-  return best;
+  return maAddLevel(DATA[sym]);
 }
 function addBadgeFor(sym){
   const a=addLevelOf(sym);
@@ -353,13 +285,7 @@ function addBadgeFor(sym){
 function cutLevelOf(sym){
   const held=(WL.market_holdings||[]).some(h=>h.s===sym);   // 加減碼只看大盤,個股不算
   if(!held) return null;
-  const r=DATA[sym];
-  if(!r||r.error||!r.mas||r.valid===0) return null;
-  if(r.score!==r.valid) return null;                 // 沒站上全部均線就不是減碼點
-  const m=maByK(r,240);
-  if(!m||m.v==null) return null;
-  const hit=CUT_TH.find(t=>m.diff>=t.d);
-  return hit?{lv:hit.n,diff:m.diff,th:hit.d}:null;
+  return maCutLevel(DATA[sym]);
 }
 function cutBadgeFor(sym){
   const c=cutLevelOf(sym);
@@ -384,14 +310,7 @@ function addSignals(){
   const held=(WL.market_holdings||[]);   // 加減碼只看大盤,個股不算
   const out=[];
   held.forEach(h=>{
-    const r=DATA[h.s];
-    if(!r||r.error||!r.mas) return;
-    let best=null;
-    [60,120,240].forEach(k=>{
-      const m=maByK(r,k);
-      if(!m||m.v==null||m.above) return;              // 站上就不是加碼點
-      if(!best||ADD_LV[k].n>best.lv) best={k,lv:ADD_LV[k].n,lbl:ADD_LV[k].lbl,diff:m.diff};
-    });
+    const best=maAddLevel(DATA[h.s]);
     if(best) out.push({s:h.s,dn:h.dn||h.s,...best});
   });
   return out.sort((a,b)=>b.lv-a.lv||a.diff-b.diff);   // 訊號強的在前,同級跌最深的在前
@@ -452,10 +371,8 @@ function mPulseCells(){
   const v=DATA["^VIX"];
   let val="-", vtag="", vcol="var(--faint)";
   if(v&&!v.error&&v.price!=null){
-    const p=v.price; val=p.toFixed(1);
-    if(p>30){vtag="高波動";vcol="var(--dn)";}
-    else if(p>=20){vtag="偏高";vcol="var(--nearink)";}
-    else {vtag="平靜";vcol="var(--up)";}
+    const lv=vixLevel(v.price); val=v.price.toFixed(1); vtag=VIX_TXT[lv];
+    vcol=({high:"var(--dn)",mid:"var(--nearink)",calm:"var(--up)"})[lv];
   }
   const L=ladderState(), hh=hhLev();
   const cells=[
@@ -609,10 +526,8 @@ function railPulseHtml(){
   const v=DATA["^VIX"];
   let val="-", txt="", col="var(--dot-na)";
   if(v&&!v.error&&v.price!=null){
-    const p=v.price; val=p.toFixed(1);
-    if(p>30){txt="高波動";col="var(--red-t)";}
-    else if(p>=20){txt="偏高";col="var(--yellow-t)";}
-    else {txt="平靜";col="var(--green-t)";}
+    const lv=vixLevel(v.price); val=v.price.toFixed(1); txt=VIX_TXT[lv];
+    col=({high:"var(--red-t)",mid:"var(--yellow-t)",calm:"var(--green-t)"})[lv];
   }
   const L=ladderState();
   const gcol=({up:"var(--green-t)",warn:"var(--yellow-t)",dn:"var(--red-t)"})[L&&L.kind]||"var(--dot-na)";

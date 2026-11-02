@@ -218,9 +218,6 @@ function renderRisk(){
   const YT_ETF=yuantaHoldings().filter(h=>!isStockHold(h,STKSET));
   const totMv=H.reduce((a,h)=>a+(+h.market_value||0),0)||1;
   const segColor=(name,i)=>RK_SEG[String(name||"").toUpperCase()]||RK_FB[i%RK_FB.length];   // 只回固定色票,不會吐資料字串
-  const segs=H.map((h,i)=>{ const mv=+h.market_value||0, w=mv/totMv*100;
-    const lbl=w>=9?`${escH(h.name)} ${Math.round(w)}%`:"";
-    return `<div class="seg" style="width:${w}%;background:${segColor(h.name,i)};color:${inkOn(segColor(h.name,i))}">${lbl}</div>`; }).join("");
   // ── 全帳戶總敞口:資料來自 ASSET_DATA.leverage ──
   const hh=hhLev();
   const hhL=ladderState();
@@ -230,9 +227,8 @@ function renderRisk(){
      檔位表規則不放在這裡,規則類內容集中在股票面板的規則彈窗(openRules)。 ══ */
   if(isMobile()){
     const barCol={safe:"var(--up2)",watch:"var(--yellow)",danger:"var(--red)"};
-    const kindOf=(v,good,warn)=> v==null?"safe":(v>=good?"safe":v>=warn?"watch":"danger");
-    const mcKind=kindOf(st.marginCallDrop,.5,.25);
-    const bcKind=kindOf(st.breachDrop,.5,.25);
+    const mcKind=rkMarginCallKind(st.marginCallDrop);
+    const bcKind=rkBreachKind(st.breachDrop);
     const pctW=v=>Math.max(Math.min((v||0)*100,100),0);
     const pillKind={safe:"up",watch:"warn",danger:"dn"};
 
@@ -278,8 +274,8 @@ function renderRisk(){
       <span class="v" style="color:${x.c}">${x.v}</span></div>`).join("");
     const ibLine=(+s.excess_liquidity||0);
     const ibLoanMax=Math.max(s.loan,0)+ibLine;
-    const ibNote=hh?`<div class="dm-foot">上面的 <b>40%</b> 線是質押成數線(借款 ÷ 持倉市值),只算 IB 帳戶內。
-      <b>IB 真正的追繳線</b>在借款 ${rkMoney(ibLoanMax,cur)}(${s.gross>0?(ibLoanMax/s.gross*100).toFixed(0):"-"}%,超出這個刻度),
+    const ibNote=hh?`<div class="dm-foot">上面的 <b>40%</b> 線是質押成數線(借款 ÷ 持倉市值),只算券商帳戶內。
+      <b>券商真正的追繳線</b>在借款 ${rkMoney(ibLoanMax,cur)}(${s.gross>0?(ibLoanMax/s.gross*100).toFixed(0):"-"}%,超出這個刻度),
       現在還可以再借 <b>${rkMoney(ibLine,cur)}</b> 才碰到。</div>`:"";
 
     // ③ 離警戒多遠:現金緩衝沒有條,只有數字與說明
@@ -353,27 +349,11 @@ function renderRisk(){
       <div class="dm-disc">40% 規則是風險緩衝,不是保證不會被追繳。這是公開示範版,所有數字都是編的。</div>`;
     return;
   }
-  // 持倉表格
-  const rows=H.map((h,i)=>{ const mv=+h.market_value||0, lev=+h.leverage||1;
-    const share=mv/totMv, eff=mv*lev;
-    const levTag=lev>1?`<span class="rk-lev">槓桿 ${lev}x</span>`:"";
-    return `<tr>
-      <td><span class="tname"><i style="background:${segColor(h.name,i)}"></i>
-        <span><span class="tn">${escH(h.name)}</span> ${levTag}<br><span class="tg">${escH(h.ticker||"")}</span></span></span></td>
-      <td>${rkMoney(mv,"")}</td>
-      <td class="dim">${(share*100).toFixed(0)}%</td>
-      <td class="dim">${lev}x</td>
-      <td class="dim">${rkMoney(eff,"")}</td>
-    </tr>`; }).join("");
-  // 承受力 bar 顏色
-  const mcKind=st.marginCallDrop==null?"safe":st.marginCallDrop>=.5?"safe":st.marginCallDrop>=.25?"watch":"danger";
-  const bcKind=st.breachDrop==null?"safe":st.breachDrop>=.2?"safe":st.breachDrop>0?"watch":"danger";
+  // 承受力 bar 顏色(門檻與手機版共用,見 js/core.js)
+  const mcKind=rkMarginCallKind(st.marginCallDrop);
+  const bcKind=rkBreachKind(st.breachDrop);
   const barCol={safe:"#0e9f6e",watch:"#e0a132",danger:"#e5484d"};
-  // 持倉曝險配置的表頭(設計稿 C4:標的 / 市值 / 占比 / 槓桿 / 等效曝險)
-  const allocTbl=`<table class="rk-tbl alloc">
-    <thead><tr><th>標的</th><th>市值</th><th>占比</th><th>槓桿</th><th>等效曝險</th></tr></thead>
-    <tbody>${rows}</tbody></table>`;
-  /* 持倉卡(桌面):IB 與券商 B共用同一個版型。unit 是金額單位,foot 是卡片底部那行字。 */
+  /* 持倉卡(桌面):券商 A 與券商 B 共用同一個版型。unit 是金額單位,foot 是卡片底部那行字。 */
   function allocCard(title,sub,list,unit,foot,mix){
     // 依「等效曝險」由大到小排(市值 x 槓桿),正二會被放大,所以排序跟市值不一定一樣。
     // 上面的色條與下面的表用同一份順序,兩者才對得起來。
@@ -418,7 +398,7 @@ function renderRisk(){
       + (ALLOC_SORT==="lev"&&nLev<HH.length
         ? subtotal(h=>(+h.leverage||1)<=1,"一倍部位小計") : "");
     const seg=[["risk","風險排序"],["lev","槓桿分組"]].map(([k,t])=>
-      `<button data-allocsort="${k}" class="${ALLOC_SORT===k?"on":""}">${t}</button>`).join("");
+      `<button data-allocsort="${k}" class="${ALLOC_SORT===k?"on":""}" aria-pressed="${ALLOC_SORT===k}">${t}</button>`).join("");
     return `<div class="rk-card">
       <div class="rk-h"><h2 style="font-size:15px">${title}</h2><span class="rk-sub">${sub}</span>
         <div class="tl-seg alloc-seg">${seg}</div></div>

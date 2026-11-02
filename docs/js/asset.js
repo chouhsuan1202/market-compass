@@ -66,16 +66,26 @@ function renderAsset(){
       const def=hv.textContent;
       const paths=[...card.querySelectorAll("path.sl")];
       const lgs=[...card.querySelectorAll(".lg span")];
-      paths.forEach(pa=>pa.addEventListener("mouseenter",()=>{
+      const show=pa=>{
         hv.innerHTML=`${escH(pa.dataset.n)} · <b>${escH(pa.dataset.v)}</b> TWD · ${escH(pa.dataset.p)}%`;
         hv.classList.add("on");
         paths.forEach(q=>q.style.opacity=(q===pa?"1":".25"));
         lgs.forEach(sp=>sp.style.opacity=(sp.dataset.n===pa.dataset.n?"1":".3"));
-      }));
-      card.addEventListener("mouseleave",()=>{
+      };
+      const reset=()=>{
         hv.textContent=def; hv.classList.remove("on");
         paths.forEach(q=>q.style.opacity="1");
         lgs.forEach(sp=>sp.style.opacity="1");
+      };
+      paths.forEach(pa=>pa.addEventListener("mouseenter",()=>show(pa)));
+      card.addEventListener("mouseleave",reset);
+      /* 鍵盤:圖例每一項可以 Tab 到,焦點停在哪一項就顯示那一塊的金額(滑鼠的效果不變) */
+      hv.setAttribute("aria-live","polite");
+      lgs.forEach(sp=>{
+        const pa=paths.find(q=>q.dataset.n===sp.dataset.n); if(!pa) return;
+        sp.tabIndex=0;
+        sp.addEventListener("focus",()=>show(pa));
+        sp.addEventListener("blur",reset);
       });
     });
   }
@@ -210,8 +220,8 @@ function renderAsset(){
         <b class="${df>=0?"up":"dn"}">(${df>=0?"+":""}${df} 萬)</b></div>`;
     }
     const seg=`<div class="tl-seg">
-      <button data-tlmode="year" class="${TL_MODE==="year"?"on":""}">年</button>
-      <button data-tlmode="month" class="${TL_MODE==="month"?"on":""}">月</button></div>`;
+      <button data-tlmode="year" class="${TL_MODE==="year"?"on":""}" aria-pressed="${TL_MODE==="year"}">年</button>
+      <button data-tlmode="month" class="${TL_MODE==="month"?"on":""}" aria-pressed="${TL_MODE==="month"}">月</button></div>`;
     const body=TL_MODE==="month"
       ?(mPts.length>=2?timelineSVG(mPts,true):`<div class="tl-empty">最近六個月的紀錄不足兩筆,畫不成線。</div>`)
       :tl;
@@ -304,9 +314,6 @@ function renderAsset(){
 
     el.innerHTML=heroCard+splitCard+twoCards+tlCardD;
     bindDonutHover(el);
-    el.querySelectorAll("[data-perf]").forEach(b=>b.addEventListener("click",()=>{
-      PERF_ON = PERF_ON===b.dataset.perf ? null : b.dataset.perf; renderAsset();
-    }));
     return;
   }
   /* ══ 手機版 v3(2026-08-17 設計稿):

@@ -220,4 +220,79 @@ function levMix(list){
   (list||[]).forEach(h=>{ const mv=+h.market_value||0; if((+h.leverage||1)>1) two+=mv; else one+=mv; });
   return {two, one, pct: one>0?two/one*100:null};
 }
+/* 下跌承受力的顏色分級。手機與桌面共用同一套門檻(以前手機版把兩條都寫成 50%/25%,
+   同一個數字在手機是黃色、在桌面是綠色)。
+   距券商追繳:還能跌 50% 以上安全,25% 以上注意,更少危險。
+   碰到 40% 成數線:還能跌 20% 以上安全,還沒碰到算注意,已經超過(0 或負數)危險。 */
+function rkMarginCallKind(v){ return v==null?"safe":v>=.5?"safe":v>=.25?"watch":"danger"; }
+function rkBreachKind(v){ return v==null?"safe":v>=.2?"safe":v>0?"watch":"danger"; }
 function rkBorrowKind(r){ if(r==null) return "safe"; return r<=RK_LIMIT.safeMax?"safe":r<=RK_LIMIT.watchMax?"watch":"danger"; }
+
+/* 以下是共用的小算式:原本在好幾個地方各寫一次,收在這裡只寫一份 */
+
+/* VIX 分級:30 以上高波動、20 到 30 偏高、20 以下平靜。四張卡共用同一個門檻 */
+function vixLevel(p){
+  if(p==null||!isFinite(p)) return null;
+  return p>30?"high":p>=20?"mid":"calm";
+}
+const VIX_TXT={high:"高波動", mid:"偏高", calm:"平靜"};
+
+/* 單一標的的加碼判定(不管有沒有持有):跌破季線/半年線/年線取最深那條 */
+function maAddLevel(r){
+  if(!r||r.error||!r.mas) return null;
+  let best=null;
+  [60,120,240].forEach(k=>{
+    const m=maByK(r,k);
+    if(!m||m.v==null||m.above) return;              // 站上就不是加碼點
+    if(!best||ADD_LV[k].n>best.lv) best={k,lv:ADD_LV[k].n,lbl:ADD_LV[k].lbl,diff:m.diff};
+  });
+  return best;
+}
+/* 單一標的的減碼判定:站上全部均線,而且年線乖離到門檻 */
+function maCutLevel(r){
+  if(!r||r.error||!r.mas||r.valid===0) return null;
+  if(r.score!==r.valid) return null;                 // 沒站上全部均線就不是減碼點
+  const m=maByK(r,240);
+  if(!m||m.v==null) return null;
+  const hit=CUT_TH.find(t=>m.diff>=t.d);
+  return hit?{lv:hit.n,diff:m.diff,th:hit.d}:null;
+}
+
+/* 買進均價:按股數加權。缺價格或股數的那筆不算進去(以前會被當成 0 元把均價拉低)。
+   全部都缺就回 null。 */
+function buyAvg(buys){
+  let q=0, amt=0;
+  (Array.isArray(buys)?buys:[]).forEach(b=>{
+    const bq=Number(b&&b.q), bp=Number(b&&b.p);
+    if(!(bq>0)||!(bp>0)) return;
+    q+=bq; amt+=bq*bp;
+  });
+  return q>0?amt/q:null;
+}
+
+/* 支出:同組先加總算淨額(朋友還款是負數),順序照 groups */
+function sumByGroup(transactions, groups){
+  const map={};
+  (transactions||[]).forEach(t=>{ map[t.group]=(map[t.group]||0)+t.amount; });
+  return (groups||[]).map(g=>({key:g.key,color:g.color,kind:g.kind,v:map[g.key]||0}));
+}
+/* 支出趨勢柱的堆疊:只堆淨額為正的組,負的那幾組從最上面幾層扣掉,
+   柱頂才會永遠等於該月總額 */
+function stackOf(gs){
+  const ls=gs.map(g=>({name:g.key,color:g.color,v:g.v})).filter(x=>x.v>0.005);
+  let left=-gs.filter(g=>g.v<0).reduce((a,g)=>a+g.v,0);
+  for(let i=ls.length-1;i>=0&&left>0.005;i--){
+    const cut=Math.min(ls[i].v,left); ls[i].v-=cut; left-=cut;
+  }
+  return ls.filter(x=>x.v>0.005);
+}
+
+/* 瀏覽器裡這些都是全域函式;在 Node 裡(npm test 的單元測試)用 require 拿得到 */
+if(typeof module==="object"&&module.exports){
+  module.exports={escH, safeColor, toNum, hexLum, contrastRatio, inkOn, readableOn, objArr, isISODay,
+    normData, normWL, normAsset, normExpense, normSnaps, maByK, interpret,
+    LADDER_BASE, LADDER, LADDER_EPS, RK_MARGIN_RATE, fmtLev, ladderTarget,
+    perfResample, perfPct, perfPathD, ADD_LV, CUT_TH, RK_LIMIT,
+    rkNorm, rkExpo, rkStress, rkMoney, rkPct, levMix, rkBorrowKind, rkMarginCallKind, rkBreachKind,
+    vixLevel, VIX_TXT, maAddLevel, maCutLevel, buyAvg, sumByGroup, stackOf};
+}

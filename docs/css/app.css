@@ -67,6 +67,8 @@
   #todoSheet .td-add input{flex:1;border:1px solid var(--line);border-radius:8px;padding:8px 12px;
     font-size:13px;font-family:inherit;color:var(--ink);background:#fff;outline:none;}
   #todoSheet .td-add input:focus{border-color:#9aa8c0;}
+  /* 上面那行 outline:none 會把全站的鍵盤焦點框也蓋掉,鍵盤使用者要看得到現在在哪 */
+  #todoSheet .td-add input:focus-visible{outline:2px solid #2f6fed;outline-offset:1px;}
   #todoSheet .td-add button{border:1px solid var(--line);background:#101418;color:#fff;border-radius:8px;
     padding:0 16px;font-size:12.5px;font-weight:700;cursor:pointer;}
   /* 按重新整理之後的小提示:告訴你抓到的是不是新的一份,免得以為按鈕壞了 */
@@ -1138,7 +1140,7 @@
   .rk-tbl .tname .tn{font-weight:700;color:var(--ink);font-size:14px;}
   .rk-tbl .tname .tg{font-size:11.5px;color:var(--faint);font-weight:400;font-family:"Noto Sans TC",sans-serif;}
   .rk-tbl td.dim{color:#676e79;font-weight:500;}
-  .rk-lev{height:18px;padding:0 6px;border-radius:5px;background:#fdf6ea;color:#93590d;font:500 10px/18px "Noto Sans TC";display:inline-block;}
+  .rk-lev{height:18px;padding:0 6px;border-radius:5px;background:#fdf6ea;color:#93590d;font:500 10px/18px "Noto Sans TC",sans-serif;display:inline-block;}
   /* 詳細數字折疊 */
   .rk-toggle{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;
     background:#fafbfc;border:1px solid var(--line2);border-radius:14px;cursor:pointer;}
@@ -1659,3 +1661,8 @@
       color:var(--muted);font:600 13px/1 "Noto Sans TC",sans-serif;cursor:pointer;}
     #afSeg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(16,20,24,.14);}
   }
+/* 系統設定「減少動態效果」時,轉圈、淡入淡出都關掉(WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;scroll-behavior:auto !important;}
+}

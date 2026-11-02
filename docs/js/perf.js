@@ -152,7 +152,7 @@ function perfCardHTML(){
       還沒有足夠的資料。每天自動存一筆,累積兩天以上就會開始畫線。</div></section>`);
 
   const chgOf=k=>P[k]&&P[k].length?P[k][P[k].length-1].v-100:null;
-  // 流動資產 = IB 與券商 B兩條指數的等權平均,缺的那天用前一筆補
+  // 流動資產 = 券商 A 與券商 B 兩條指數的等權平均,缺的那天用前一筆補
   const combo=(()=>{
     const a=P.ib||[], b=P.yuanta||[];
     if(a.length<2||b.length<2) return null;
@@ -240,7 +240,7 @@ function perfCardHTML(){
     </div></section>`;
 
   const segs=[["day","日"],["week","週"],["month","月"],["year","年"]].map(([k,t])=>
-    `<button data-perfx="${k}" style="height:26px;padding:0 14px;border:none;border-radius:7px;cursor:pointer;
+    `<button data-perfx="${k}" aria-pressed="${PERF_X===k}" style="height:26px;padding:0 14px;border:none;border-radius:7px;cursor:pointer;
       font-size:12px;line-height:1;background:${PERF_X===k?"#fff":"transparent"};
       box-shadow:${PERF_X===k?"0 1px 2px rgba(16,20,24,.12)":"none"};
       color:${PERF_X===k?"#101418":"var(--faint)"};font-weight:${PERF_X===k?700:600}">${t}</button>`).join("");
@@ -281,7 +281,7 @@ function perfCardHTML(){
         bChg,pts[0].d+" 起",dd,dd>=0?"贏大盤":"落後大盤"))
       +perfChartSVG(series,{xmode:PERF_X,smooth:false,dens:8})
       +footHTML(isLiq
-        ?"合併線 = IB 與券商 B兩條指數的等權平均（缺日用前一筆補）。起點都設成 100，100 以上就是賺；入金已扣。"
+        ?"合併線 = 券商 A 與券商 B 兩條指數的等權平均（缺日用前一筆補）。起點都設成 100，100 以上就是賺；入金已扣。"
         :"兩條線起點都設成 100，100 以上就是賺。入金記在 <b>asset-flows.json</b>，沒記的話薪水會被算成獲利。");
     return wrap(chips+shell(name+" vs S&P 500",
       pts[0].d+" 起 · "+(isLiq?"兩帳戶合併 · 已扣掉入金":"已扣掉入金 · 時間加權報酬"), body));
@@ -314,7 +314,7 @@ function perfCardHTML(){
       bEnd,firstBuy+"（首買日）起",dd,ddSub,idx))
     +perfChartSVG(series,{timeX:true,smooth:true,dens:8,marks})
     +footHTML((isSelf?perfEsc(B.dn)+" 本身就追蹤"+idx+"，兩條線會重疊。"
-      :"對照線是 "+idx+"（用 "+benchSym.replace(/\..*/,'')+" 這檔歐元 ETF 當代理）。")
+      :"對照線是 "+idx+"（用 "+benchSym.replace(/\..*/,'')+" 這檔 ETF 當代理）。")
       +"起點 = 首買日收盤設 100，▲ 滑過看股數與價格。");
   const levTag=(B.lev||1)>1?" ·正二 2x":"";
   return wrap(chips+shell(B.dn+" vs "+idx+levTag,

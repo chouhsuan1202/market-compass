@@ -31,15 +31,18 @@ function renderAF(){
     <div id="afSeg">${seg("expense","支出")}${seg("asset","資產")}</div>`;
 }
 
+/* 桌面「資產支出」是一頁,asset 與 expense 都讓同一顆亮著(那顆的 data-panel 是 expense) */
+function syncPanelToggle(){
+  const togKey=(!isMobile()&&PANEL==="asset")?"expense":PANEL;
+  document.querySelectorAll("#panelToggle button").forEach(b=>{ const on=b.dataset.panel===togKey;
+    b.classList.toggle("on",on); b.setAttribute("aria-pressed",on); });
+}
 function switchPanel(p){
   if(p==="risk"&&!rkHas()) return;
   if(p==="asset"&&!window.ASSET_DATA) return;
   if(p==="expense"&&!window.EXPENSE_DATA) return;
   PANEL=p;
-  // 桌面「資產支出」是一頁,asset 與 expense 都讓同一顆亮著(那顆的 data-panel 是 expense)
-  const togKey=(!isMobile()&&p==="asset")?"expense":p;
-  document.querySelectorAll("#panelToggle button").forEach(b=>{ const on=b.dataset.panel===togKey;
-    b.classList.toggle("on",on); b.setAttribute("aria-pressed",on); });
+  syncPanelToggle();
   document.getElementById("stockPanel").hidden = p!=="stock";
   document.getElementById("stockChrome").hidden = p!=="stock";
   const rp=document.getElementById("riskPanel"); rp.hidden = p!=="risk";
@@ -255,6 +258,18 @@ function modalFocus(id){
   const f=m&&m.querySelector(".sclose,.td-x,button");
   if(f) f.focus({preventScroll:true});
 }
+/* Tab 在彈窗裡繞圈,不會跑到彈窗後面看不到的按鈕上(WCAG 2.4.3) */
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Tab") return;
+  const m=document.querySelector(".modal.show"); if(!m) return;
+  const f=[...m.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')]
+    .filter(x=>!x.disabled&&x.offsetParent!==null);
+  if(!f.length) return;
+  const first=f[0], last=f[f.length-1];
+  if(!m.contains(document.activeElement)){ e.preventDefault(); first.focus(); }
+  else if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+});
 function modalBlur(id){
   const m=document.getElementById(id);
   if(!m||!m.classList.contains("show")) return false;
@@ -469,6 +484,9 @@ loadData();
 window.matchMedia("(max-width:720px)"),function(){
   switchTab(CUR_TAB);
   if(PANEL==="asset") renderAsset();
+  // 資產支出的頂部總覽只在桌面出現,頁首標題只在手機跟著面板換。
+  // 以前跨過 720px 不會重算,桌面縮成手機時總覽還掛著、標題也沒換。
+  renderAF(); syncHeader(); syncPanelToggle();
   if(!DATA||!WL) return;
   renderTopStrip(); renderMacro();
   if(PANEL==="risk") renderRisk();

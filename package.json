@@ -3,7 +3,11 @@
   "private": true,
   "description": "Compass (Beta) 示範版的自動測試。頁面本身不需要任何建置步驟。",
   "scripts": {
-    "test": "node --test --test-concurrency=1 tests/site.test.mjs"
+    "start": "node scripts/serve.mjs",
+    "sync": "node scripts/sync-docs.mjs",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test tests/core.test.mjs",
+    "test:e2e": "node --test --test-concurrency=1 tests/site.test.mjs"
   },
   "devDependencies": {
     "axe-core": "4.10.2",

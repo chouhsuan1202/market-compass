@@ -50,8 +50,6 @@ function todoList(){
   const hide=todoHidden();
   return [...autoTodos(),...RK_TODO,...myTodos()].filter(t=>!hide[t.title]);
 }
-function todoCount(){ const L=todoList(), D=todoDone();
-  return {done:L.filter(t=>D[t.title]).length, all:L.length}; }
 
 function renderTodoSheet(){
   const el=document.getElementById("todoSheet"); if(!el) return;
