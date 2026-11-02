@@ -1,0 +1,14 @@
+  /* 示範版的標題用粉紅色,跟自用那份一眼分得開 */
+  .brandcol h1{color:#e0218a;}
+  /* 只有一個帳戶,持倉卡吃滿整列 */
+  .rk-holds{grid-template-columns:1fr;}
+  /* 借款量表拿掉之後左欄變短,置中比較不會空一大塊 */
+  .rk-main-left{display:flex;flex-direction:column;justify-content:center;}
+  /* 手機槓桿頁的「風險/線圖」切換鈕:.tl-seg 的樣式原本只寫在桌面(721px 以上),
+     手機上變成瀏覽器預設的方框按鈕。沿用同一套分段鈕樣式 */
+  @media(max-width:720px){
+    .tl-seg{display:inline-flex;gap:3px;padding:3px;background:#e4e7ec;border-radius:8px;}
+    .tl-seg button{height:28px;padding:0 14px;border:none;border-radius:6px;background:transparent;
+      color:var(--muted);font:600 12.5px/1 "Noto Sans TC",sans-serif;cursor:pointer;}
+    .tl-seg button.on{background:#fff;box-shadow:0 1px 2px rgba(16,20,24,.12);color:var(--ink);font-weight:700;}
+  }

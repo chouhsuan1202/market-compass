@@ -4,11 +4,22 @@
    不可以改成 cache first，那會讓面板顯示過期的價格與均線訊號。
    改動這個檔案時記得把 CACHE 的版本號加一，舊快取才會被清掉。 */
 
-var CACHE = "compass-demo-v94";
+var CACHE = "compass-demo-v95";
 
 var PRECACHE = [
   "./",
   "index.html",
+  "css/app.css",
+  "css/demo.css",
+  "js/core.js",
+  "js/stocks.js",
+  "js/todo.js",
+  "js/perf.js",
+  "js/risk.js",
+  "js/asset.js",
+  "js/expense.js",
+  "js/chart.js",
+  "js/app.js",
   "manifest.json",
   "icon-192.png",
   "icon-512.png",

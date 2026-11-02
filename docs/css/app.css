@@ -1,0 +1,1661 @@
+  /* 色彩系統依完稿規格(2026-08-11 上色版) */
+  :root{
+    color-scheme:light;
+    --bg:#eef0f4; --card:#fff; --line:#edeff2; --line2:#e3e6ea;
+    --ink:#101418; --muted:#5f6673; --faint:#676e79;   /* 2026-11 對比調深一階,過 WCAG AA */
+    --up:#0b7a55; --up2:#12a670; --upbg:#e7f6ef; --dn:#c2373b; --dn2:#e5484d; --dnbg:#fdeeee;
+    --dot-up:#12a670; --dot-dn:#e5484d; --dot-na:#cbd5e1;
+    --add:#1d4ed8; --addbg:#eef4ff;
+    --green:#0e9f6e; --yellow:#f59e0b; --red:#e5484d;
+    /* 白字標籤專用的深一階(VIX、站上 n/5、檔位),白字才過 WCAG AA */
+    --green-t:#0b7a55; --yellow-t:#b45309; --red-t:#c2373b;
+    --nearbg:#fff4e5; --nearink:#b45309;
+    --cline:#12a670;
+    --num:"Manrope",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  /* hidden 屬性一定要贏。像 #riskPanel{display:flex} 這種帶 id 的規則優先度比瀏覽器
+     內建的 [hidden]{display:none} 高,會讓「隱藏」失效(槓桿面板曾因此掛在股票面板下面)。 */
+  [hidden]{display:none !important;}
+  /* 鍵盤焦點框:只在用鍵盤時出現,滑鼠點擊的外觀不變(WCAG 2.4.7) */
+  :focus-visible{outline:2px solid #2f6fed;outline-offset:2px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Noto Sans TC","Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;
+    font-size:15px;line-height:1.45;}
+  /* 版心 900px(依設計稿),手機仍是滿版。桌面改成 1232px 版心,見檔尾桌面 redesign 區 */
+  .wrap{max-width:900px;margin:0 auto;padding:14px 12px calc(28px + env(safe-area-inset-bottom));}
+  /* 面板容器與右欄:手機上完全透明(display:contents / 不顯示),桌面才成形 */
+  .main{display:contents;}
+  #paneCol{display:contents;}
+  #rail{display:none;}
+  /* 上半部(標題+分頁+訊號)收在同一張白卡,各段用分隔線 */
+  .shell{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;margin-bottom:14px;}
+  header{display:flex;justify-content:space-between;align-items:flex-start;
+    padding:14px 16px;border-bottom:1px solid var(--line);}
+  header h1{font-size:19px;margin:0 0 2px;}
+  .sub{color:var(--muted);font-size:12px;margin-bottom:0;}
+  .refresh{border:1px solid var(--line);background:var(--card);color:var(--muted);
+    width:34px;height:34px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;}
+  .refresh:active{background:var(--line);}
+  #todoBtn{position:relative;margin-right:8px;}
+  #todoBtn .bdg{position:absolute;top:-4px;right:-5px;min-width:16px;height:16px;border-radius:8px;
+    background:#c2373b;color:#fff;font-size:10px;font-weight:800;line-height:1;
+    display:flex;align-items:center;justify-content:center;padding:0 4px;}
+  /* To-Do 彈窗:全站通用,不再綁在槓桿風險頁裡 */
+  #todoSheet .td-hd{display:flex;align-items:baseline;gap:10px;}
+  #todoSheet .td-hd h2{margin:0;font-size:16px;font-weight:800;color:var(--ink);}
+  #todoSheet .td-hd .sub{font-size:12px;color:var(--faint);}
+  #todoSheet .td-x{margin-left:auto;border:none;background:none;font-size:18px;color:var(--faint);cursor:pointer;padding:4px;}
+  #todoSheet .td-row{display:grid;grid-template-columns:20px 1fr;gap:10px;padding:12px 0;
+    border-bottom:1px solid var(--line);cursor:pointer;}
+  #todoSheet .td-row .ck{width:17px;height:17px;border:1.5px solid var(--line2,#d5d9e0);border-radius:5px;
+    display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:11px;margin-top:2px;}
+  #todoSheet .td-row.done .ck{background:#0e9f6e;border-color:#0e9f6e;}
+  #todoSheet .td-row .t{font-size:13.5px;font-weight:700;line-height:1.5;color:var(--ink);}
+  #todoSheet .td-row .t .no{font-size:11px;color:var(--faint);margin-right:6px;}
+  #todoSheet .td-row .b{font-size:12px;color:var(--muted,#6b7280);line-height:1.65;margin-top:3px;}
+  #todoSheet .td-row.done .t{color:var(--faint);text-decoration:line-through;}
+  #todoSheet .td-row.done .b{opacity:.4;text-decoration:line-through;}
+  #todoSheet .td-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:11.5px;color:var(--faint);padding-top:12px;}
+  #todoSheet .td-foot button{border:1px solid var(--line);background:#fff;border-radius:7px;
+    padding:5px 10px;font-size:11.5px;cursor:pointer;color:var(--muted,#6b7280);white-space:nowrap;}
+  #todoSheet .td-foot{flex-wrap:wrap;}
+  #todoSheet .td-add{display:flex;gap:8px;padding-top:12px;}
+  #todoSheet .td-add input{flex:1;border:1px solid var(--line);border-radius:8px;padding:8px 12px;
+    font-size:13px;font-family:inherit;color:var(--ink);background:#fff;outline:none;}
+  #todoSheet .td-add input:focus{border-color:#9aa8c0;}
+  #todoSheet .td-add button{border:1px solid var(--line);background:#101418;color:#fff;border-radius:8px;
+    padding:0 16px;font-size:12.5px;font-weight:700;cursor:pointer;}
+  /* 按重新整理之後的小提示:告訴你抓到的是不是新的一份,免得以為按鈕壞了 */
+  #toast{position:fixed;left:50%;transform:translateX(-50%) translateY(8px);bottom:76px;z-index:80;
+    background:var(--ink);color:#fff;font-size:12.5px;line-height:1;padding:10px 14px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;white-space:nowrap;}
+  #toast.show{opacity:.94;transform:translateX(-50%) translateY(0);}
+  @media(min-width:721px){ #toast{bottom:28px;font-size:13px;} }
+  .refresh.spinning svg{animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* 標題列右側:槓桿風險連結 + 更新鈕 */
+  .hright{display:flex;gap:8px;align-items:center;flex:none;margin-top:2px;}
+  .crossLink{font-size:12.5px;font-weight:700;padding:8px 11px;border-radius:9px;
+    border:1px solid var(--line);background:var(--card);color:var(--muted);
+    text-decoration:none;white-space:nowrap;}
+  .crossLink:active{background:#eceef1;}
+
+  /* 分頁:文字加底線,不再是佔一整列的大膠囊 */
+  .tabs{display:flex;gap:22px;padding:0 16px;border-bottom:1px solid var(--line);background:var(--card);}
+  .tabs button{flex:none;font-size:13px;font-weight:600;padding:11px 0;border:none;
+    background:none;color:var(--muted);cursor:pointer;box-shadow:inset 0 -2px 0 transparent;}
+  .tabs button:hover{color:var(--ink);}
+  .tabs button.active{color:var(--ink);font-weight:700;box-shadow:inset 0 -2px 0 var(--ink);}
+
+  .loading{text-align:center;padding:44px 0;color:var(--muted);}
+
+  /* ── 標的清單:分隔線列(完稿) ── */
+  .num{font-family:var(--num);font-variant-numeric:tabular-nums;}
+  .blist{background:var(--card);border:1px solid var(--line2);border-radius:16px;
+    padding:2px 20px 8px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,20,24,.05);}
+  .bhead{display:grid;grid-template-columns:1fr 250px 116px;gap:20px;align-items:center;
+    padding:12px 2px 9px;border-bottom:1px solid var(--line2);
+    font-size:10.5px;letter-spacing:.06em;color:var(--faint);font-weight:600;}
+  .bhead .c2{text-align:center;} .bhead .c3{text-align:right;}
+  .brow{display:grid;grid-template-columns:1fr 250px 116px;gap:20px;align-items:center;
+    padding:14px 2px;border-bottom:1px solid var(--line);}
+  .brow:last-child{border-bottom:none;}
+  .brow.clickable{cursor:pointer;}
+  .brow.clickable:hover{background:#fafbfc;margin:0 -20px;padding-left:22px;padding-right:22px;
+    grid-template-columns:1fr 250px 116px;}
+  .brow-id{display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .brow-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .brow-t{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:.01em;}
+  .brow-note{font-size:11.5px;color:var(--faint);}
+  .brow-p{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;}
+  .brow-p .px{font-size:18px;font-weight:600;color:#3f4652;}
+  .brow-day{font-size:12px;font-weight:500;}
+  .brow-day.up,.brow-yr b.up{color:var(--up);} .brow-day.dn,.brow-yr b.dn{color:var(--dn);}
+  .brow-yr{font-size:12px;color:var(--faint);}
+  .brow-yr b{font-weight:700;}
+  .brow-interp{font-size:12.5px;color:var(--muted);line-height:1.5;}
+  .brow-ma{display:flex;flex-direction:column;gap:7px;align-items:flex-end;}
+  .brow-pe{font-size:11px;letter-spacing:.03em;color:var(--faint);min-height:13px;}
+  .brow-st{display:flex;justify-content:flex-end;}
+  .brow-badge{height:30px;padding:0 13px;border-radius:9px;display:inline-flex;align-items:center;
+    font-size:12.5px;font-weight:700;background:var(--card);border:1px solid #d9dde3;color:#3f4652;white-space:nowrap;}
+  .brow-badge.full{background:var(--green-t);border-color:var(--green-t);color:#fff;}
+  /* 窄螢幕:三欄撐不開,改成堆疊(代號價格在上,均線點+狀態在下一列) */
+  @media(max-width:720px){
+    .blist{padding:2px 14px 6px;}
+    .bhead{display:none;}
+    .brow{grid-template-columns:1fr;gap:11px;padding:13px 2px;}
+    .brow.clickable:hover{margin:0;padding-left:2px;padding-right:2px;grid-template-columns:1fr;background:none;}
+    .brow-ma{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;}
+    .brow-ma .dots{gap:16px;flex:1;justify-content:space-between;}
+    .brow-pe{order:2;min-height:0;}
+    .brow-st{justify-content:flex-start;}
+    .brow-ma+.brow-st{margin-top:-2px;}
+  }
+  /* 舊 index card(指數 fallback 用) */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+  .icard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 12px 11px;}
+  .icard.span2{grid-column:1 / -1;}
+  .icard.clickable{cursor:pointer;}
+  .fb.hold{color:#fff;background:var(--up);}
+  .icard .top{display:flex;align-items:baseline;justify-content:space-between;gap:6px;}
+  .icard .short{font-size:16px;font-weight:800;}
+  .icard .full{font-size:11px;color:var(--faint);}
+  .icard .px{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;margin:4px 0 1px;}
+  .icard .yr{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .icard .yr .lbl{color:var(--faint);font-weight:500;}
+  .icard .mid{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:2px 0 3px;}
+  .icard .dots{display:flex;gap:7px;}
+  .icard .rcol{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+  .icard .foot{display:flex;align-items:center;justify-content:space-between;margin-top:6px;}
+  .icard .sc{font-size:12px;color:var(--muted);}
+  .icard .sc b{font-size:15px;}
+  .mapill{display:inline-block;color:#fff;font-weight:800;font-size:12px;padding:4px 10px;border-radius:8px;}
+  /* 正二/正三等內建槓桿產品的警示標記,提醒每日重設耗損 */
+  .levtag{display:inline-block;margin-left:6px;font-size:10.5px;font-weight:800;color:#9a3412;
+    background:#ffedd5;border:1px solid #fb923c;padding:2px 7px;border-radius:6px;vertical-align:middle;}
+  .icard .interp{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.4;}
+  .fb{display:inline-block;margin-top:6px;font-size:10.5px;color:#92600a;background:#fef3c7;
+    border-radius:6px;padding:2px 6px;}
+  .naidx{color:var(--faint);font-size:12px;padding:6px 0;}
+
+  /* dot */
+  /* 均線點:站上=實心綠+光暈,跌破=空心紅環,無資料=灰(完稿) */
+  .brow-ma .dots{display:flex;gap:22px;}
+  .dot{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;color:#676e79;line-height:1;font-weight:600;font-family:var(--num);}
+  .dot i{width:16px;height:16px;border-radius:50%;display:block;box-sizing:border-box;}
+  .dot.up i{background:var(--dot-up);box-shadow:0 0 0 4px rgba(18,166,112,.13);}
+  .dot.dn i{background:var(--card);border:2.5px solid var(--dot-dn);}
+  .dot.na i{background:var(--card);border:2.5px solid var(--dot-na);}
+
+  /* traffic light rule */
+  .rule{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:13px 14px;margin-bottom:12px;}
+  .lamp{flex:none;width:16px;height:16px;border-radius:50%;box-shadow:0 0 0 4px rgba(0,0,0,.05);}
+  .lamp.green{background:var(--green);} .lamp.yellow{background:var(--yellow);} .lamp.red{background:var(--red);}
+  .lamp.gray{background:var(--dot-na);}
+  .rule .msg{font-size:15px;font-weight:700;}
+  .rule .why{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+  /* 訊號區在 shell 內,不需要自己的框與圓角 */
+  .topstrip{margin-bottom:0;}
+  .topstrip .sig{border:none;border-radius:0;margin-bottom:0;padding:12px 16px;}
+  .topstrip .sig{margin-bottom:0;padding:10px 12px;}
+  .topstrip .sig h3{font-size:12px;}
+  .topstrip .sig .sigtxt,.topstrip .sig .noneline{font-size:13px;}
+
+  /* signals */
+  .sig{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:11px;}
+  .sig h3{margin:0 0 8px;font-size:14px;color:var(--muted);font-weight:600;}
+  /* VIX + NDX 併一行 */
+  .metaline{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px;color:var(--muted);
+    padding-bottom:9px;margin-bottom:9px;border-bottom:1px solid var(--line);}
+  .metaline .mk{font-weight:700;color:var(--ink);}
+  .metaline b{font-variant-numeric:tabular-nums;color:var(--ink);font-size:13px;}
+  .metaline .msep{width:1px;height:12px;background:var(--line);margin:0 3px;}
+  .metaline .mwhy{font-size:11.5px;}
+  /* 訊號摘要列:筆數 chip + 展開 */
+  .sigsum{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .sigchips{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;}
+  .sigsum .sigt{font-size:12.5px;font-weight:700;margin-right:2px;}
+  .sc{font-size:11.5px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:2px 10px;
+    font-variant-numeric:tabular-nums;}
+  .sc.on{color:var(--ink);border-color:var(--ink);font-weight:700;}
+  .sigmore{margin-left:auto;background:none;border:none;color:var(--muted);font:inherit;font-size:11.5px;
+    cursor:pointer;padding:2px 0;}
+  .sigmore:hover{color:var(--ink);}
+  .sighl{font-size:12px;color:var(--muted);line-height:1.7;margin-top:7px;}
+  .sighl b{color:var(--ink);}
+  .sigacts{margin-left:auto;display:flex;gap:14px;align-items:center;}
+  .sigacts .sigmore{margin-left:0;}
+  /* 規則面板 */
+  .rules{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);}
+  .rules .rh{font-size:12px;font-weight:700;margin:10px 0 5px;}
+  .rules .rh:first-child{margin-top:0;}
+  .rules .rh span{font-weight:400;color:var(--faint);font-size:11px;margin-left:6px;}
+  .rules table{width:100%;border-collapse:collapse;}
+  .rules td{font-size:11.5px;color:var(--muted);padding:4px 0;vertical-align:top;
+    border-bottom:1px solid var(--line);line-height:1.55;}
+  .rules td:first-child{width:150px;padding-right:12px;white-space:nowrap;color:var(--ink);}
+  .rules td b{color:var(--ink);}
+  .rules .rt-a{color:#5b21b6;} .rules .rt-c{color:#0f766e;}
+  .rules .rnote{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.6;
+    background:var(--bg);border-radius:8px;padding:9px 11px;}
+  .sigfull[hidden]{display:none;}
+  .sigfull{margin-top:4px;}
+  .sigdiv{height:1px;background:var(--line);margin:6px 0 2px;}
+  /* 訊號列裡的標的名:全部都是持有部位,不再寫「(持)」 */
+  .sigtxt .sy{font-weight:600;}
+  .sigrow{display:flex;gap:10px;align-items:center;padding:6px 0;}
+  .tag{font-size:12px;font-weight:800;padding:4px 10px;border-radius:8px;flex:none;min-width:62px;text-align:center;color:#fff;}
+  .tag.b{background:var(--up);} .tag.s{background:var(--dn);}
+  .tag.n{background:var(--nearbg);color:var(--nearink);}
+  /* 加碼訊號:跌破季線/半年線/年線,越深越強(完稿改藍) */
+  .tag.a{background:var(--add);}
+  .addrow{align-items:flex-start;}
+  .addit{display:inline-flex;align-items:baseline;gap:5px;background:var(--addbg);color:var(--add);
+    border-radius:7px;padding:2px 9px;margin:0 6px 4px 0;font-size:13px;}
+  .addit .lv{font-size:9px;letter-spacing:1px;color:var(--add);}
+  .addbadge{display:inline-flex;align-items:center;gap:4px;margin-left:2px;font-size:11px;font-weight:600;color:var(--add);
+    background:var(--addbg);padding:1px 8px;border-radius:6px;vertical-align:middle;line-height:1.7;}
+  /* 減碼訊號:漲多了,加碼的鏡像(完稿改紅) */
+  .tag.c{background:var(--dn);}
+  .cutit{display:inline-flex;align-items:baseline;gap:5px;background:var(--dnbg);color:var(--dn);
+    border-radius:7px;padding:2px 9px;margin:0 6px 4px 0;font-size:13px;}
+  .cutit .lv{font-size:9px;letter-spacing:1px;color:var(--dn);}
+  .cutbadge{display:inline-flex;align-items:center;gap:4px;margin-left:2px;font-size:11px;font-weight:600;color:var(--dn);
+    background:var(--dnbg);padding:1px 8px;border-radius:6px;vertical-align:middle;line-height:1.7;}
+  .sigtxt{font-size:14px;}
+  .noneline{color:var(--muted);font-size:14px;}
+  .vixnote{display:flex;align-items:center;gap:8px;margin-top:9px;padding-top:9px;
+    border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted);}
+  .vixnote .vixk{font-weight:600;}
+  .vixnote b{font-variant-numeric:tabular-nums;font-size:14px;color:var(--ink);}
+  .vixtag{color:#fff;font-weight:800;font-size:11px;padding:2px 9px;border-radius:7px;}
+
+  /* stock list */
+  .blk{margin-bottom:16px;}
+  .blk h2{font-size:12px;color:var(--muted);font-weight:600;margin:0 0 7px;padding-left:2px;}
+  .grphd{font-size:12px;color:var(--ink);font-weight:700;margin:12px 0 6px;padding-left:2px;}
+  /* .row 現在只剩「這一段沒有標的」的空狀態在用(舊的精簡列已隨個股分頁移除) */
+  .row{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:7px 11px;margin-bottom:5px;cursor:pointer;}
+  .row .head{display:flex;align-items:center;gap:9px;}
+  .row.err{opacity:.6;}
+  .row .nd{color:var(--faint);font-size:12px;}
+  .caret{font-size:11px;color:var(--faint);margin-left:2px;}
+
+  footer{color:var(--muted);font-size:12px;margin-top:22px;text-align:center;line-height:1.6;}
+
+  /* ---------- 點擊彈窗:走勢線圖 ---------- */
+  .modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;justify-content:center;
+    background:rgba(20,22,28,.45);}
+  .modal.show{display:flex;}
+  .sheet{background:var(--card);width:100%;max-width:680px;max-height:92vh;overflow-y:auto;
+    border-radius:18px 18px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 40px rgba(0,0,0,.22);}
+  @media(min-width:560px){ .modal{align-items:center;} .sheet{border-radius:18px;} }
+  .shead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px;}
+  .shead .stitle{font-size:19px;font-weight:800;line-height:1.2;font-family:var(--num);letter-spacing:-.01em;}
+  .shead .ssub{font-size:12px;color:var(--faint);margin-top:5px;}
+  .shead .rt{text-align:right;display:flex;align-items:flex-start;gap:12px;}
+  .shead .sprice{font-size:26px;font-weight:800;font-family:var(--num);font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.02em;}
+  .shead .schg{font-size:12px;font-weight:500;font-family:var(--num);font-variant-numeric:tabular-nums;margin-top:5px;}
+  .schg.up{color:var(--up);} .schg.dn{color:var(--dn);}
+  .trendtag{font-size:11px;font-weight:500;padding:3px 8px;border-radius:6px;margin-left:8px;vertical-align:middle;}
+  .trendtag.up{background:var(--upbg);color:var(--up);} .trendtag.dn{background:var(--dnbg);color:var(--dn);}
+  .sclose{border:none;background:#f1f3f5;color:var(--muted);width:30px;height:30px;border-radius:50%;
+    font-size:14px;line-height:1;cursor:pointer;flex:none;}
+  .chartbox{margin:10px 0 0;}
+  .chartbox svg{width:100%;height:auto;display:block;}
+  .cline{fill:none;stroke:var(--cline);stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round;}
+  .carea{fill:url(#cgrad);stroke:none;}
+  .cdot{fill:var(--cline);}
+  .cglow{fill:var(--cline);opacity:.18;}
+  /* 買點標記:紅色虛線 + 兩端紅點 + 標籤 */
+  .bline{stroke:#dc2626;stroke-width:1.3;stroke-dasharray:4 4;}
+  .bdot{fill:#dc2626;}
+  .blabel{font-size:10.5px;font-weight:700;fill:#dc2626;font-variant-numeric:tabular-nums;}
+  /* 買點收成一個 chip,不再是紅字疊三行 */
+  .costchip{display:inline-flex;align-items:baseline;gap:6px;margin-top:5px;font-size:11px;
+    color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:3px 9px;
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .costchip b{color:var(--ink);font-weight:800;}
+  .costchip .bq{width:6px;height:6px;border-radius:50%;background:#dc2626;display:inline-block;}
+  /* 彈窗底部:解讀句 + 站上 n/5 */
+  .sfoot{display:flex;align-items:center;gap:10px;margin-top:14px;}
+  .sfoot .sinterp{margin-top:0;flex:1;}
+  .sfoot .sscore{flex:none;font-size:11px;font-weight:800;border:1px solid var(--ink);border-radius:6px;
+    padding:3px 9px;font-variant-numeric:tabular-nums;}
+  .clabel{font-size:10.5px;fill:var(--faint);font-variant-numeric:tabular-nums;}
+  .cnodata{padding:44px 0;text-align:center;color:var(--muted);}
+  .cdates{display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);margin-top:3px;}
+  /* 週期切換:滿寬 segmented control(完稿) */
+  .segs{display:flex;margin:16px 0 0;}
+  .segrow{display:flex;gap:4px;background:#f4f6f8;border-radius:11px;padding:4px;flex:1;}
+  .segrow button{flex:1;border:none;background:transparent;color:var(--muted);font-size:12.5px;font-weight:500;
+    padding:7px 0;border-radius:8px;cursor:pointer;}
+  .segrow button.on{background:var(--card);color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(16,20,24,.12);}
+  /* 五條均線一排五格:白底細框,顏色只在數值,狀態小標籤(完稿) */
+  .macards{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px;}
+  .mac{border:1px solid #e8eaee;border-radius:11px;padding:11px 6px 10px;text-align:center;
+    display:flex;flex-direction:column;align-items:center;gap:5px;}
+  .mac.crossed{border-color:var(--ink);border-width:1.5px;}
+  .mac .macv{font-size:15px;font-weight:700;}
+  .mac .macv.up{color:var(--up);} .mac .macv.dn{color:var(--dn);} .mac .macv.na{color:var(--faint);}
+  .mac .macl{font-size:11px;color:var(--faint);}
+  .mac .macs{font-size:10px;line-height:1;}
+  .mac .macs.muted{color:#676e79;}
+  .mac .macs.on{padding:2px 7px;border-radius:5px;font-weight:500;}
+  .mac .macs.on.up{background:var(--upbg);color:var(--up);}
+  .mac .macs.on.dn{background:var(--dnbg);color:var(--dn);}
+  .sinterp{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5;}
+
+
+    /* ══ 支出面板：視覺照 Claude Design v2，全部鎖在 #expensePanel 底下，
+     免得 :root 變數與 .card/.hero 這類通用類名蓋掉其他面板 ══ */
+  #expensePanel{display:flex;flex-direction:column;gap:28px;
+    font-family:'IBM Plex Sans','Noto Sans TC',-apple-system,BlinkMacSystemFont,'PingFang TC',sans-serif;
+    color:var(--ink);}
+  /* 面板自己的頂列:資料來源在左、月份導航在右。獨立頁這一列是放在共用 header 裡的 */
+  #expensePanel .extop{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  #expensePanel .exsub{font-size:12px;color:var(--faint);}
+  @media(max-width:720px){
+    #expensePanel{gap:18px;}
+    #expensePanel .extop{flex-direction:column;align-items:stretch;gap:10px;}
+  }
+/* 視覺規格對齊 design/reference-v2.dc.html,數值 1:1 照抄,資料全部動態算 */
+  #expensePanel{
+    color-scheme:light;
+    --bg:#f4f5f7; --card:#ffffff; --line:#e3e6ec; --hair:#f0f2f5; --hair2:#d9dce3;
+    --ink:#16181d; --dim:#4a5060; --body:#6a7080; --muted:#5f6673; --faint:#676e79;
+    /* 進度條的藍紅跟著槓桿風險面板那套走(RK_SEG),不然跟堆疊柱的配色打架 */
+    --blue:#1d6fd8; --red:#d95f18; --dn:#c3312f; --dnbg:#fdeeee; --up:#0b7a55; --upbg:#e7f6ef;
+    --warnbg:#fff7ec; --warnline:#f2ddba; --warnink:#9a5a05; --warnink2:#b06e10; --warndot:#d97a08;
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+#expensePanel .mono{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+/* 卡片全部掛在 #app 底下,間距要下在這裡。之前只設 .wrap 的 gap,
+     被這層吃掉,卡片實測是 0px,整個黏成一坨。 */
+  #expensePanel #app{display:flex;flex-direction:column;gap:28px;}
+#expensePanel .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 30px;}
+/* ── header ── */
+  #expensePanel header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+#expensePanel header .htitle{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0;}
+#expensePanel header h1{margin:0;font-size:24px;font-weight:700;letter-spacing:-.01em;}
+#expensePanel header .sub{font-size:12px;color:var(--faint);}
+#expensePanel .mnav{display:flex;align-items:center;gap:4px;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;padding:3px;flex:none;position:relative;}
+#expensePanel .mnav button{width:32px;height:32px;flex:none;padding:0;border:none;background:transparent;
+    border-radius:8px;cursor:pointer;font-size:16px;line-height:1;color:var(--dim);}
+#expensePanel .mnav button:hover:not(:disabled){background:#f0f2f6;}
+#expensePanel .mnav button:disabled{opacity:.3;cursor:default;}
+/* 中間的月份是按鈕:點了打開年月選單。只靠箭頭翻,資料滿一年後要按二十幾下 */
+  #expensePanel .mnav .ml{font-size:14px;font-weight:600;padding:0 10px;min-width:104px;width:auto;height:32px;
+    text-align:center;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:5px;}
+#expensePanel .mnav .ml .caret{font-size:10px;color:var(--dim);}
+#expensePanel .mnav .ml:hover{background:#f0f2f6;}
+#expensePanel .picker{position:absolute;top:calc(100% + 8px);right:0;z-index:40;width:268px;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;
+    box-shadow:0 12px 28px rgba(16,24,40,.14);}
+#expensePanel .pyear{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+#expensePanel .pyear span{font-size:14px;font-weight:700;font-family:var(--mono);}
+#expensePanel .pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+#expensePanel .pgrid .pm{width:auto;height:34px;font-size:13px;font-weight:500;color:var(--ink);
+    border-radius:8px;font-family:inherit;}
+#expensePanel .pgrid .pm:disabled{opacity:.28;}
+#expensePanel .pgrid .pm.on{background:var(--ink);color:#fff;font-weight:700;}
+#expensePanel .pgrid .pm.on:hover{background:var(--ink);}
+/* ── hero ── */
+  #expensePanel .hero{display:grid;grid-template-columns:auto 1fr;gap:48px;align-items:center;padding:28px 32px;}
+#expensePanel .hero .left{display:flex;flex-direction:column;gap:6px;min-width:0;}
+#expensePanel .hero .k{font-size:13px;color:var(--muted);}
+#expensePanel .hero .v{font-family:var(--mono);font-size:48px;font-weight:600;letter-spacing:-.02em;line-height:1;
+    font-variant-numeric:tabular-nums;}
+#expensePanel .hero .chips{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap;}
+#expensePanel .chip-over{font-size:13px;font-weight:700;color:var(--dn);background:var(--dnbg);border-radius:6px;padding:2px 8px;}
+#expensePanel .chip-under{font-size:13px;font-weight:700;color:var(--up);background:var(--upbg);border-radius:6px;padding:2px 8px;}
+#expensePanel .hero .delta{font-size:13px;color:var(--faint);}
+#expensePanel .hero .right{display:flex;flex-direction:column;gap:10px;min-width:0;}
+#expensePanel .bar-top{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);}
+#expensePanel .bar-top .mid{color:var(--dim);font-weight:600;}
+#expensePanel .bar{position:relative;height:18px;background:#eef0f4;border-radius:9px;overflow:hidden;}
+#expensePanel .bar .seg-in{position:absolute;left:0;top:0;bottom:0;background:var(--blue);}
+#expensePanel .bar .seg-over{position:absolute;top:0;bottom:0;right:0;background:var(--red);}
+#expensePanel .bar .tick{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink);}
+#expensePanel .bar-leg{display:flex;gap:20px;font-size:12px;color:var(--muted);flex-wrap:wrap;}
+#expensePanel .bar-leg span.i{display:flex;align-items:center;gap:6px;}
+#expensePanel .bar-leg i{width:10px;height:10px;border-radius:3px;flex:none;display:block;}
+/* ── 要確認 ── */
+  #expensePanel .ask{background:var(--warnbg);border:1px solid var(--warnline);border-radius:12px;}
+#expensePanel .ask>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:12px 18px;cursor:pointer;list-style:none;}
+#expensePanel .ask>summary::-webkit-details-marker{display:none;}
+#expensePanel .ask .l{display:flex;align-items:center;gap:10px;min-width:0;flex-wrap:wrap;}
+#expensePanel .ask .dot{width:8px;height:8px;border-radius:50%;background:var(--warndot);flex:none;}
+#expensePanel .ask .t{font-size:14px;font-weight:700;color:var(--warnink);}
+#expensePanel .ask .n{font-size:13px;color:var(--warnink2);}
+#expensePanel .ask .amt{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--warnink);
+    font-variant-numeric:tabular-nums;flex:none;}
+#expensePanel .ask .body{padding:0 18px 14px;}
+#expensePanel .ask .row{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid var(--warnline);}
+#expensePanel .ask .row .d{font-family:var(--mono);font-size:12.5px;color:#93590d;flex:none;width:46px;
+    font-variant-numeric:tabular-nums;}
+#expensePanel .ask .row .n2{font-size:13.5px;color:#7a5c2a;min-width:0;}
+#expensePanel .ask .row .a{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:600;
+    color:var(--warnink);font-variant-numeric:tabular-nums;white-space:nowrap;}
+#expensePanel .ask .oth{font-size:12px;color:#93590d;line-height:1.6;padding-top:10px;}
+/* ── 兩欄 ── */
+  #expensePanel .cols{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;}
+/* 目標卡的三行:名稱 / 實際/目標 / 差距 */
+#expensePanel .goalrow{display:grid;grid-template-columns:1fr auto auto;align-items:baseline;gap:12px;
+    padding:12px 0;border-bottom:1px solid var(--hair);}
+#expensePanel .goalrow:last-child{border-bottom:none;}
+#expensePanel .goalrow .gn{font-size:14px;font-weight:700;}
+#expensePanel .goalrow .ga{font-family:var(--mono);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;}
+#expensePanel .goalrow .gt{color:var(--faint);font-weight:400;font-size:12.5px;}
+#expensePanel .goalrow .gd{font-family:var(--mono);font-size:13px;font-weight:700;
+    font-variant-numeric:tabular-nums;min-width:64px;text-align:right;}
+#expensePanel .cols>section{min-width:0;}
+#expensePanel .chead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+#expensePanel .chead h2{margin:0;font-size:16px;font-weight:700;}
+#expensePanel .chead .tot{font-family:var(--mono);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;}
+#expensePanel .csub{font-size:12px;color:var(--faint);margin-top:2px;}
+#expensePanel .rows{display:flex;flex-direction:column;margin-top:14px;}
+/* 「這個月多花在哪」的每一列 */
+  #expensePanel .catrow{border-bottom:1px solid var(--hair);}
+#expensePanel .catrow>summary{display:grid;grid-template-columns:106px 1fr 72px 40px;align-items:center;gap:14px;
+    padding:10px 0;cursor:pointer;list-style:none;}
+#expensePanel .catrow>summary::-webkit-details-marker{display:none;}
+#expensePanel .catrow>summary:hover{background:#fafbfc;}
+#expensePanel .catrow .nm{font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;min-width:0;}
+#expensePanel .catrow .nm i{width:9px;height:9px;border-radius:3px;flex:none;display:block;}
+#expensePanel .catrow .track{height:8px;background:var(--hair);border-radius:4px;overflow:hidden;}
+#expensePanel .catrow .track i{display:block;height:100%;border-radius:4px;}
+#expensePanel .catrow .amt{font-family:var(--mono);font-size:14px;font-weight:600;text-align:right;
+    font-variant-numeric:tabular-nums;}
+#expensePanel .catrow .pct{font-size:12px;color:var(--faint);text-align:right;font-variant-numeric:tabular-nums;}
+/* 展開後的每一筆 */
+  #expensePanel .items{padding:2px 0 12px;}
+#expensePanel .item{display:flex;align-items:baseline;gap:10px;padding:6px 0 6px 17px;}
+#expensePanel .item .d{font-family:var(--mono);font-size:12px;color:var(--faint);flex:none;width:44px;
+    font-variant-numeric:tabular-nums;}
+#expensePanel .item .t{font-size:13px;color:var(--body);min-width:0;}
+/* 明細列的細類:group 是大分類,cat 用小字掛在描述後面 */
+#expensePanel .item .catlab{font-size:11px;color:var(--faint);}
+#expensePanel .item .a{margin-left:auto;font-family:var(--mono);font-size:12.5px;font-weight:600;
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+#expensePanel .srcchip{font-size:10.5px;font-weight:600;color:var(--faint);border:1px solid var(--line);
+    border-radius:6px;padding:1px 6px;white-space:nowrap;}
+#expensePanel .insight{margin-top:14px;font-size:13px;color:var(--body);background:#f7f8fa;
+    border-radius:10px;padding:10px 14px;line-height:1.6;}
+#expensePanel .insight strong.r{color:var(--dn);}
+#expensePanel .foot{margin-top:14px;font-size:12px;color:var(--faint);line-height:1.6;}
+#expensePanel .foot .r{color:var(--dn);font-weight:600;}
+/* 右欄:月收入卡疊在必要開銷上面 */
+#expensePanel .rcol{display:flex;flex-direction:column;gap:14px;min-width:0;}
+/* 月收入卡的列沒有 details,色塊要自己補樣式 */
+#expensePanel .fixline .nm{display:flex;align-items:center;gap:8px;min-width:0;}
+#expensePanel .fixline .nm i{width:9px;height:9px;border-radius:3px;flex:none;display:block;}
+#expensePanel .inccard{padding-bottom:16px;}
+#expensePanel .incnote{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px;}
+#expensePanel .incnote b{color:var(--ink);font-family:var(--mono);}
+#expensePanel .incnote b.r{color:var(--dn);}
+/* 必要開銷卡:固定帳單 / 生活費兩大列,點開才展細項 */
+  #expensePanel .fixrow{border-bottom:1px solid var(--hair);}
+#expensePanel .fixrow>summary, #expensePanel .fixline{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px 0;list-style:none;}
+#expensePanel .fixrow>summary{cursor:pointer;}
+#expensePanel .fixrow>summary::-webkit-details-marker{display:none;}
+#expensePanel .fixline, #expensePanel .fixrow .nm{font-size:14px;font-weight:500;}
+#expensePanel .fixline{border-bottom:1px solid var(--hair);}
+#expensePanel .fixv{font-family:var(--mono);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;}
+/* 生活費那列的金額後面接一段小字寫預算,金額本身靠紅綠標有沒有超支 */
+#expensePanel .fixv .budnote{margin-left:6px;font-size:11.5px;font-weight:500;color:var(--faint);}
+/* 大列的色塊跟趨勢圖同一顆顏色,顏色由 groups 帶 inline style 進來 */
+#expensePanel .fixrow>summary .nm{display:flex;align-items:center;gap:8px;min-width:0;}
+#expensePanel .fixrow>summary .nm i{width:9px;height:9px;border-radius:3px;flex:none;display:block;}
+#expensePanel .fixrow>summary:hover{background:#fafbfc;}
+/* 展開後的細項往內縮一階,字級降一號當層次;最後一行不再畫線,免得跟大列的底線疊成雙線 */
+#expensePanel .fixsub{padding-left:17px;}
+#expensePanel .fixsub .fixline, #expensePanel .fixsub .fixrow .nm{font-size:13.5px;font-weight:400;color:var(--body);}
+#expensePanel .fixsub>*:last-child{border-bottom:none;}
+#expensePanel .fixsub .items{padding-bottom:10px;}
+/* ── 趨勢 ── */
+  #expensePanel .thead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+/* 圖說分兩行:第一行講怎麼看,第二行是堆疊柱的顏色對照。
+     舊的 .tleg 三顆點是折線時代的圖例,改柱狀圖後由 .exlegend 取代 */
+  #expensePanel .tnote{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;}
+#expensePanel .exlegend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+#expensePanel .exlegend span.i{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);}
+#expensePanel .exlegend i{width:9px;height:9px;border-radius:3px;flex:none;display:block;}
+/* 每月支出圖的圖例是按鈕:大一點、點下去開那個類別的逐月明細 */
+#expensePanel .exlegend button.i{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--body);
+    background:none;border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 10px;
+    font-family:inherit;cursor:pointer;line-height:1;}
+#expensePanel .exlegend button.i:hover{background:#f3f5f8;border-color:#cfd4dd;}
+#expensePanel .exlegend button.i.on{font-weight:700;}
+/* 「全部」沒有顏色點,選中時用深色底跟其他組區隔 */
+#expensePanel .exlegend button.i.all{padding:5px 14px;}
+#expensePanel .exlegend button.i.all.on{background:var(--ink);border-color:var(--ink);color:#fff;}
+#expensePanel .exlegend button.i.all.on:hover{background:var(--ink);}
+#expensePanel .exlegend button.i i{width:10px;height:10px;}
+/* 滑到哪根柱子,旁邊浮出那個月各組的金額與佔比 */
+#expensePanel .tcard{position:relative;}
+#expensePanel .extip{position:absolute;z-index:30;pointer-events:none;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:168px;
+    box-shadow:0 10px 24px rgba(16,24,40,.14);}
+#expensePanel .extip[hidden]{display:none;}
+#expensePanel .extip .th{display:flex;justify-content:space-between;gap:14px;font-size:12.5px;font-weight:700;
+    margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--hair);}
+#expensePanel .extip .tr{display:grid;grid-template-columns:10px 1fr auto 34px;align-items:center;gap:7px;
+    font-size:12px;color:var(--body);padding:2px 0;}
+#expensePanel .extip .tr i{width:9px;height:9px;border-radius:3px;display:block;}
+#expensePanel .extip .tr .a{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+#expensePanel .extip .tr .p{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--faint);text-align:right;}
+#expensePanel #exTrend{width:100%;height:auto;margin-top:14px;display:block;}
+#expensePanel #exTrend .ax{font-size:11px;fill:var(--faint);}
+/* 數字樣式跟資產的歷年線圖同一套:平常 10.5px 灰,最新那筆 12px 深藍 */
+#expensePanel #exTrend .vl{font-size:10.5px;font-weight:600;font-family:var(--num);
+  font-variant-numeric:tabular-nums;}
+#expensePanel #exTrend .vl.now{font-size:12px;font-weight:700;}
+#expensePanel #exTrend .vl.sm{font-size:8.6px;}
+#expensePanel #exTrend .hit{fill:transparent;cursor:pointer;}
+#expensePanel #exTrend circle{cursor:pointer;}
+/* ── 趨勢右上角的年度數字 ── */
+/* 示範版沒有年度統計 */
+  #expensePanel .ystat{display:flex;gap:26px;}
+#expensePanel .ystat .ys{background:none;border:none;padding:0;margin:0;cursor:pointer;
+    font-family:inherit;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+#expensePanel .ystat .ys .k{font-size:12px;color:var(--muted);}
+#expensePanel .ystat .ys .v{font-family:var(--mono);font-size:20px;font-weight:600;line-height:1;
+    letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+#expensePanel .ystat .ys:hover .v{text-decoration:underline;text-underline-offset:4px;}
+/* ── 年度明細 popup ── */
+  #expensePanel .exmask{position:fixed;inset:0;z-index:120;background:rgba(16,24,40,.34);
+    display:flex;align-items:center;justify-content:center;padding:24px;}
+#expensePanel .exmask[hidden]{display:none;}
+#expensePanel .exmodal{background:var(--card);border-radius:16px;width:min(520px,100%);
+    max-height:min(78vh,720px);overflow:auto;padding:24px 26px;
+    box-shadow:0 24px 60px rgba(16,24,40,.24);}
+#expensePanel .exmodal .mh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+#expensePanel .exmodal .mh h3{margin:0;font-size:15px;font-weight:700;}
+#expensePanel .exmodal .mh .x{background:none;border:none;padding:2px 4px;font-size:16px;line-height:1;
+    color:var(--faint);cursor:pointer;}
+#expensePanel .exmodal .mv{font-family:var(--mono);font-size:32px;font-weight:600;letter-spacing:-.02em;
+    line-height:1.1;font-variant-numeric:tabular-nums;margin:12px 0 4px;}
+#expensePanel .exmodal .ms{font-size:12px;color:var(--faint);margin-bottom:8px;}
+#expensePanel .yrline{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--hair);}
+#expensePanel .yrline:last-child{border-bottom:none;}
+#expensePanel .yrline .d{font-family:var(--mono);font-size:12px;color:var(--faint);flex:none;width:44px;
+    font-variant-numeric:tabular-nums;}
+#expensePanel .yrline .t{font-size:13.5px;color:var(--body);min-width:0;overflow-wrap:anywhere;}
+#expensePanel .yrline .a{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:600;
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+#expensePanel .yrline .lab{font-size:11.5px;color:var(--faint);}
+#expensePanel .empty{font-size:14px;color:var(--faint);}
+  @media(max-width:720px){
+#expensePanel .card{padding:18px 16px;}
+#expensePanel header{gap:10px;}
+#expensePanel header h1{font-size:21px;}
+#expensePanel .htitle{width:100%;}
+#expensePanel .mnav{width:100%;justify-content:center;}
+#expensePanel .hero{grid-template-columns:1fr;gap:20px;padding:20px 16px;align-items:stretch;}
+#expensePanel .hero .v{font-size:40px;}
+#expensePanel .cols{grid-template-columns:1fr;gap:18px;}
+#expensePanel .card{padding:20px 16px;}
+#expensePanel .catrow>summary{grid-template-columns:104px 1fr 62px 32px;gap:8px;}
+#expensePanel .ask>summary{padding:11px 14px;}
+#expensePanel .ask .body{padding:0 14px 12px;}
+#expensePanel .ystat{gap:20px;width:100%;justify-content:space-between;}
+#expensePanel .exlegend button.i{font-size:12.5px;padding:4px 10px 4px 8px;}
+#expensePanel .exmodal{padding:20px 18px;}
+#expensePanel .item{padding-left:8px;}
+  }
+
+  #expensePanel .picker{z-index:80;}
+
+  /* ══ 資產面板:沿用 Compass 白卡語言,桌面寬版格局、手機改直排 ══ */
+  #assetPanel{display:flex;flex-direction:column;gap:12px;}
+  .as-card{background:var(--card);border:1px solid var(--line2);border-radius:16px;padding:14px 16px;
+    box-shadow:0 1px 2px rgba(16,20,24,.05);}
+  .as-card h3{font-size:13px;font-weight:700;margin:0 0 8px;}
+  .as-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .as-kpi{background:var(--card);border:1px solid var(--line2);border-radius:14px;padding:12px 14px;
+    box-shadow:0 1px 2px rgba(16,20,24,.05);}
+  .as-kpi .k{font-size:11px;color:var(--muted);margin-bottom:6px;}
+  .as-kpi .v{font-size:21px;font-weight:800;letter-spacing:-.01em;}
+  .as-kpi .v .u{font-size:12px;font-weight:600;color:var(--muted);margin-left:4px;}
+  .as-kpi .s{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .as-kpi .d{font-size:11.5px;font-weight:700;margin-top:6px;}
+  .as-kpi .d.up{color:var(--up);} .as-kpi .d.down{color:var(--dn);}
+  .as-donuts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;align-items:stretch;}
+  /* 卡片直排:標題與圓圈固定在上面(四張圓圈同一高度),圖例長短不一往下長,
+     hover 讀數用 margin-top:auto 釘在底部,四張卡的底線就對齊。 */
+  .as-donut{display:flex;flex-direction:column;}
+  .as-donut path.sl{transition:opacity .12s;}
+  .as-donut .lg span{transition:opacity .12s;}
+  /* hover 讀數:游標移到扇形就顯示該項的名稱、金額、佔比,取代原本的帳戶明細表 */
+  .as-hv{margin-top:auto;padding-top:8px;text-align:center;font-size:11.5px;color:var(--faint);min-height:17px;}
+  .as-hv.on{color:var(--muted);}
+  .as-hv b{color:var(--ink);font-family:var(--num);font-weight:700;}
+  .as-donut .lg{display:flex;flex-wrap:wrap;gap:3px 12px;font-size:11px;color:var(--muted);margin:10px 0 0;}
+  .as-donut .lg i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;}
+  .as-donut .db{display:flex;justify-content:center;}
+  .as-cv{font-size:15px;font-weight:700;text-anchor:middle;font-family:var(--num);}
+  .as-cl{font-size:9.5px;fill:var(--muted);text-anchor:middle;}
+  .as-acc{display:grid;grid-template-columns:150px 1fr 96px 44px;gap:12px;align-items:center;
+    padding:6px 0;border-bottom:1px solid var(--line);font-size:12.5px;}
+  .as-acc:last-child{border-bottom:none;}
+  .as-acc .t{height:7px;background:#f1f3f5;border-radius:4px;overflow:hidden;}
+  .as-acc .t i{display:block;height:100%;border-radius:4px;}
+  .as-acc .v{text-align:right;font-weight:600;}
+  .as-acc .p{text-align:right;color:var(--faint);font-size:11.5px;}
+  .as-note{font-size:11.5px;color:var(--nearink);background:var(--nearbg);border-radius:8px;padding:8px 10px;margin-bottom:8px;}
+  /* 資產分析桌面版 v2(2026-08-20,Claude Design 專案 b2b18b95):
+     甜甜圈換成橫條,四張圓餅收成一張「流動資產配置」;類別與帳戶並排成兩張長條清單。
+     手機版不吃這組樣式(renderAsset 的手機分支是另一套模板)。 */
+  .ax-hero{display:grid;grid-template-columns:auto 1fr;gap:48px;align-items:center;}
+  .ax-net .k{font-size:13px;color:var(--muted);}
+  .ax-net .v{font-family:var(--num);font-size:44px;font-weight:800;letter-spacing:-.02em;
+    line-height:1;margin-top:6px;font-variant-numeric:tabular-nums;}
+  .ax-net .v em{font-size:15px;font-weight:700;color:var(--muted);font-style:normal;margin-left:8px;}
+  .ax-net .d{margin-top:11px;display:flex;align-items:center;gap:8px;font-size:13px;}
+  .ax-net .dl{font-weight:700;border-radius:6px;padding:2px 8px;font-family:var(--num);}
+  .ax-net .dl.up{color:#116b41;background:#e8f5ee;}
+  .ax-net .dl.dn{color:#a5262b;background:#fdecec;}
+  .ax-net .sub{color:var(--faint);}
+  .ax-cap{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:9px;}
+  .ax-cap b{font-family:var(--num);color:var(--nearink);}
+  .ax-bar{display:flex;height:18px;border-radius:9px;overflow:hidden;gap:2px;}
+  .ax-bar i{display:block;}
+  .ax-lg{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:9px;}
+  .ax-lg span{display:flex;align-items:center;gap:6px;}
+  .ax-lg i{width:10px;height:10px;border-radius:3px;flex:none;}
+  .ax-hd{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+  .ax-hd h3{margin:0;font-size:16px;font-weight:700;}
+  .ax-sub{font-size:12px;color:var(--faint);}
+  .ax-row{display:grid;grid-template-columns:126px 1fr;gap:20px;align-items:center;
+    padding:13px 0;border-bottom:1px solid var(--line);}
+  .ax-row:last-child{border-bottom:none;}
+  .ax-row>.t{font-size:14px;font-weight:700;}
+  .ax-row .ax-bar{height:16px;border-radius:8px;}
+  .ax-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
+  /* 流動資產配置:三個小甜甜圈並排。橫條看不出 54 比 46 的比例感,圓餅看得出來
+     (使用者 2026-08-20 指定改回圓餅) */
+  .ax-dn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:12px;}
+  .ax-dn .as-donut{align-items:center;}
+  .ax-dn .dt{font-size:13px;font-weight:600;color:var(--muted);text-align:center;margin-bottom:2px;}
+  /* 比例才是重點,所以數字放大放在圓餅上面,每個數字用它那塊的顏色 */
+  .ax-dn .rt{font-family:var(--num);font-size:26px;font-weight:800;letter-spacing:-.01em;
+    text-align:center;line-height:1.15;font-variant-numeric:tabular-nums;margin-bottom:8px;}
+  .ax-dn .rt em{font-style:normal;font-size:17px;font-weight:600;color:var(--faint);margin:0 3px;}
+  .ax-dn .rt em.who{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:1px 0 0;}
+  .ax-dn .lg{justify-content:center;text-align:center;}
+  .ax-dn .as-hv{text-align:center;}
+  @media(max-width:1250px){ .ax-dn{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  @media(max-width:760px){ .ax-dn{grid-template-columns:1fr;} }
+  .ax-brow{display:grid;grid-template-columns:148px 1fr 44px;gap:14px;align-items:center;
+    padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}
+  .ax-brow:last-child{border-bottom:none;}
+  .ax-brow .n{display:flex;align-items:center;gap:8px;font-weight:500;min-width:0;}
+  .ax-brow .n i{width:9px;height:9px;border-radius:3px;flex:none;}
+  .ax-brow .n span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ax-brow .t{height:8px;background:#f0f2f5;border-radius:4px;overflow:hidden;}
+  .ax-brow .t i{display:block;height:100%;border-radius:4px;}
+  .ax-brow .p{text-align:right;font-family:var(--num);font-weight:700;font-variant-numeric:tabular-nums;}
+  .as-holds{display:grid;grid-template-columns:1fr;gap:10px;align-items:start;}
+  /* 卡片滿版,但裡面的清單分兩欄,不然一整排 21 列右半邊全空。
+     用 column-count 讓排名照直的走(左欄 1 到 11、右欄 12 到 21),grid 會變成左右跳著讀。 */
+  .as-rows{column-gap:30px;}
+  .as-rows .as-row{break-inside:avoid;}
+  .as-row.notag{grid-template-columns:1fr 92px 46px 12px;}
+  .as-row{display:grid;grid-template-columns:auto 1fr 92px 46px 12px;gap:10px;align-items:center;
+    padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;}
+  .as-row:last-child{border-bottom:none;}
+  .as-row .tg{font-size:10px;font-weight:700;padding:1.5px 6px;border-radius:5px;background:#e9f0fe;color:#2f6fed;white-space:nowrap;}
+  .as-row .tg.tw{background:#e6f6ee;color:#12805e;}
+  .as-row .tg.twetf{background:#fdf0e3;color:#93590d;}
+  .as-row .tg.gold{background:#fdeaf1;color:#b8407a;}
+  .as-row .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .as-row .vv{text-align:right;font-weight:600;}
+  .as-row .pp{text-align:right;color:var(--faint);}
+  .as-row .ar{color:var(--faint);}
+  .as-row.link{cursor:pointer;}
+  .as-row.link:hover{background:#fafbfc;}
+  .as-risk{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--line);font-size:12.5px;}
+  .as-risk:last-child{border-bottom:none;}
+  .as-risk i{width:17px;height:17px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+    font-size:10px;font-weight:800;font-style:normal;color:#fff;margin-top:2px;}
+  .as-risk.warn i{background:var(--yellow);} .as-risk.info i{background:#5b8def;} .as-risk.ok i{background:var(--up2);}
+  .as-risk p{margin:0;color:#374151;}
+  .as-foot{font-size:11px;color:var(--faint);padding:0 4px;}
+  /* 歷年流動資產時間軸線圖 */
+  .as-note2{font-size:11.5px;color:var(--faint);margin:-2px 0 10px;}
+  .tl-g{stroke:#eceff3;stroke-width:1;}
+  .tl-t{font-size:11px;fill:var(--faint);}
+  .tl-a{fill:rgba(47,111,237,.07);}
+  .tl-l{fill:none;stroke:#2f6fed;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;}
+  .tl-d{fill:#2f6fed;stroke:#fff;stroke-width:1.5;cursor:default;}
+  .tl-d:hover{r:6;}
+  .tl-n{font-size:10.5px;font-weight:600;fill:#5a6472;}
+  /* 年模式的年增率,標在年份下面一行 */
+  .tl-p{font-size:10.5px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .tl-p.up{fill:#0b7a55;} .tl-p.dn{fill:#c2373b;}
+  .tl-v{font-size:12px;font-weight:700;fill:#1d4fc4;}
+  .apos{margin-top:10px;font-size:12.5px;color:var(--muted);background:#f7f8fa;border:1px solid var(--line);
+    border-radius:9px;padding:9px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .aposlink,.rk-assetlink button{border:none;background:none;color:var(--add);font-weight:700;font-size:12.5px;cursor:pointer;padding:0;}
+  .rk-assetlink{font-size:12.5px;color:var(--muted);padding:10px 2px 2px;}
+  @media(max-width:720px){
+    .as-kpis{grid-template-columns:1fr 1fr;}
+    .as-donuts{grid-template-columns:1fr;}
+    .as-holds{grid-template-columns:1fr;}
+    .as-rows{column-count:1;}
+    .as-acc{grid-template-columns:104px 1fr 84px;gap:8px;}
+    .as-acc .p{display:none;}
+    #assetPanel{gap:10px;}
+  }
+
+  /* ── 手機 app 模式(加到主畫面用) ──
+     桌面完全不受影響:底部分頁列只在窄螢幕出現,頂部分頁與面板切換則收起來。 */
+  .tabbar{display:none;}
+  @media(max-width:720px){
+    /* 捲到底的回彈會把 fixed 元素一起拖走,關掉回彈這條就不動了 */
+    html,body{overscroll-behavior-y:none;}
+    .tabbar{
+      display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;
+      /* 推到自己的合成層,iOS 捲動時才不會跟著飄 */
+      transform:translateZ(0);will-change:transform;backface-visibility:hidden;
+      background:rgba(255,255,255,.93);
+      -webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);
+      border-top:1px solid var(--line2);
+      padding:5px 2px calc(3px + env(safe-area-inset-bottom));
+    }
+    .tabbar button{
+      flex:1;border:none;background:none;cursor:pointer;padding:5px 0 3px;
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+      color:var(--faint);font:500 10px/1 "Noto Sans TC",sans-serif;
+      -webkit-tap-highlight-color:transparent;
+    }
+    /* 選中=墨色粗描邊粗體,未選=灰細描邊。不用底色膠囊,顏色留給均線點與漲跌(設計稿 1e) */
+    .tabbar button svg{width:23px;height:23px;stroke-width:1.7;display:block;}
+    .tabbar button.on{color:var(--ink);font-weight:700;}
+    .tabbar button.on svg{stroke-width:2.3;}
+    .tabbar button:active{opacity:.55;}
+    /* 槓桿那格掛狀態點:不進槓桿頁也知道現在安不安全 */
+    .tb-ic{position:relative;display:block;line-height:0;}
+    .tb-dot{position:absolute;top:-1px;right:-3px;width:7px;height:7px;border-radius:50%;
+      border:1.5px solid var(--card);background:var(--green);display:block;}
+    .tb-dot.warn{background:var(--yellow);} .tb-dot.danger{background:var(--red);}
+    /* 內容不要被底部列蓋住 */
+    .wrap{padding-top:8px;padding-bottom:calc(78px + env(safe-area-inset-bottom));}
+    /* 面板切換已移到底部列,收起來。分頁列留著,它就是四段導覽(2026-08-25 改一層),
+       用 order 排到脈搏卡下面,位置跟舊的篩選 chip 列一樣。 */
+    #stockChrome{display:flex;flex-direction:column;}
+    #topstrip{order:1;}
+    .tabs{order:2;gap:6px;padding:0 2px 9px;margin:9px 0 0;border-bottom:none;background:none;
+      flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+    .tabs::-webkit-scrollbar{display:none;}
+    .tabs button[data-seg]{flex:none;font-size:11.5px;font-weight:600;padding:3px 11px;
+      border:1px solid var(--line);border-radius:20px;background:var(--card);color:var(--muted);
+      box-shadow:none;white-space:nowrap;}
+    .tabs button[data-seg].active{border-color:var(--ink);color:var(--ink);font-weight:700;box-shadow:none;}
+    /* 手機的規則入口在脈搏卡裡,分頁列這顆不重複出現 */
+    .tabs button.tabrules{display:none;}
+    #panelToggle{display:none !important;}
+    footer{display:none;}
+    /* 標題列收成一行,不要折行吃掉半個螢幕 */
+    header{padding:12px 15px 11px;align-items:center;}
+    header h1{font-size:17px;white-space:nowrap;letter-spacing:-.01em;}
+    .sub{font-size:10.5px;white-space:nowrap;}
+    .shell{border-radius:16px;}
+    /* 彈窗改成貼底的 sheet,留出底部列的高度 */
+    .sheet{max-height:88vh;padding-bottom:calc(24px + env(safe-area-inset-bottom));}
+  }
+  /* 主畫面 app(standalone)時,狀態列區域要自己撐開 */
+  @media(display-mode:standalone){
+    .wrap{padding-top:calc(8px + env(safe-area-inset-top));}
+  }
+
+  /* ══════ 手機版 redesign(依 2026-08-13 設計稿 1a-1e) ══════
+     手機不再沿用桌面的三欄卡片,改成:
+       · 頂部收成一張「脈搏卡」(VIX/NDX + 今日訊號 + 一句摘要)
+       · 標的列壓到 56px,均線的 5/20/60/120/240 標籤移到表頭只印一次
+       · 判讀句、站上 n/5、P/E 全部移進點開的走勢彈窗
+     桌面(>720px)完全不受影響。 */
+  @media(max-width:720px){
+    /* 頂部改成貼在畫面上,捲動時 VIX/NDX 與訊號一直看得到 */
+    .shell{background:none;border:none;border-radius:0;overflow:visible;margin-bottom:0;
+      position:sticky;top:0;z-index:30;
+      padding-top:calc(8px + env(safe-area-inset-top));
+      background:linear-gradient(var(--bg) 82%,rgba(238,240,244,0));}
+    header{background:none;border-bottom:none;padding:2px 4px 8px;}
+    header h1{font-size:17px;font-weight:900;letter-spacing:-.01em;}
+    .sub{font-size:10.5px;}
+    .refresh{width:26px;height:26px;font-size:13px;}
+    .refresh svg{width:13px;height:13px;}
+    .wrap{padding-top:0;}
+
+
+    /* ── 標的清單(手機專用結構) ── */
+    .blk{margin-bottom:0;}
+    .blk h2{display:none;}                 /* 分區標題改印在清單卡內 */
+    /* 線圖那張卡的標題要留著,它不是分區標題 */
+    .blk.perfblk .perfcard h2{display:block;font-size:15px;color:var(--ink);font-weight:700;margin:0;}
+    /* 列上的小籤 */
+    .mtag{font-size:9px;font-weight:700;border-radius:5px;padding:1px 6px;flex:none;}
+    .mtag.add{color:var(--add);background:var(--addbg);}
+    .mtag.cut{color:var(--dn);background:var(--dnbg);}
+    .mtag.lev{color:#9a3412;background:#ffedd5;border:1px solid #fdba74;padding:0 5px;}
+    .mempty{padding:26px 0;text-align:center;color:var(--faint);font-size:12.5px;}
+
+    /* ── 走勢彈窗(設計稿 1c) ── */
+    .sheet{padding:8px 16px calc(30px + env(safe-area-inset-bottom));border-radius:18px 18px 0 0;}
+    .grab{width:36px;height:4px;border-radius:2px;background:var(--line2);margin:0 auto 10px;}
+    .mshead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+    .mshead .t{display:flex;align-items:center;gap:8px;}
+    .mshead .t b{font-family:var(--num);font-size:19px;font-weight:800;letter-spacing:-.01em;}
+    .mshead>div:first-child{min-width:0;}
+    .mshead .sub{font-size:11.5px;color:var(--faint);margin-top:4px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .mshead .rt{display:flex;align-items:flex-start;gap:10px;flex:none;}
+    .mshead .chg{white-space:nowrap;}
+    .mshead .px{font-family:var(--num);font-size:24px;font-weight:800;letter-spacing:-.02em;
+      font-variant-numeric:tabular-nums;line-height:1;}
+    .mshead .chg{font-family:var(--num);font-size:11.5px;margin-top:4px;}
+    .mshead .chg.up{color:var(--up);} .mshead .chg.dn{color:var(--dn);}
+    .mshead .sclose{width:28px;height:28px;font-size:12px;}
+    .mtrend{font-size:10.5px;font-weight:500;border-radius:6px;padding:2px 7px;}
+    .mtrend.up{background:var(--upbg);color:var(--up);}
+    .mtrend.dn{background:var(--dnbg);color:var(--dn);}
+    /* 買進摘要與明細 */
+    .mbuy-sum{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);
+      border:1px solid var(--line);border-radius:6px;padding:3px 9px;margin-top:10px;
+      font-variant-numeric:tabular-nums;}
+    .mbuy-sum i{width:6px;height:6px;border-radius:50%;background:#dc2626;flex:none;}
+    .mbuy-sum b{color:var(--ink);font-weight:800;}
+    .mbuy-sum b.up{color:var(--up);} .mbuy-sum b.dn{color:var(--dn);}
+    .mbuy-list{margin-top:8px;border-top:1px dashed var(--line);}
+    .mbrow{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:11.5px;
+      border-bottom:1px solid var(--line);}
+    .mbrow:last-child{border-bottom:none;}
+    .mbrow i{width:6px;height:6px;border-radius:50%;background:#dc2626;flex:none;}
+    .mbrow .d{color:var(--muted);font-family:var(--num);}
+    .mbrow .p{margin-left:auto;font-family:var(--num);font-weight:700;font-variant-numeric:tabular-nums;}
+    .mbrow .q{color:var(--faint);width:44px;text-align:right;}
+    /* 均線格:顯示均線價格,狀態用小籤 */
+    .mmacards{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px;}
+    .mmac{border:1px solid #e8eaee;border-radius:11px;padding:9px 4px;text-align:center;
+      display:flex;flex-direction:column;gap:4px;align-items:center;}
+    .mmac .l{font-size:10.5px;color:var(--faint);}
+    .mmac .v{font-family:var(--num);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;}
+    .mmac .v.up{color:var(--up);} .mmac .v.dn{color:var(--dn);} .mmac .v.na{color:var(--faint);}
+    .mmac .s{font-size:9.5px;border-radius:5px;padding:2px 6px;}
+    .mmac .s.up{background:var(--upbg);color:var(--up);}
+    .mmac .s.dn{background:var(--dnbg);color:var(--dn);}
+    .mmac .s.na{color:var(--faint);}
+    .msfoot{display:flex;align-items:center;gap:10px;margin-top:13px;}
+    .msfoot .ip{flex:1;font-size:12.5px;color:var(--muted);line-height:1.5;}
+    .msfoot .sc5{flex:none;font-size:11px;font-weight:800;border:1px solid var(--ink);
+      border-radius:6px;padding:3px 9px;font-family:var(--num);}
+
+    /* ── 槓桿風險頁 v2(設計稿 1a):順序改成 ①總敞口 ②借款比例 ③離警戒多遠 ④持倉配置。
+       字級收成四階(54/22/13/10.5),每張卡只有一個大數字。 ── */
+    #riskPanel{gap:10px;}
+    .rkm{background:var(--card);border:1px solid var(--line2);border-radius:16px;padding:14px;
+      box-shadow:0 1px 2px rgba(16,20,24,.05);}
+    .rkm.hero{padding:16px 14px 14px;}
+    .rkm-top{display:flex;align-items:center;gap:8px;}
+    .rkm-top .t{font-size:13px;font-weight:700;color:var(--muted);}
+    .rkm-pill{margin-left:auto;font-size:12px;font-weight:800;border-radius:7px;padding:3px 11px;}
+    .rkm-pill.safe{color:var(--up);background:var(--upbg);}
+    .rkm-pill.watch{color:var(--nearink);background:var(--nearbg);}
+    .rkm-pill.danger{color:var(--dn);background:var(--dnbg);}
+    /* 英雄數字:總敞口 */
+    .rkm-hero{display:flex;align-items:baseline;gap:8px;margin-top:2px;}
+    .rkm-hero .n{font-family:var(--num);font-size:54px;font-weight:800;letter-spacing:-.03em;
+      line-height:1.05;font-variant-numeric:tabular-nums;}
+    .rkm-hero .n i{font-size:28px;font-weight:700;color:var(--muted);font-style:normal;}
+    .rkm-hero .side{font-size:10.5px;color:var(--muted);white-space:nowrap;}
+    .rkm-hero .side b{color:var(--ink);font-family:var(--num);}
+    /* 敞口量表 1.0x-3.0x */
+    .rkm-g{position:relative;height:8px;border-radius:4px;display:flex;margin-top:12px;}
+    .rkm-g .z1{background:#cdeee0;border-radius:4px 0 0 4px;}
+    .rkm-g .z2{background:#fdeac2;}
+    .rkm-g .z3{flex:1;background:#fbd7d7;border-radius:0 4px 4px 0;}
+    .rkm-g .fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--dot-up);}
+    .rkm-g .tick{position:absolute;top:-3px;bottom:-3px;width:1.5px;background:var(--ink);}
+    .rkm-gl{position:relative;height:13px;margin-top:4px;font-size:9.5px;color:var(--faint);
+      font-family:var(--num);}
+    .rkm-gl .lo{position:absolute;left:0;} .rkm-gl .hi{position:absolute;right:0;}
+    .rkm-gl .mid{position:absolute;transform:translateX(-50%);color:var(--ink);font-weight:700;
+      white-space:nowrap;font-family:"Noto Sans TC",sans-serif;}
+    /* 借款比例量表 */
+    .rkm-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+    .rkm-h .t{font-size:13px;font-weight:700;}
+    .rkm-h .n{font-family:var(--num);font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;}
+    .rkm-h .s{font-size:10.5px;color:var(--faint);}
+    .rkm-h .r{margin-left:auto;font-size:11px;font-weight:700;}
+    .rkm-zone{position:relative;height:10px;border-radius:5px;overflow:hidden;display:flex;margin-top:12px;}
+    .rkm-zone .z1{background:#cdeee0;} .rkm-zone .z2{background:#fdeac2;} .rkm-zone .z3{flex:1;background:#fbd7d7;}
+    .rkm-zone .fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--dot-up);}
+    .rkm-marks{position:relative;height:14px;margin-top:3px;}
+    .rkm-marks .line{position:absolute;top:-17px;bottom:3px;width:1.5px;background:var(--ink);}
+    .rkm-marks .lbl{position:absolute;transform:translateX(-50%);font-size:9.5px;color:var(--ink);
+      font-weight:700;white-space:nowrap;}
+    .rkm-marks .max{position:absolute;right:0;font-size:9.5px;color:var(--faint);font-family:var(--num);}
+    .rkm-zt{display:flex;gap:6px;margin-top:8px;font-size:10px;font-weight:600;flex-wrap:wrap;}
+    .rkm-zt span{border-radius:5px;padding:2px 8px;}
+    .rkm-zt .a{color:var(--up);background:var(--upbg);}
+    .rkm-zt .b{color:var(--nearink);background:var(--nearbg);}
+    .rkm-zt .c{color:var(--dn);background:var(--dnbg);}
+    /* 離警戒多遠:三列,第一列(40% 自訂警戒)是本卡唯一大數字 */
+    .rkm-h2{font-size:13px;font-weight:700;}
+    .rkm-line{display:flex;align-items:center;gap:10px;margin-top:9px;padding-top:9px;
+      border-top:1px solid var(--line);}
+    .rkm-line.first{margin-top:11px;padding-top:0;border-top:none;}
+    .rkm-line .t{flex:1;font-size:12px;min-width:0;}
+    .rkm-line .t span{display:block;font-size:10px;color:var(--faint);margin-top:1px;}
+    .rkm-line .mini{width:76px;height:5px;border-radius:3px;background:#e9ecef;overflow:hidden;flex:none;}
+    .rkm-line .mini i{display:block;height:100%;border-radius:3px;}
+    .rkm-line .v{width:52px;text-align:right;font-family:var(--num);font-weight:800;font-size:14px;
+      font-variant-numeric:tabular-nums;flex:none;}
+    .rkm-line .v.big{font-size:22px;letter-spacing:-.01em;}
+    /* 曝險三格 */
+    .rkm-tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:11px;}
+    .rkm-src{margin-top:9px;font-size:10px;color:var(--faint);}
+    .rkm-tiles div{background:#f6f7f9;border-radius:9px;padding:8px 10px;}
+    .rkm-tiles .k{font-size:10px;color:var(--muted);}
+    .rkm-tiles .v{font-family:var(--num);font-weight:700;font-size:13.5px;margin-top:2px;
+      font-variant-numeric:tabular-nums;}
+    /* 持倉配置 */
+    .rkm-stack{display:flex;height:14px;border-radius:7px;overflow:hidden;margin-top:11px;}
+    .rkm-hold{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);}
+    .rkm-hold:last-of-type{border-bottom:none;}
+    .rkm-hold i{width:8px;height:8px;border-radius:50%;flex:none;}
+    .rkm-hold .n{font-size:12.5px;font-weight:700;}
+    .rkm-hold .g{font-size:10px;color:var(--faint);}
+    .rkm-hold .p{margin-left:auto;font-size:11px;color:var(--muted);}
+    .rkm-hold .m{width:56px;text-align:right;font-family:var(--num);font-weight:700;font-size:12.5px;
+      font-variant-numeric:tabular-nums;}
+    .rkm-foot{font-size:10.5px;color:var(--faint);padding-top:8px;border-top:1px dashed var(--line);}
+    .rkm-disc{font-size:10px;color:var(--faint);line-height:1.6;padding:12px 4px 4px;}
+  }
+  /* 買進紀錄:彈窗底部列出每一筆買點(和線圖紅點對應) */
+  .bhist{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);}
+  .bh-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px;}
+  .bh-t{font-size:13px;font-weight:700;color:var(--ink);}
+  .bh-sum{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;}
+  .bh-row{display:grid;grid-template-columns:92px 64px 1fr 58px;gap:8px;align-items:center;
+    padding:8px 2px;border-bottom:1px solid var(--line);font-size:12.5px;}
+  .bh-row:last-child{border-bottom:none;}
+  .bh-d{display:flex;align-items:center;gap:8px;color:var(--muted);}
+  .bh-dot{width:8px;height:8px;border-radius:50%;background:#dc2626;flex:none;}
+  .bh-q{color:var(--ink);font-weight:600;}
+  .bh-p{color:var(--muted);text-align:right;}
+  .bh-pl{font-weight:700;text-align:right;}
+  .bh-pl.up{color:var(--up);} .bh-pl.dn{color:var(--dn);}
+  /* 規則彈窗:沿用 .sheet,內文表格靠左讀 */
+  #rulesSheet .rules{margin-top:12px;padding-top:0;border-top:none;}
+
+  /* ── 面板切換:股票面板 / 槓桿風險(依原型) ── */
+  .ptog{display:flex;gap:3px;padding:3px;background:#f4f6f8;border-radius:9px;flex:none;}
+  /* 切換鈕固定在標題列正中間,不跟左右兩側的寬度連動 */
+  header{position:relative;}
+  #panelToggle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);}
+  .ptog button{height:28px;padding:0 13px;border:none;border-radius:7px;background:transparent;
+    font:600 12.5px/1 "Noto Sans TC",sans-serif;color:#5f6673;cursor:pointer;}
+  .ptog button.on{background:#fff;box-shadow:0 1px 2px rgba(16,20,24,.12);color:#101418;font-weight:700;}
+  header .brandcol{min-width:0;}
+
+  /* ── 槓桿風險面板 ── */
+  #riskPanel{display:flex;flex-direction:column;gap:12px;}
+  /* To-Do 最上面的自動待辦:看板自己算出來的,跟手寫項目分開 */
+  .rk-auto{padding:10px 0;border-bottom:1px solid var(--line);}
+  .rk-auto:first-of-type{padding-top:4px;}
+  .rk-auto .t{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;}
+  .rk-auto .tag{font-size:10px;font-weight:800;color:#fff;background:var(--ink);border-radius:5px;padding:2px 6px;}
+  .rk-auto .b{font-size:12px;color:var(--muted);line-height:1.6;margin-top:4px;}
+  .rk-auto .b b{color:var(--ink);font-family:var(--num);}
+  .rk-auto .n{font-family:var(--num);font-size:11px;font-weight:800;color:var(--faint);}
+  .rk-auto[data-todo]{cursor:pointer;}
+  .rk-auto .ck{display:inline-flex;align-items:center;justify-content:center;flex:none;
+    width:15px;height:15px;border:1.5px solid #d6dbe2;border-radius:4px;
+    font-size:10px;font-weight:800;color:#fff;background:#fff;}
+  .rk-auto.done .ck{background:#0e9f6e;border-color:#0e9f6e;}
+  .rk-auto.done .t{color:var(--faint);text-decoration:line-through;}
+  .rk-auto.done .t .ck{text-decoration:none;}
+  .rk-auto.done .b{opacity:.4;text-decoration:line-through;}
+  .rk-todofoot{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin-top:12px;font-size:11.5px;color:var(--faint);}
+  .rk-todofoot button{border:1px solid var(--line2);background:#fff;border-radius:7px;
+    padding:5px 10px;font-size:11.5px;color:var(--muted);cursor:pointer;}
+  .rk-ladder{width:100%;margin-top:10px;font-size:12.5px;border-collapse:collapse;}
+  .rk-ladder td{padding:7px 8px;border-bottom:1px solid var(--line);}
+  .rk-ladder tr:last-child td{border-bottom:none;}
+  .rk-ladder td:first-child{color:var(--muted);}
+  .rk-ladder td:last-child{text-align:right;font-variant-numeric:tabular-nums;}
+  .rk-ladder-note{margin-top:9px;font-size:11px;color:var(--faint);line-height:1.7;}
+  .rk-card{background:var(--card);border:1px solid var(--line2);border-radius:16px;
+    box-shadow:0 1px 2px rgba(16,20,24,.05);padding:18px 20px;}
+  .rk-h{display:flex;align-items:baseline;gap:10px;margin-bottom:2px;}
+  .rk-h h2{font-size:16px;font-weight:800;margin:0;color:var(--ink);}
+  .rk-h .rk-sub{font-size:12px;color:var(--faint);}
+  /* 狀態列(風險狀態 / 借款比例 / 距追繳) */
+  .rk-strip{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;
+    background:#fafbfc;border:1px solid var(--line2);border-radius:14px;}
+  .rk-strip .k{font-size:11.5px;color:var(--faint);letter-spacing:.04em;}
+  .rk-strip b{font-family:var(--num);font-variant-numeric:tabular-nums;font-size:15px;color:var(--ink);}
+  .rk-strip .note{font-size:12px;color:var(--muted);}
+  .rk-strip .sep{width:1px;height:16px;background:var(--line2);}
+  .rk-pill{padding:3px 9px;border-radius:6px;font-size:11.5px;font-weight:700;}
+  .rk-safe{background:#e7f6ef;color:#0b7a55;} .rk-watch{background:#fdf6ea;color:#93590d;}
+  .rk-danger{background:#fdeeee;color:#c2373b;}
+  /* 主卡:左=曝險+借款量表(上下疊),右=下跌承受力側欄(依設計 1fr / 328px) */
+  .rk-main{display:grid;grid-template-columns:1fr 328px;padding:0;overflow:hidden;}
+  .rk-main-left{padding:22px 24px 24px;border-right:1px solid var(--line);}
+  .rk-main-right{padding:22px 22px 24px;}
+  .rk-gauge-wrap{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);}
+  /* Hero:總等效曝險 */
+  .rk-hero{display:grid;grid-template-columns:1fr 320px;gap:20px;}
+  .rk-hero .rk-left{border-right:1px solid var(--line);padding-right:20px;}
+  .rk-expo{font-family:var(--num);font-weight:800;font-size:44px;letter-spacing:-.03em;
+    color:var(--ink);font-variant-numeric:tabular-nums;line-height:1;}
+  .rk-expo-note{font-size:12.5px;color:var(--muted);margin-top:8px;}
+  .rk-expo-note b{font-family:var(--num);color:#3f4652;}
+  .rk-kv{display:flex;gap:22px;margin-top:16px;flex-wrap:wrap;}
+  .rk-kv .kk{font-size:11.5px;color:var(--faint);}
+  .rk-kv .vv{font-family:var(--num);font-weight:700;font-size:15px;color:#3f4652;font-variant-numeric:tabular-nums;margin-top:4px;}
+  /* 借款比例量表 */
+  .rk-gauge-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+  .rk-gauge-top .g-l{display:flex;align-items:baseline;gap:9px;}
+  .rk-gauge-top .g-l b{font-family:var(--num);font-weight:800;font-size:20px;color:#0b7a55;font-variant-numeric:tabular-nums;}
+  .rk-gauge-top .g-r{font-size:12px;color:var(--muted);}
+  .rk-gauge-top .g-r b{font-family:var(--num);font-weight:700;color:#0b7a55;}
+  .rk-bar{position:relative;height:10px;border-radius:5px;overflow:hidden;display:flex;}
+  .rk-bar .z1{background:#dff2e9;} .rk-bar .z2{background:#fdf1de;} .rk-bar .z3{background:#fbe4e5;}
+  .rk-bar .fill{position:absolute;left:0;top:0;bottom:0;background:#0e9f6e;border-radius:5px;}
+  .rk-bar .safe-line{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55;}
+  .rk-bar .ib-line{position:absolute;top:-4px;bottom:-4px;width:2px;background:#c2373b;}
+  .rk-mark{position:relative;height:16px;}
+  .rk-mark .m{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap;font-size:11px;}
+  .rk-zones{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;}
+  .rk-zones .zt{height:24px;padding:0 10px;border-radius:6px;display:flex;align-items:center;font-size:11px;font-weight:500;}
+  .rk-zones .zmax{margin-left:auto;font-family:var(--num);font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;}
+  /* 下跌承受力 */
+  .rk-stress{display:flex;flex-direction:column;gap:16px;}
+  .rk-stress .srow .st{display:flex;align-items:baseline;justify-content:space-between;}
+  .rk-stress .srow .st .sl{font-size:12px;color:var(--muted);}
+  .rk-stress .srow .st .sv{font-family:var(--num);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums;}
+  .rk-stress .sbar{height:6px;border-radius:3px;background:#eef0f3;overflow:hidden;margin-top:8px;}
+  .rk-stress .sbar i{display:block;height:6px;border-radius:3px;}
+  .rk-stress .shint{font-size:11.5px;color:var(--faint);margin-top:6px;line-height:1.4;}
+  .rk-mini{display:flex;flex-direction:column;gap:12px;margin-top:4px;padding-top:16px;border-top:1px solid var(--line);}
+  .rk-mini .mr{display:flex;align-items:center;justify-content:space-between;}
+  .rk-mini .mr .ml{font-size:12px;color:#3f4652;}
+  .rk-mini .mr .ml span{display:block;font-size:11px;color:var(--faint);margin-top:3px;}
+  .rk-mini .mr .mv{font-family:var(--num);font-weight:700;font-size:17px;font-variant-numeric:tabular-nums;}
+  /* 績效線圖:版面沿用資產分頁那張歷年線圖,兩張要看起來像同一個東西 */
+  .perfblk{padding:0;}
+  .perfcard{background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px 14px;margin:0;}
+  .perfcard .tl-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .perfcard .tl-head h3{margin:0;font-size:15px;font-weight:700;color:var(--ink);}
+  .perfcard .tl-seg{display:flex;gap:3px;padding:3px;background:#f4f6f8;border-radius:8px;}
+  .perfcard .tl-seg button{height:24px;padding:0 12px;border:none;border-radius:6px;
+    background:transparent;cursor:pointer;color:var(--muted);
+    font:600 12px/1 "Noto Sans TC",sans-serif;}
+  .perfcard .tl-seg button.on{background:#fff;box-shadow:0 1px 2px rgba(16,20,24,.12);
+    color:var(--ink);font-weight:700;}
+  .pf-sub{font-size:11.5px;color:var(--faint);margin-top:5px;}
+  .pf-legend{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px;}
+  .pf-lg{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);
+    background:#fff;border-radius:999px;padding:4px 10px;cursor:pointer;
+    font:600 11.5px/1 "Noto Sans TC",sans-serif;color:var(--body);}
+  .pf-lg i{width:8px;height:8px;border-radius:50%;}
+  .pf-lg b{font-family:var(--num);font-size:12px;}
+  .pf-lg b.up{color:var(--up);} .pf-lg b.dn{color:var(--dn);}
+  .pf-lg.off{opacity:.38;}
+  /* 高度寫死,切圖例或換刻度時整頁不會上下跳 */
+  .pf-svg{width:100%;height:auto;aspect-ratio:920/300;display:block;margin-top:2px;}
+  /* 高度用固定比例算,不是固定像素:手機上圖被縮到一半寬,固定 300px 會在上下留一大片空白。
+     比例是常數,所以切換線或切換刻度時版面一樣不會跳。 */
+  .pf-zero{stroke:var(--line2);stroke-width:1;stroke-dasharray:3 3;}
+  .pf-line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;}
+  .pf-line.bench{stroke-width:1.6;stroke-dasharray:5 4;}
+  .pf-dot{stroke:#fff;stroke-width:1.4;cursor:default;}
+  .pf-foot{font-size:11px;color:var(--muted);line-height:1.6;margin-top:6px;}
+  .pf-empty{font-size:12.5px;color:var(--muted);line-height:1.7;padding:14px 0 6px;}
+  /* 持倉曝險配置 */
+  .rk-alloc{display:flex;height:26px;border-radius:7px;overflow:hidden;margin-top:14px;}
+  .rk-alloc .seg{display:flex;align-items:center;justify-content:center;font:700 11px/1 var(--num);color:#fff;min-width:0;overflow:hidden;}
+  .rk-legend{display:flex;align-items:center;gap:16px;margin-top:10px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);}
+  .rk-legend .lg{display:flex;align-items:center;gap:6px;}
+  .rk-legend .lg i{width:8px;height:8px;border-radius:50%;display:block;}
+  .rk-legend .lg i.sq{border-radius:2px;}
+  .rk-tbl{width:100%;border-collapse:collapse;margin-top:18px;}
+  .rk-tbl th{font:600 10.5px/1 var(--num);letter-spacing:.06em;color:var(--faint);text-align:right;padding:0 0 10px;border-bottom:1px solid var(--line2);}
+  .rk-tbl th:first-child{text-align:left;}
+  .rk-h .alloc-seg{margin-left:auto;align-self:center;}
+  .rk-tbl tr.alloc-sum td{background:#f6f7f9;font-weight:700;color:var(--faint);
+    font-size:12px;padding-top:7px;padding-bottom:7px;}
+  .rk-tbl tr.alloc-sum td:first-child{color:var(--ink);}
+  .rk-tbl tr.link{cursor:pointer;}
+  .rk-tbl tr.link:hover td{background:#fafbfc;}
+  .rk-mix{margin-top:-2px;font-size:13px;color:var(--muted);font-weight:600;}
+  .rk-mix b{font-family:var(--num);font-size:16px;color:var(--ink);margin:0 2px;}
+  .rk-mix .nt{margin-left:8px;font-size:11.5px;font-weight:500;color:var(--faint);}
+  .rk-tbl td{padding:13px 0;border-bottom:1px solid var(--line);font-family:var(--num);font-variant-numeric:tabular-nums;text-align:right;font-size:13.5px;color:#3f4652;font-weight:700;}
+  .rk-tbl td:first-child{text-align:left;}
+  .rk-tbl tr:last-child td{border-bottom:none;}
+  .rk-tbl .tname{display:flex;align-items:center;gap:9px;}
+  .rk-tbl .tname i{width:8px;height:8px;border-radius:50%;flex:none;}
+  .rk-tbl .tname .tn{font-weight:700;color:var(--ink);font-size:14px;}
+  .rk-tbl .tname .tg{font-size:11.5px;color:var(--faint);font-weight:400;font-family:"Noto Sans TC",sans-serif;}
+  .rk-tbl td.dim{color:#676e79;font-weight:500;}
+  .rk-lev{height:18px;padding:0 6px;border-radius:5px;background:#fdf6ea;color:#93590d;font:500 10px/18px "Noto Sans TC";display:inline-block;}
+  /* 詳細數字折疊 */
+  .rk-toggle{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;
+    background:#fafbfc;border:1px solid var(--line2);border-radius:14px;cursor:pointer;}
+  .rk-toggle:hover{background:#f4f6f8;}
+  .rk-toggle .tl{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink);}
+  .rk-toggle .tr{font-size:12px;color:var(--faint);}
+  .rk-acct{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px;}
+  .rk-acct .ac{border:1px solid var(--line2);border-radius:11px;padding:12px 13px;display:flex;flex-direction:column;gap:6px;}
+  .rk-acct .ac .ak{font-size:11px;color:var(--faint);}
+  .rk-acct .ac .av{font-family:var(--num);font-weight:700;font-size:16px;font-variant-numeric:tabular-nums;}
+  .rk-acct .ac .an{font-size:10.5px;color:#676e79;}
+  .rk-note{font-size:11.5px;color:var(--faint);line-height:1.6;padding:2px 2px 0;}
+  @media(max-width:720px){
+    .rk-card{padding:15px 15px;}
+    .rk-main{grid-template-columns:1fr;}
+    .rk-main-left{border-right:none;border-bottom:1px solid var(--line);}
+    .rk-hero{grid-template-columns:1fr;gap:16px;}
+    .rk-hero .rk-left{border-right:none;border-bottom:1px solid var(--line);padding-right:0;padding-bottom:16px;}
+    .rk-expo{font-size:38px;}
+    .rk-acct{grid-template-columns:repeat(2,1fr);}
+    .rk-tbl th:nth-child(2),.rk-tbl td:nth-child(2){display:none;} /* 手機收掉本金欄 */
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     手機版 v3(依 2026-08-17 Claude Design 手機稿):槓桿 / 大盤 / 資產三頁
+     共用同一套白卡語言:圓角 18px、陰影 0 1px 2px rgba(16,20,24,.06)、
+     分隔線 #f4f6f8、灰字兩階(#6b7280 說明 / #9aa1ab 註記)。
+     資料與功能沒有增減,只有版面與資訊層級重排。
+     全部包在 max-width:720px,桌面(>=721px)一個字都不動。
+     ══════════════════════════════════════════════════════════════════════ */
+  @media(max-width:720px){
+    /* 只有頁首吸頂,脈搏卡改成跟著內容捲(設計稿的 frame 就是這樣) */
+    .shell{position:static;background:none;padding-top:0;}
+    header{position:sticky;top:0;z-index:30;
+      padding:calc(8px + env(safe-area-inset-top)) 4px 9px;
+      background:rgba(238,240,244,.94);
+      -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+    header h1{font-size:19px;font-weight:800;letter-spacing:-.01em;}
+    .sub{font-size:11.5px;}
+    .refresh{width:32px;height:32px;border-color:var(--line2);}
+    .refresh svg{width:15px;height:15px;}
+    /* 底部分頁列:選中墨色粗體,未選灰色,槓桿格的狀態點沿用 */
+    .tabbar button{gap:5px;font-size:10.5px;}
+    /* 分頁列在手機是 pill:選中墨框墨字 */
+    .tabs button[data-seg]{font-size:12px;padding:5px 13px;border-color:var(--line2);}
+
+    /* ── 共用零件 ── */
+    .dm-card{background:var(--card);border-radius:18px;padding:16px 16px 14px;
+      box-shadow:0 1px 2px rgba(16,20,24,.06);}
+    .dm-card.c2{padding:14px 16px 12px;}
+    .dm-card.c3{padding:14px 16px 6px;}
+    .dm-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .dm-hd.bl{align-items:baseline;}
+    .dm-t{font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap;}
+    .dm-hint{flex:none;font-size:10.5px;color:var(--faint);white-space:nowrap;}
+    .dm-pill{flex:none;white-space:nowrap;font-size:11.5px;font-weight:700;
+      padding:3px 9px;border-radius:20px;}
+    .dm-pill.up{background:var(--upbg);color:var(--up);}
+    .dm-pill.warn{background:#fdf6ea;color:#93590d;}
+    .dm-pill.dn{background:var(--dnbg);color:var(--dn);}
+    .dm-btn{display:block;border:none;background:none;padding:11px 0 1px;color:var(--muted);
+      cursor:pointer;font:600 11.5px/1.4 "Noto Sans TC",sans-serif;white-space:nowrap;}
+    .dm-open{border-top:1px solid var(--line);margin-top:6px;}
+    .dm-kv{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+      padding:8px 0;border-bottom:1px solid #f4f6f8;}
+    .dm-kv .k{font-size:12.5px;color:var(--muted);white-space:nowrap;}
+    .dm-kv .v{font-family:var(--num);font-size:15px;font-weight:700;
+      font-variant-numeric:tabular-nums;white-space:nowrap;}
+    .dm-foot{font-size:10.5px;color:var(--faint);line-height:1.6;padding-top:9px;}
+    .dm-disc{font-size:10.5px;color:var(--faint);line-height:1.6;padding:2px 4px 0;}
+    .dm-link{flex:none;white-space:nowrap;font-size:10.5px;font-weight:700;
+      color:var(--add);text-decoration:none;}
+    /* 分段條:段與段之間留 1.5px 空隙,不用外框線 */
+    .dm-seg{display:flex;height:8px;border-radius:5px;overflow:hidden;gap:1.5px;}
+    .dm-seg i{display:block;height:100%;}
+    /* 小籤 */
+    .dm-tag{flex:none;font-size:9.5px;font-weight:700;border-radius:5px;padding:1px 6px;
+      white-space:nowrap;}
+    .dm-tag.lev{font-size:10px;font-weight:800;color:#9a3412;background:#ffedd5;border:1px solid #fb923c;}
+    .dm-tag.add{color:var(--add);background:var(--addbg);}
+    .dm-tag.cut{color:var(--dn);background:var(--dnbg);}
+    .dm-tag.st{color:#2f6fed;background:#e9f0fe;}
+    .dm-tag.tw{color:#12805e;background:#e6f6ee;}
+    .dm-tag.twetf{color:#93590d;background:#fdf0e3;}
+    .dm-tag.gold{color:#b8407a;background:#fdeaf1;}
+
+    /* ── 槓桿頁 ── */
+    .dm-hero{display:flex;align-items:baseline;gap:10px;margin:6px 0 2px;}
+    .dm-hero .n{font-family:var(--num);font-size:54px;font-weight:800;letter-spacing:-.035em;
+      line-height:1;font-variant-numeric:tabular-nums;}
+    .dm-hero .x{font-family:var(--num);font-size:22px;font-weight:700;color:var(--muted);}
+    .dm-hero .side{margin-left:auto;text-align:right;font-size:11.5px;color:var(--faint);
+      line-height:1.4;white-space:nowrap;}
+    .dm-hero.sm{margin:5px 0 0;gap:8px;}
+    .dm-hero.sm .n{font-size:28px;letter-spacing:-.025em;line-height:1.1;}
+    .dm-hero.sm .x{font-size:15px;}
+    .dm-hero.sm .side{font-size:11px;}
+    /* 敞口量表:綠/黃/紅三區在底,綠實條是現在的位置,黑刻度線是基準 */
+    .dm-g{position:relative;display:flex;height:8px;border-radius:5px;overflow:hidden;margin:14px 0 0;}
+    .dm-g.thin{height:5px;border-radius:4px;margin:9px 0 0;}
+    .dm-g .z1{background:#d7f0e4;} .dm-g .z2{background:#fbeecf;} .dm-g .z3{flex:1;background:#fadbdb;}
+    .dm-g .fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--up2);}
+    .dm-gl{position:relative;height:16px;}
+    .dm-gl .tick{position:absolute;top:-8px;width:2px;height:14px;background:var(--ink);}
+    .dm-gl span.lo,.dm-gl span.hi{position:absolute;top:4px;font-family:var(--num);
+      font-size:10.5px;color:var(--faint);}
+    .dm-gl .lo{left:0;} .dm-gl .hi{right:0;}
+    .dm-gl .mid{position:absolute;top:4px;transform:translateX(-50%);font-family:var(--num);
+      font-size:10.5px;font-weight:700;color:var(--ink);white-space:nowrap;}
+    .dm-stats{display:flex;align-items:baseline;gap:14px;white-space:nowrap;
+      border-top:1px solid var(--line);margin-top:11px;padding-top:9px;}
+    .dm-stats div{display:flex;align-items:baseline;gap:5px;}
+    .dm-stats .k{font-size:11px;color:var(--faint);}
+    .dm-stats .v{font-family:var(--num);font-size:13.5px;font-weight:700;
+      font-variant-numeric:tabular-nums;}
+    /* 借款比例:跟 券商 敞口收在同一張卡 */
+    .dm-brw{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:12px;}
+    .dm-brw .l{font-size:12.5px;color:var(--muted);white-space:nowrap;}
+    .dm-brw .l b{font-family:var(--num);font-size:17px;color:var(--ink);margin-left:4px;}
+    .dm-brw .r{flex:none;font-size:11.5px;font-weight:700;white-space:nowrap;}
+    .dm-bbar{position:relative;display:flex;height:6px;border-radius:4px;overflow:hidden;margin-top:8px;}
+    .dm-bbar .z1{background:#e9f7f0;} .dm-bbar .z2{flex:1;background:#fbeecf;}
+    .dm-bbar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--up2);}
+    .dm-bbar .tick{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);}
+    .dm-bbar .tick.ib{background:#c2373b;}
+    .dm-blbl{display:flex;justify-content:space-between;gap:10px;white-space:nowrap;
+      font-size:10.5px;color:var(--faint);padding-top:5px;}
+    .dm-blbl b{color:var(--ink);font-family:var(--num);}
+    /* 離警戒多遠:標題左、大百分比右,細條與說明擺下一行 */
+    .dm-st{padding:10px 0;border-bottom:1px solid #f4f6f8;}
+    .dm-st .h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+    .dm-st .h .k{font-size:13.5px;font-weight:700;white-space:nowrap;}
+    .dm-st .h .v{font-family:var(--num);font-size:19px;font-weight:800;letter-spacing:-.02em;}
+    .dm-st .b{display:flex;align-items:center;gap:10px;margin-top:6px;}
+    .dm-st .bar{flex:1;height:5px;border-radius:3px;background:#eef0f4;overflow:hidden;}
+    .dm-st .bar i{display:block;height:100%;border-radius:3px;}
+    .dm-st .n{flex:none;font-size:11px;color:var(--faint);white-space:nowrap;}
+    /* 持倉曝險列 */
+    .dm-hold{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #f4f6f8;}
+    .dm-hold i.d{width:7px;height:7px;border-radius:50%;flex:none;}
+    .dm-hold .n{font-family:var(--num);font-size:14px;font-weight:700;}
+    .dm-hold .p{margin-left:auto;font-family:var(--num);font-size:11.5px;color:var(--faint);}
+    .dm-hold .m{font-family:var(--num);font-size:14px;font-weight:700;
+      font-variant-numeric:tabular-nums;min-width:52px;text-align:right;}
+    /* To-Do:編號 + 粗標題 + 灰內文 */
+    .dm-mix{margin-top:6px;font-size:12px;color:var(--muted);font-weight:600;}
+    .dm-mix b{font-family:var(--num);font-size:15px;color:var(--ink);margin:0 2px;}
+    .dm-mix .nt{margin-left:6px;font-size:11px;font-weight:500;color:var(--faint);}
+    .dm-todo{display:grid;grid-template-columns:18px 1fr;gap:9px;padding:11px 0;
+      border-bottom:1px solid #f4f6f8;}
+    .dm-todo .i{font-family:var(--num);font-size:11.5px;font-weight:800;color:var(--faint);padding-top:2px;}
+    .dm-todo[data-todo]{cursor:pointer;}
+    .dm-todo .ck{display:inline-flex;align-items:center;justify-content:center;
+      width:16px;height:16px;margin-top:2px;padding-top:0;border:1.5px solid #d6dbe2;
+      border-radius:5px;font-size:10px;color:#fff;background:#fff;}
+    .dm-todo.done .ck{background:#0e9f6e;border-color:#0e9f6e;}
+    .dm-todo .t .no{font-family:var(--num);font-size:11px;color:var(--faint);margin-right:6px;}
+    .dm-todo.done .t{color:var(--faint);text-decoration:line-through;}
+    .dm-todo.done .b{opacity:.4;text-decoration:line-through;}
+    .dm-todofoot{display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-top:10px;font-size:11px;color:var(--faint);}
+    .dm-todofoot button{border:1px solid var(--line2);background:#fff;border-radius:7px;
+      padding:5px 9px;font-size:11px;color:var(--muted);}
+    .dm-todo .t{font-size:13.5px;font-weight:700;line-height:1.45;}
+    .dm-todo .b{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:3px;}
+
+    /* ── 大盤頁 ── */
+    .dm-pulse{padding:4px 16px 12px;}
+    .dm-cells{display:grid;grid-template-columns:1fr 1fr;}
+    .dm-cell{padding:12px 0 11px;border-bottom:1px solid #f4f6f8;min-width:0;}
+    .dm-cell.l{padding-right:14px;border-right:1px solid #f4f6f8;}
+    .dm-cell.r{padding-left:14px;}
+    .dm-cell .k{font-size:11px;color:var(--faint);}
+    .dm-cell .vv{display:flex;align-items:baseline;gap:7px;margin-top:3px;}
+    .dm-cell .vv b{font-family:var(--num);font-size:25px;font-weight:800;letter-spacing:-.025em;
+      line-height:1.1;font-variant-numeric:tabular-nums;}
+    .dm-cell .vv em{font-style:normal;font-size:11.5px;font-weight:700;}
+    .dm-cell .s{font-size:11px;color:var(--faint);margin-top:2px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .dm-sig{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:11px 0 0;}
+    .dm-sig .lbl{font-size:12.5px;font-weight:700;}
+    .dm-chip{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:20px;
+      background:#f4f6f8;color:var(--muted);font-variant-numeric:tabular-nums;}
+    .dm-chip.on{background:var(--addbg);color:var(--add);font-weight:700;}
+    .dm-acts{margin-left:auto;display:flex;align-items:center;gap:12px;}
+    .dm-acts button{border:none;background:none;padding:2px 0;color:var(--muted);cursor:pointer;
+      font:600 11.5px/1 "Noto Sans TC",sans-serif;white-space:nowrap;}
+    .dm-hl{font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:7px;}
+    .dm-hl b{color:var(--ink);}
+    .dm-sgrp{display:grid;grid-template-columns:56px 1fr;gap:8px;padding:7px 0;}
+    .dm-sgrp .g{font-size:11.5px;font-weight:700;}
+    .dm-sgrp .x{font-size:11.5px;color:var(--muted);line-height:1.6;}
+    .dm-none{font-size:12px;color:var(--muted);padding:9px 0 2px;}
+    /* 標的清單:兩行 grid,右上五顆均線點、右下 vs 年線 */
+    .dm-grp{font-size:11.5px;font-weight:700;color:var(--muted);padding:6px 4px;}
+    .dm-list{padding:2px 14px 6px;margin-bottom:10px;}
+    .dm-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;
+      gap:6px 10px;padding:11px 0;border-bottom:1px solid #f4f6f8;cursor:pointer;}
+    .dm-row:active{background:#fafbfc;}
+    .dm-r1{display:flex;align-items:center;gap:6px;min-width:0;}
+    .dm-r1 b{font-family:var(--num),"Noto Sans TC",sans-serif;font-size:15px;font-weight:700;
+      white-space:nowrap;}
+    .dm-note{font-size:10.5px;color:#676e79;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .dm-dots{display:flex;align-items:center;gap:7px;justify-self:end;}
+    .dm-dots i{width:11px;height:11px;border-radius:50%;display:block;box-sizing:border-box;}
+    .dm-dots i.up{background:var(--dot-up);}
+    .dm-dots i.dn{background:var(--card);border:2px solid var(--dot-dn);}
+    .dm-dots i.na{background:var(--card);border:2px solid var(--dot-na);}
+    .dm-r2{display:flex;align-items:baseline;gap:8px;min-width:0;}
+    .dm-r2 .px{font-family:var(--num);font-size:15px;font-weight:600;color:#3f4652;
+      font-variant-numeric:tabular-nums;}
+    .dm-r2 .chg{font-family:var(--num);font-size:12px;font-weight:600;}
+    .dm-r2 .chg.up{color:var(--up);} .dm-r2 .chg.dn{color:var(--dn);}
+    .dm-yr{justify-self:end;font-family:var(--num);font-size:14px;font-weight:800;letter-spacing:-.01em;}
+    .dm-yr.up{color:var(--up);} .dm-yr.dn{color:var(--dn);} .dm-yr.na{color:var(--faint);}
+
+    /* ── 資產頁 ── */
+    .dm-big{display:flex;align-items:baseline;gap:8px;margin:5px 0 0;}
+    .dm-big .n{font-family:var(--num);font-size:44px;font-weight:800;letter-spacing:-.035em;
+      line-height:1;font-variant-numeric:tabular-nums;}
+    .dm-big .u{font-family:var(--num);font-size:16px;font-weight:700;color:var(--muted);}
+    .dm-delta{flex:none;white-space:nowrap;font-size:11.5px;font-weight:700;color:var(--muted);}
+    .dm-delta.up{color:var(--up);} .dm-delta.down{color:var(--dn);}
+    .dm-sub{font-size:11.5px;color:var(--faint);margin-top:3px;}
+    .dm-net{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+      white-space:nowrap;border-top:1px solid var(--line);margin-top:11px;padding-top:9px;}
+    .dm-net .l{font-size:11.5px;color:var(--muted);}
+    .dm-net .l b{font-family:var(--num);font-size:15px;color:var(--ink);margin-left:5px;}
+    .dm-net .r{font-size:11px;color:var(--faint);}
+    .dm-spark{display:block;width:100%;height:88px;margin-top:10px;}
+    .dm-sparkl{display:flex;justify-content:space-between;font-family:var(--num);
+      font-size:10.5px;color:var(--faint);padding-top:4px;}
+    /* 資產結構:一列一種切法,展開才畫甜甜圈 */
+    .dm-strow{padding:11px 0 10px;border-bottom:1px solid #f4f6f8;}
+    .dm-strow .h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;white-space:nowrap;}
+    .dm-strow .h .k{font-size:12.5px;color:var(--muted);}
+    .dm-strow .h .v{font-family:var(--num);font-size:15px;font-weight:800;}
+    .dm-strow .dm-seg{margin:8px 0 6px;}
+    .dm-strow .f{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+    .dm-strow .f .s{font-size:11px;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .dm-strow .f button{flex:none;border:none;background:none;padding:0;color:var(--muted);
+      cursor:pointer;font:600 11px/1.4 "Noto Sans TC",sans-serif;white-space:nowrap;}
+    .dm-donut{display:flex;align-items:center;gap:14px;padding:10px 0 2px;}
+    .dm-donut svg{flex:none;display:block;}
+    .dm-lgd{min-width:0;display:flex;flex-direction:column;gap:6px;}
+    .dm-lgd span{display:flex;align-items:center;gap:7px;font-size:11.5px;color:#3f4652;}
+    .dm-lgd i{width:7px;height:7px;border-radius:50%;flex:none;}
+    .dm-lgd b{font-family:var(--num);font-weight:700;color:var(--ink);}
+    /* 帳戶明細 */
+    .dm-acc{padding:9px 0 8px;border-bottom:1px solid #f4f6f8;}
+    .dm-acc .h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;white-space:nowrap;}
+    .dm-acc .h .n{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;}
+    .dm-acc .h .v{font-family:var(--num);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;}
+    .dm-acc .t{height:5px;border-radius:3px;background:#f4f6f8;overflow:hidden;margin-top:6px;}
+    .dm-acc .t i{display:block;height:100%;border-radius:3px;}
+    /* 持倉與 ETF 列 */
+    .dm-pos{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #f4f6f8;}
+    .dm-pos.link{cursor:pointer;}
+    .dm-pos.link:active{background:#fafbfc;}
+    .dm-pos .nm{flex:1 1 auto;min-width:0;font-size:13.5px;font-weight:700;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .dm-pos .pc{flex:none;font-family:var(--num);font-size:11.5px;color:var(--faint);}
+    .dm-pos .vl{font-family:var(--num);font-size:13.5px;font-weight:700;
+      font-variant-numeric:tabular-nums;min-width:54px;text-align:right;}
+    /* 風險提示:點標題才展開內文 */
+    .dm-risk{padding:10px 0 9px;border-bottom:1px solid #f4f6f8;}
+    .dm-risk .h{display:flex;align-items:center;gap:9px;cursor:pointer;}
+    .dm-risk .h i{width:16px;height:16px;border-radius:50%;flex:none;display:flex;
+      align-items:center;justify-content:center;font-size:10px;font-weight:800;
+      font-style:normal;color:#fff;}
+    .dm-risk.warn .h i{background:var(--yellow);}
+    .dm-risk.info .h i{background:#5b8def;}
+    .dm-risk.ok .h i{background:var(--up2);}
+    .dm-risk .h span{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .dm-risk .b{font-size:11.5px;color:var(--muted);line-height:1.65;padding:6px 0 0 25px;}
+  }
+  /* iPhone SE 這種 320px 機身:幾條原本不換行的列讓它換行,寧可多一行也不要被切掉 */
+  @media(max-width:360px){
+    .dm-stats{flex-wrap:wrap;gap:6px 12px;white-space:normal;}
+    .dm-net{flex-wrap:wrap;white-space:normal;}
+    .dm-hd.bl{flex-wrap:wrap;}
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     桌面版 redesign(依 2026-08-16 設計稿):滿版 app bar + 分頁 sticky bar,
+     股票面板改雙欄(清單 + 右側脈搏/訊號欄),槓桿與資產重排成寬版格局。
+     全部包在 min-width:721px,手機版(<=720px)結構與樣式完全不動。
+     ══════════════════════════════════════════════════════════════════════ */
+  @media(min-width:721px){
+    body{min-width:1280px;font-size:14px;}
+    /* 版心 1232px:app bar 與分頁列滿版,其餘內容置中 */
+    .wrap{max-width:none;margin:0;padding:0;}
+    .main{display:block;max-width:1232px;margin:0 auto;padding:18px 24px 44px;}
+    .shell{display:contents;}
+    footer{margin-top:26px;}
+
+    /* ── 頂部 app bar ── */
+    header{position:sticky;top:0;z-index:60;height:57px;background:var(--card);
+      border:none;border-bottom:1px solid var(--line2);border-radius:0;margin:0;box-shadow:none;
+      display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+      padding:0 max(24px,calc((100% - 1184px)/2));}
+    header .brandcol{display:flex;align-items:baseline;gap:12px;min-width:0;}
+    header h1{font-size:18px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;margin:0;}
+    header .sub{font-size:11.5px;color:var(--muted);white-space:nowrap;margin:0;}
+    #panelToggle{position:static;transform:none;}
+    .ptog button{height:30px;padding:0 15px;font-size:13px;}
+    .hright{justify-self:end;margin-top:0;}
+    .refresh{width:32px;height:32px;font-size:15px;}
+    .refresh:hover{background:#f4f6f8;}
+
+    /* ── 第二條 sticky bar:股票面板分頁 + 規則 ── */
+    #stockChrome{position:sticky;top:57px;z-index:55;background:var(--card);
+      border:none;border-bottom:1px solid var(--line2);border-radius:0;margin:0;overflow:visible;
+      padding:0 max(24px,calc((100% - 1184px)/2));}
+    .tabs{gap:28px;padding:0;border-bottom:none;height:44px;align-items:center;}
+    .tabs button{padding:13px 0;}
+    .tabs button.tabrules{margin-left:auto;font:600 12px/1 "Noto Sans TC",sans-serif;
+      color:var(--muted);box-shadow:none;padding:6px 0;}
+    .tabs button.tabrules:hover{color:var(--ink);}
+    #topstrip{display:none;}
+
+    /* ── 股票面板:左清單 + 右側欄 ── */
+    #stockPanel{display:grid;grid-template-columns:minmax(0,1fr) 352px;gap:18px;align-items:start;}
+    #stockPanel.norail{grid-template-columns:minmax(0,1fr);}
+    #paneCol{display:block;min-width:0;}
+    #status{grid-column:1 / -1;}
+    #rail{display:flex;flex-direction:column;gap:12px;min-width:0;
+      position:sticky;top:117px;}
+
+    /* 清單:組標籤 + 白卡 */
+    .blk{margin-bottom:18px;}
+    .blk h2{font-size:12px;color:var(--muted);font-weight:600;margin:0 0 7px;}
+    .blist{padding:2px 22px 8px;margin-bottom:0;}
+    .bhead,.brow,.brow.clickable:hover{grid-template-columns:minmax(0,1fr) 260px 110px;}
+    /* 表頭中欄的說明字只印一次,借用左右兩側的 gap 讓它保持單行 */
+    .bhead .c2{white-space:nowrap;margin:0 -16px;}
+    .brow{padding:14px 4px;}
+    .brow.clickable:hover{margin:0 -22px;padding-left:26px;padding-right:26px;}
+
+    /* ── 右欄:脈搏卡 ── */
+    .rl-card{background:var(--card);border:1px solid var(--line2);border-radius:16px;
+      box-shadow:0 1px 2px rgba(16,20,24,.05);}
+    .rl-pulse{padding:15px 17px 14px;}
+    .rl-top{display:flex;align-items:stretch;}
+    .rl-l{flex:none;width:118px;}
+    .rl-r{flex:1;min-width:0;}
+    .rl-div{flex:none;width:1px;background:var(--line);margin:1px 14px;}
+    .rl-lbl{font-size:10.5px;color:var(--muted);font-weight:600;}
+    .rl-v{display:flex;align-items:baseline;gap:7px;margin-top:4px;}
+    .rl-v b{font-family:var(--num);font-size:26px;font-weight:800;letter-spacing:-.02em;
+      line-height:1;font-variant-numeric:tabular-nums;}
+    .rl-v2{display:flex;align-items:baseline;gap:8px;margin-top:4px;white-space:nowrap;}
+    .rl-v2>b{font-family:var(--num);font-size:20px;font-weight:800;letter-spacing:-.01em;line-height:1;}
+    .rl-v2 .rl-side{font-size:10.5px;color:var(--muted);}
+    .rl-v2 .rl-side b{color:var(--ink);font-family:var(--num),"Noto Sans TC",sans-serif;}
+    .rl-tag{font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 8px;color:#fff;}
+    .rl-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px;padding-top:11px;
+      border-top:1px solid var(--line);}
+    .rl-chip{font-size:11px;font-weight:700;color:#fff;padding:3px 9px;border-radius:7px;}
+    .rl-note{font-size:10.5px;color:var(--faint);margin-top:8px;}
+    /* ── 右欄:今日訊號(桌面永遠全部展開) ── */
+    .rl-sig{padding:14px 17px 13px;}
+    .rl-sh{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+    .rl-sh .rl-st{font-size:12.5px;font-weight:700;margin-right:2px;}
+    .rl-sc{font-size:11.5px;border-radius:20px;padding:2px 10px;font-variant-numeric:tabular-nums;
+      border:1px solid var(--line);color:var(--muted);font-weight:500;}
+    .rl-sc.on{border-color:var(--ink);color:var(--ink);font-weight:700;}
+    .rl-none{color:var(--muted);font-size:13px;margin-top:10px;}
+    .rl-row{display:flex;gap:9px;align-items:flex-start;margin-top:12px;}
+    .rl-row+.rl-row{margin-top:8px;}
+    .rl-mrow{display:flex;gap:9px;align-items:flex-start;padding:7px 0 0;}
+    .rl-t{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:8px;flex:none;color:#fff;}
+    .rl-t.a{background:var(--add);} .rl-t.c{background:var(--dn);}
+    .rl-t.b{background:var(--up);min-width:52px;text-align:center;}
+    .rl-t.s{background:var(--dn);min-width:52px;text-align:center;}
+    .rl-t.n{background:var(--nearbg);color:var(--nearink);min-width:52px;text-align:center;}
+    .rl-items{display:flex;flex-wrap:wrap;font-size:13px;line-height:1.4;min-width:0;}
+    .rl-it{display:inline-flex;align-items:baseline;gap:5px;border-radius:7px;padding:2px 9px;
+      margin:0 6px 4px 0;}
+    .rl-it.a{background:var(--addbg);color:var(--add);}
+    .rl-it.c{background:var(--dnbg);color:var(--dn);}
+    .rl-it b{font-weight:700;}
+    .rl-it .lv{font-size:9px;letter-spacing:1px;}
+    .rl-moves{font-size:13px;line-height:1.9;min-width:0;}
+    .rl-moves .mv{margin-right:10px;white-space:nowrap;}
+    .rl-moves .sy{font-weight:600;color:var(--ink);}
+    .rl-divline{height:1px;background:var(--line);margin:11px 0 3px;}
+    .rl-hl{font-size:12px;color:var(--muted);line-height:1.7;margin-top:10px;padding-top:9px;
+      border-top:1px dashed var(--line);}
+    .rl-hl b{color:var(--ink);}
+    .rl-foot{font-size:10.5px;color:var(--faint);padding:0 4px;line-height:1.6;}
+
+    /* ── 槓桿風險 ── */
+    #riskPanel{gap:14px;}
+    .rk-main{grid-template-columns:1fr 380px;}
+    .rk-main-left{padding:22px 26px 24px;}
+    .rk-main-right{padding:22px 24px 24px;}
+    .rk-hero-row{display:flex;gap:44px;flex-wrap:wrap;}
+    .rk-kv{gap:26px;margin-top:18px;}
+    .rk-mark.lo{height:34px;}
+    .rk-two{display:grid;grid-template-columns:1fr 400px;gap:14px;align-items:start;}
+    .rk-holds{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+    .rk-two .rk-card{padding:18px 22px 16px;}
+    .rk-two .rk-card.todo{padding:18px 22px 14px;}
+    .rk-foot2{font-size:12px;color:var(--muted);padding-top:10px;}
+    .rk-foot2 b{font-family:var(--num);color:var(--ink);}
+    .rk-foot2 button{border:none;background:none;color:var(--add);font-weight:700;font-size:12px;
+      cursor:pointer;padding:0;}
+    .rk-tbl.alloc{margin-top:10px;}
+    .rk-detail{padding:18px 22px 20px;}
+
+    /* ── 資產 ── */
+    #assetPanel{gap:14px;}
+    .as-kpi{padding:13px 16px;border-radius:14px;}
+    .as-kpi .v{font-size:22px;}
+    .as-card{border-radius:16px;padding:14px 18px 12px;}
+    .as-two{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:12px;align-items:start;}
+    /* 持倉卡收合(桌面) */
+    .as-fold{display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-user-select:none;user-select:none;}
+    .as-fold h3{margin:0;}
+    .as-fold .fs{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:8px;}
+    .as-fold .fs i{font-style:normal;color:var(--faint);font-size:11px;}
+    .as-fold:hover .fs{color:var(--ink);}
+    .as-hold.folded{padding:14px 18px;}
+    .as-hold .as-fold+ .as-row{margin-top:8px;}
+    /* 歷年線圖:年/月切換與今年總結 */
+    .tl-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .tl-head h3{margin:0;}
+    .tl-seg{display:flex;gap:3px;padding:3px;background:#f4f6f8;border-radius:8px;}
+    .tl-seg button{height:24px;padding:0 13px;border:none;border-radius:6px;background:transparent;
+      color:var(--muted);font:600 12px/1 "Noto Sans TC",sans-serif;cursor:pointer;}
+    .tl-seg button.on{background:#fff;box-shadow:0 1px 2px rgba(16,20,24,.12);color:var(--ink);font-weight:700;}
+    .tl-sum{font-size:12px;color:var(--muted);background:#f7f8fa;border:1px solid var(--line);
+      border-radius:8px;padding:7px 11px;display:inline-block;margin:6px 0 10px;}
+    .tl-sum b.up{color:var(--up);} .tl-sum b.dn{color:var(--dn);}
+    .tl-empty{padding:36px 0;text-align:center;color:var(--faint);font-size:12.5px;}
+    .as-holds{gap:12px;}
+    .as-holds .as-card{padding:14px 18px 8px;}
+    .as-rows{column-count:2;}
+    .as-row{grid-template-columns:auto 1fr 92px 48px 12px;}
+    .as-row.notag{grid-template-columns:1fr 92px 48px 12px;}
+    .as-kpis,.as-donuts{gap:12px;}
+
+    /* ── 走勢彈窗 / 規則彈窗 ── */
+    .modal{padding:24px;}
+    .sheet{max-width:780px;padding:18px 22px 22px;box-shadow:0 12px 48px rgba(0,0,0,.25);}
+    #rulesSheet{max-width:720px;}
+    .bh-row{grid-template-columns:96px 70px 1fr 60px;}
+
+    /* ══════════════════════════════════════════════════════════════════
+       四個面板一致性收尾(2026-08-20,Claude Design「Market Compass 桌面版 v2」)。
+       只調樣式,不動結構、不動資料、不動手機版。
+       原稿還有第 9 項「把支出併進資產分析」,那要動 JS,先沒套。
+       ══════════════════════════════════════════════════════════════════ */
+
+    /* 1)數字一律等寬對齊 */
+    .main{font-variant-numeric:tabular-nums;}
+    #expensePanel #exTrend .vl{font-family:var(--num);}
+
+    /* 2)支出面板原本用 IBM Plex Sans 與 Plex Mono,跟另外三個面板像兩個產品,
+          改成吃全站字體與同一組數字字體,hero 數字也對到資產的 44/800 */
+    #expensePanel{font-family:inherit;--mono:var(--num);}
+    #expensePanel .hero .v{font-size:44px;font-weight:800;letter-spacing:-.02em;}
+    #expensePanel .hero .k{font-size:13px;color:var(--muted);}
+
+    /* 3)卡片外殼:同一個圓角、框線、陰影 */
+    .blist,.rl-card,.rk-card,.as-card,.as-kpi,#expensePanel .card{
+      border:1px solid var(--line2);border-radius:16px;
+      box-shadow:0 1px 2px rgba(16,20,24,.05);}
+    #expensePanel .ask,#expensePanel .picker{border-radius:12px;}
+
+    /* 4)卡片內距:主卡一律 18/22,量表卡與清單卡不再各有一套 */
+    .rl-pulse,.rl-sig{padding:18px 20px;}
+    .rk-main-left,.rk-main-right{padding:18px 22px 22px;}
+    .rk-two .rk-card,.rk-two .rk-card.todo,.rk-holds .rk-card{padding:18px 22px;}
+    .as-card,.as-holds .as-card,.as-hold.folded{padding:18px 22px;}
+    #expensePanel .card,#expensePanel .hero{padding:18px 22px;}
+
+    /* 5)卡與卡的間距一律 14 */
+    #stockPanel,#riskPanel,#assetPanel,#expensePanel,#expensePanel #app{gap:14px;}
+    .rk-two,.rk-holds,.as-two,.as-holds,.as-kpis,.as-donuts,.ax-two,
+    #expensePanel .cols{gap:14px;}
+
+    /* 6)標題層級:主標 16/700,副標 12 faint */
+    .rk-h h2,.ax-hd h3,.as-card h3,.as-fold h3,.tl-head h3,
+    #expensePanel .chead h2{font-size:16px;font-weight:700;letter-spacing:-.01em;}
+    .rk-h .rk-sub,.ax-sub,.as-note2,#expensePanel .csub{
+      font-size:12px;color:var(--faint);font-weight:400;}
+
+    /* 7)橫條底軌與註解區塊統一 */
+    .as-acc .t,.ax-brow .t,#expensePanel .catrow .track,#expensePanel .bar{background:#f0f2f5;}
+    .tl-sum,.apos,#expensePanel .insight{border-radius:10px;}
+
+    /* 8)支出的月份導航跟資產的年月切換用同一個尺度 */
+    #expensePanel .mnav{border-color:var(--line2);border-radius:8px;padding:2px;}
+    #expensePanel .mnav button{width:28px;height:28px;border-radius:6px;}
+    #expensePanel .mnav .ml{height:28px;font-size:13px;min-width:96px;}
+
+    /* 9)桌面 IA:「支出」併入「資產支出」一頁。
+          頂部四格總覽把兩邊重點拉到第一屏,sticky 切換鈕隨時換明細,
+          支出的獨立切換鈕收掉,手機版四分頁完全不動 */
+    #expenseTogBtn{display:none !important;}
+    #afSummary{margin-bottom:14px;}
+    #afSummary .afup{color:var(--up);font-weight:700;}
+    #afSummary .afdn{color:var(--dn);font-weight:700;}
+    #afSummary .as-kpi .v.afdn{color:var(--dn);}
+    #afSummary .as-kpi .v.afup{color:var(--up);}
+    #rkSeg{position:sticky;top:67px;z-index:50;width:max-content;margin:0 auto 14px;
+      display:flex;gap:3px;padding:3px;background:#e4e7ec;border-radius:10px;
+      box-shadow:0 1px 4px rgba(16,20,24,.10);}
+    #rkSeg button{height:30px;padding:0 24px;border:none;border-radius:8px;background:transparent;
+      color:var(--muted);font:600 13px/1 "Noto Sans TC",sans-serif;cursor:pointer;}
+    #rkSeg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(16,20,24,.14);}
+    #afSeg{position:sticky;top:67px;z-index:50;width:max-content;margin:0 auto 14px;
+      display:flex;gap:3px;padding:3px;background:#e4e7ec;border-radius:10px;
+      box-shadow:0 1px 4px rgba(16,20,24,.10);}
+    #afSeg button{height:30px;padding:0 24px;border:none;border-radius:8px;background:transparent;
+      color:var(--muted);font:600 13px/1 "Noto Sans TC",sans-serif;cursor:pointer;}
+    #afSeg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(16,20,24,.14);}
+  }
