@@ -4,7 +4,7 @@
    不可以改成 cache first，那會讓面板顯示過期的價格與均線訊號。
    改動這個檔案時記得把 CACHE 的版本號加一，舊快取才會被清掉。 */
 
-var CACHE = "compass-v91";
+var CACHE = "compass-demo-v93";
 
 var PRECACHE = [
   "./",
@@ -59,14 +59,17 @@ self.addEventListener("fetch", function (event) {
         // 只快取真正的內容。401（未登入）與轉址不要存，否則登入後還是拿到擋人的那頁
         if (res && res.ok && res.type === "basic") {
           var copy = res.clone();
+          // 頁面抓資料會加 ?t=時間戳 避開 HTTP 快取。快取鍵要拿掉查詢字串,
+          // 不然每次開頁都多存一份 data.json,快取會一直長大。
+          var key = url.search ? url.origin + url.pathname : req;
           caches.open(CACHE).then(function (cache) {
-            cache.put(req, copy).catch(function () {});
+            cache.put(key, copy).catch(function () {});
           });
         }
         return res;
       })
       .catch(function () {
-        return caches.match(req).then(function (hit) {
+        return caches.match(req, { ignoreSearch: true }).then(function (hit) {
           if (hit) return hit;
           // 導覽請求沒有對應快取時，退回首頁的快取版本
           if (req.mode === "navigate") {
