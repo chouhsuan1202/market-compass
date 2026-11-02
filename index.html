@@ -1875,7 +1875,8 @@ function normWL(raw){
     if(o.lev!=null) o.lev=toNum(o.lev)||1;
     if(o.cost!=null) o.cost=toNum(o.cost);
     if(o.buys!=null) o.buys=objArr(o.buys).filter(b=>isISODay(b.d))
-      .map(b=>({...b, q:toNum(b.q)||0, p:toNum(b.p)}));
+      .map(b=>({...b, q:toNum(b.q)||0, p:toNum(b.p)}))
+      .sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:0);   // 首買日、「剛買」都取 buys[0],資料沒照日期排就會算錯
     return o;
   });
   return {...raw, indexes:(Array.isArray(raw.indexes)?raw.indexes:[]).filter(x=>typeof x==="string"),
@@ -2492,6 +2493,7 @@ function perfCardHTML(){
       const bs=bh.find(p=>p.d>=l.d);
       const bRet=(bs&&bLast)?bLast/bs.c-1:0;
       const w=l.q*l.p;
+      if(!(w>0)) return;   // 缺價格或股數的那筆不能進加權,不然整個 alpha 變 NaN
       asum+=w*(eRet-bRet); wsum+=w;
     });
     return wsum?(asum/wsum)*100:null;
@@ -3727,13 +3729,15 @@ function renderAsset(){
     const t=s=>new Date(s+"T00:00:00Z").getTime();
     const yearly=!monthly&&pts.length&&pts[0].yr!=null;   // 年平均模式:x 等距
     const t0=t(pts[0].d),t1=t(pts[pts.length-1].d);
-    const vmax=Math.max(...pts.map(p=>p.v));
+    const vmax=Math.max(...pts.map(p=>p.v)), vlo=Math.min(...pts.map(p=>p.v));
     // 月模式:區間短、值域窄,y 軸不從 0 起,刻度 50;年模式維持從 0 起、刻度 200
+    // 值是負的時候 y 軸往下延伸;全部是 0 或同一天時不能除以 0(路徑會變 NaN)
     const step=monthly?50:200;
-    const yn=Math.ceil(vmax/step)*step;
-    const vmin=monthly?Math.max(0,Math.floor(Math.min(...pts.map(p=>p.v))/step)*step-step):0;
+    const vmin=vlo<0?Math.floor(vlo/step)*step-(monthly?step:0)
+      :(monthly?Math.max(0,Math.floor(vlo/step)*step-step):0);
+    const yn=Math.max(Math.ceil(vmax/step)*step, vmin+step);
     const XI={}; pts.forEach((p,i)=>{ XI[p.d]=pts.length<2?L:L+i*(W-L-R)/(pts.length-1); });
-    const X=d=>yearly?XI[d]:(L+(t(d)-t0)/(t1-t0)*(W-L-R));
+    const X=d=>yearly?XI[d]:(L+(t(d)-t0)/((t1-t0)||1)*(W-L-R));
     const Y=v=>T+(1-(v-vmin)/(yn-vmin))*(H-T-B);
     // \u5e74\u4efd\u683c\u7dda:\u6bcf\u5e74 1/1 \u4e00\u689d,\u5bec\u5ea6\u4e0d\u5747\u5c31\u662f\u91cd\u9ede
     let grid="";
@@ -4131,7 +4135,8 @@ function render(){
 
   const scale=Math.max(total,goal)||1;
   const inBase=Math.min(total,goal);
-  const inPct=inBase/scale*100, tickPct=goal/scale*100;
+  // 退款多過花費(總額是負的)時條不能是負寬度
+  const inPct=Math.max(inBase,0)/scale*100, tickPct=goal/scale*100;
   const chip = over>0
     ? `<span class="chip-over">超出目標 ${exEur(over)}</span>`
     : `<span class="chip-under">目標內,還有 ${exEur(-over)}</span>`;
@@ -4418,7 +4423,8 @@ function drawTrend(ms){
     : ms.map(stackLayers);
   const tops=stacks.map(ls=>ls.reduce((a,l)=>a+l.v,0));
   const goal=D.totalBudget||D.fixedBudget;
-  const maxV=(fk?Math.max(...vals,...tops,1):Math.max(...vals,...tops,goal))*1.15;
+  // 沒設目標、月份又全是 0 時 maxV 會是 0,y() 除以 0 整張圖變 NaN,所以至少 1
+  const maxV=(fk?Math.max(...vals,...tops,1):Math.max(...vals,...tops,goal,1))*1.15;
   const n=ms.length;
   /* 格數 = 月份數 + 1:右邊永遠留一格呼吸,月份少時柱子也攤得開 */
   const slot=iw/Math.max(n+1,3);
@@ -5369,7 +5375,10 @@ loadData();
 
 /* 手機與桌面的清單結構不同(手機是 56px 的列,桌面是三欄卡),
    所以跨越 720px 這條線的時候要整個重畫,不能只靠 CSS。 */
-window.matchMedia("(max-width:720px)").addEventListener("change",function(){
+/* iOS 13 / Safari 13 的 MediaQueryList 沒有 addEventListener,只有舊的 addListener。
+   直接呼叫會丟例外,後面的 service worker 也就註冊不到。 */
+(function(mq,fn){ if(mq.addEventListener) mq.addEventListener("change",fn); else if(mq.addListener) mq.addListener(fn); })(
+window.matchMedia("(max-width:720px)"),function(){
   switchTab(CUR_TAB);
   if(PANEL==="asset") renderAsset();
   if(!DATA||!WL) return;
