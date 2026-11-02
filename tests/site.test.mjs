@@ -354,6 +354,91 @@ test("鍵盤:Tab 到清單列按 Enter 開線圖,Esc 關掉焦點回原位", asy
   await ctx.close();
 });
 
+// ───────────────────────── 極端數值:圖表不能出現 NaN ─────────────────────────
+
+test("歷年線圖:全是 0、同一天、負值,年與月兩種檢視都畫得出來", async () => {
+  const cases = {
+    "全是 0": [{ d: "2025-05-01", v: 0 }, { d: "2026-07-01", v: 0 }, { d: "2026-08-01", v: 0 }],
+    "同一天": [{ d: "2025-05-01", v: 300 }, { d: "2026-08-01", v: 310 }, { d: "2026-08-01", v: 320 }],
+    "負值": [{ d: "2025-05-01", v: -120 }, { d: "2026-07-01", v: -40 }, { d: "2026-08-01", v: 15 }],
+  };
+  for (const [name, timeline] of Object.entries(cases)) {
+    const asset = readGlobal("asset-data.js", "ASSET_DATA");
+    asset.timeline = timeline;
+    if (name === "同一天") asset.timeline = [timeline[1], timeline[2]]; // 月模式只剩同一天的兩筆
+    const { page, ctx, errors } = await open({ width: 1280, hash: "asset",
+      routes: { "asset-data.js": { body: asScript("ASSET_DATA", asset) } } });
+    for (const mode of ["year", "month"]) {
+      const btn = page.locator(`#assetPanel [data-tlmode="${mode}"]`);
+      if (await btn.count()) await btn.click();
+      const svg = await page.evaluate(() => [...document.querySelectorAll("#assetPanel svg")].map(s => s.outerHTML).join(""));
+      assert.ok(!/NaN|Infinity/.test(svg), `${name}/${mode}: 線圖座標不能是 NaN`);
+    }
+    assert.deepEqual(errors, [], name);
+    await ctx.close();
+  }
+});
+
+test("支出趨勢圖:沒設目標、每月都是 0,圖不出現 NaN", async () => {
+  const exp = readGlobal("expense-data.js", "EXPENSE_DATA");
+  exp.totalBudget = 0; exp.fixedBudget = 0;
+  exp.months = exp.months.map(m => ({ ...m, transactions: [] }));
+  const { page, ctx, errors } = await open({ width: 1280, hash: "expense",
+    routes: { "expense-data.js": { body: asScript("EXPENSE_DATA", exp) } } });
+  await page.locator("#exTrend").waitFor({ state: "attached" });
+  const svg = await page.locator("#exTrend").evaluate(s => s.innerHTML);
+  assert.ok(svg.length > 0 && !/NaN|Infinity/.test(svg), "趨勢圖座標不能是 NaN");
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test("支出總額是負的(退款多過花費):目標條不會是負寬度", async () => {
+  const exp = readGlobal("expense-data.js", "EXPENSE_DATA");
+  const last = exp.months[exp.months.length - 1];
+  last.transactions = [{ date: last.month + "-03", desc: "退款", group: exp.groups[0].key, amount: -500 }];
+  exp.updated = last.month + "-28";
+  const { page, ctx, errors } = await open({ width: 1280, hash: "expense",
+    routes: { "expense-data.js": { body: asScript("EXPENSE_DATA", exp) } } });
+  const w = await page.locator("#expensePanel .seg-in").evaluate(e => e.style.width);
+  assert.equal(w, "0%");
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test("報酬線圖:買點沒照日期排、有一筆缺價格,首買日取最早那筆,數字不是 NaN", async () => {
+  const d = DATA(), wl = WL();
+  const sym = Object.keys(d).find(k => k[0] !== "_" && d[k] && d[k].hist && d[k].hist.d.length > 40 && !k.startsWith("^"));
+  const hd = d[sym].hist.d, n = hd.length;
+  const early = hd[n - 30], late = hd[n - 10];
+  wl.market_holdings = [{ s: sym, dn: "測試標的", cost: d[sym].hist.c[n - 30],
+    buys: [{ d: late, q: 10, p: d[sym].hist.c[n - 10] }, { d: early, q: 10, p: d[sym].hist.c[n - 30] }, { d: late, q: 5 }] }];
+  const asset = readGlobal("asset-data.js", "ASSET_DATA");
+  asset.perf = { sp500: hd.slice(-30).map((x, i) => ({ d: x, v: 100 + i / 10 })) };
+  const { page, ctx, errors } = await open({ width: 1280, hash: "risk", routes: {
+    "data.json": { body: JSON.stringify(d) }, "watchlist.json": { body: JSON.stringify(wl) },
+    "asset-data.js": { body: asScript("ASSET_DATA", asset) } } });
+  await page.click('[data-riskview="perf"]');
+  await page.click(`[data-perfsubj="${sym}"]`);
+  const html = await page.locator("#riskPanel").innerHTML();
+  assert.ok(html.includes(early + " 首買起"), "首買日要是最早那筆");
+  assert.ok(!/NaN/.test(html), "不能出現 NaN");
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test("舊版 Safari:MediaQueryList 沒有 addEventListener 也不丟例外", async () => {
+  const { page, ctx, errors } = await open({ width: 1280, init: () => {
+    window.__mqOld = 0;
+    const P = MediaQueryList.prototype;
+    P.addListener = function () { window.__mqOld++; };
+    delete P.addEventListener;
+    Object.defineProperty(P, "addEventListener", { value: undefined, configurable: true });
+  } });
+  assert.ok(await page.evaluate(() => window.__mqOld > 0), "要退回 addListener");
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
 // ───────────────────────── 檔案層級檢查 ─────────────────────────
 
 const tracked = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => {
