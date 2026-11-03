@@ -137,7 +137,7 @@ window.ASSET_DATA = {
  ],
  "holdings": [
   {
-   "title": "歐股 ETF",
+   "title": "ETF",
    "rows": [
     {
      "tag": "ETF",
@@ -267,7 +267,7 @@ window.ASSET_DATA = {
   },
   {
    "level": "warn",
-   "title": "IB 帳戶有融資",
+   "title": "券商帳戶有融資",
    "body": "現金餘額 -100,000 TWD（負數＝借券商的錢），持股市值 830,145 TWD，淨值 730,145 TWD。"
   },
   {

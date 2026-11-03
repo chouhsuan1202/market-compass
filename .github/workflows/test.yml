@@ -4,9 +4,15 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+# 同一個分支連推好幾次時,只跑最新那次
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -19,5 +25,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # 單元測試不用瀏覽器,先跑,算式壞了一秒就知道
+      - name: 單元測試(js/core.js 的算式)
+        run: npm run test:unit
       - run: npx playwright install --with-deps chromium
-      - run: npm test
+      - name: 頁面測試(手機與桌面、壞資料、無障礙)
+        run: npm run test:e2e

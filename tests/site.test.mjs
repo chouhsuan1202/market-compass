@@ -9,6 +9,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import { siteFileList } from "../scripts/sync-docs.mjs";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
@@ -18,6 +19,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, "..");
 const ROOT = path.join(REPO, "docs");
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8", ".png": "image/png", ".md": "text/plain; charset=utf-8" };
 
 let server, base, browser;
@@ -83,6 +85,32 @@ async function goPanel(page, key) {
   await page.evaluate(k => { location.hash = k; }, key);
   await page.waitForTimeout(120);
 }
+
+// ======================= 煙霧測試 =======================
+
+test("煙霧測試:頁面打得開,每個 CSS 與 JS 都載到,四個分頁都有內容", async () => {
+  const failed = [];
+  const { page, ctx, errors } = await open({ width: 1280 });
+  page.on("requestfailed", r => failed.push(r.url()));
+  const res = await page.evaluate(() => performance.getEntriesByType("resource")
+    .filter(e => /\/(css|js)\//.test(e.name)).map(e => ({ n: e.name, s: e.responseStatus })));
+  assert.equal(res.filter(r => r.n.endsWith(".css")).length, 2, "兩個 CSS 都要載到");
+  assert.equal(res.filter(r => r.n.endsWith(".js")).length, 9, "九個 JS 都要載到");
+  assert.ok(res.every(r => r.s === 200), JSON.stringify(res));
+  // CSS 有吃到:版心是 1232px 的桌面版,不是瀏覽器預設樣式
+  assert.equal(await page.locator("#tabbar").isVisible(), false, "桌面不該看到手機底部列");
+  assert.ok(await page.locator("#macro .brow").count() > 5, "股票面板要有清單");
+  assert.ok(await page.locator("#rail .rl-card").count() >= 2, "右欄要有脈搏卡與訊號卡");
+  await goPanel(page, "risk");
+  assert.match(await page.locator("#riskPanel").innerText(), /借款成數/);
+  await goPanel(page, "asset");
+  assert.match(await page.locator("#assetPanel").innerText(), /資產配置/);
+  await goPanel(page, "expense");
+  assert.match(await page.locator("#expensePanel").innerText(), /總支出/);
+  assert.deepEqual(failed, []);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
 
 // ───────────────────────── 正常資料 ─────────────────────────
 
@@ -439,16 +467,104 @@ test("舊版 Safari:MediaQueryList 沒有 addEventListener 也不丟例外", asy
   await ctx.close();
 });
 
+// ======================= 第三輪修理 =======================
+
+test("外部字型載不到(Google Fonts 斷線):頁面照常,字型退回系統字", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 820 }, serviceWorkers: "block" });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", e => errors.push(e.message));
+  await page.route(u => !u.href.startsWith(base), r => r.abort());
+  await page.goto(base);
+  await page.locator("#macro [data-sym]").first().waitFor({ timeout: 5000 });
+  const fam = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
+  assert.match(fam, /sans-serif/);
+  await goPanel(page, "risk");
+  const lev = await page.locator(".rk-lev").first().evaluate(e => getComputedStyle(e).fontFamily);
+  assert.match(lev, /sans-serif/, "槓桿小標要有系統字備援");
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test("視窗跨過 720px:資產支出的桌面總覽與手機標題跟著切換", async () => {
+  const { page, ctx, errors } = await open({ width: 1280, hash: "asset" });
+  const state = () => page.evaluate(() => ({ af: !document.getElementById("afHead").hidden,
+    h1: document.querySelector("header h1").textContent }));
+  assert.deepEqual(await state(), { af: true, h1: "Compass (Beta)" });
+  await page.setViewportSize({ width: 375, height: 820 });
+  await page.waitForTimeout(200);
+  assert.deepEqual(await state(), { af: false, h1: "資產總覽" }, "縮成手機:總覽要收起來、標題要換");
+  await page.setViewportSize({ width: 1280, height: 820 });
+  await page.waitForTimeout(200);
+  assert.deepEqual(await state(), { af: true, h1: "Compass (Beta)" });
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test("線圖彈窗:沒填成本時,買點均價按股數加權,缺價格的那筆不算", async () => {
+  const d = DATA(), wl = WL();
+  const sym = wl.market_holdings[0].s, n = d[sym].hist.d.length;
+  const da = d[sym].hist.d[n - 20], db = d[sym].hist.d[n - 10];
+  // 10 股 @ 100、30 股 @ 200、5 股缺價格:均價是 175,不是 (100+200+0)/3 = 100
+  wl.market_holdings[0].buys = [{ d: da, q: 10, p: 100 }, { d: db, q: 30, p: 200 }, { d: db, q: 5 }];
+  delete wl.market_holdings[0].cost;
+  for (const width of [375, 1280]) {
+    const { page, ctx, errors } = await open({ width, routes: { "watchlist.json": { body: JSON.stringify(wl) } } });
+    await page.locator(`#macro [data-sym="${sym}"]`).click();
+    const txt = await page.locator("#chartSheet").innerText();
+    assert.match(txt, /均價\s*175\.00/, `${width}px`);
+    if (width === 1280) assert.match(txt, /買點 175\.00/);
+    assert.ok(!/NaN|Infinity/.test(txt));
+    assert.deepEqual(errors, []);
+    await ctx.close();
+  }
+});
+
+test("鍵盤:彈窗開著時 Tab 只在彈窗裡繞,不會跑到後面", async () => {
+  const { page, ctx } = await open({ width: 1280 });
+  await page.click("#todoBtn");
+  for (let i = 0; i < 12; i++) {
+    await page.keyboard.press("Tab");
+    assert.ok(await page.evaluate(() => !!document.activeElement.closest("#todoModal")), `第 ${i + 1} 次 Tab 跑出彈窗`);
+  }
+  await page.keyboard.press("Shift+Tab");
+  assert.ok(await page.evaluate(() => !!document.activeElement.closest("#todoModal")));
+  await ctx.close();
+});
+
+test("鍵盤:資產頁的圓餅圖例可以 Tab 到,焦點停在哪一項就顯示金額", async () => {
+  const { page, ctx, errors } = await open({ width: 1280, hash: "asset" });
+  const item = page.locator("#assetPanel .as-donut .lg span[tabindex]").first();
+  assert.ok(await item.count(), "圖例要能用 Tab 選到");
+  await item.focus();
+  const hv = await item.evaluate(e => e.closest(".as-donut").querySelector(".as-hv").textContent);
+  assert.match(hv, /TWD/);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test("分段切換鈕都有 aria-pressed,讀屏知道現在選哪一個", async () => {
+  const { page, ctx } = await open({ width: 1280 });
+  const missing = async () => page.evaluate(() => [...document.querySelectorAll(
+    ".tabs button[data-seg],#panelToggle button,[data-range],[data-riskview],[data-allocsort],[data-tlmode],[data-perfx],[data-af],[data-gk]")]
+    .filter(b => !b.hasAttribute("aria-pressed")).map(b => b.outerHTML.slice(0, 60)));
+  await page.locator("#macro [data-sym]").first().click();
+  assert.deepEqual(await missing(), []);
+  await page.keyboard.press("Escape");
+  for (const k of ["risk", "asset", "expense"]) { await goPanel(page, k); assert.deepEqual(await missing(), [], k); }
+  await ctx.close();
+});
+
 // ───────────────────────── 檔案層級檢查 ─────────────────────────
 
 const tracked = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => {
-  if (e.name.startsWith(".") || e.name === "node_modules") return [];
+  if ((e.name.startsWith(".") && e.name !== ".github") || e.name === "node_modules") return [];
   const p = path.join(dir, e.name);
   return e.isDirectory() ? tracked(p) : [p];
-}).filter(p => /\.(html|js|mjs|json|md|yml)$/.test(p) && !p.endsWith("package-lock.json"));
+}).filter(p => /\.(html|js|mjs|json|md|yml|css)$/.test(p) && !p.endsWith("package-lock.json"));
 
-test("沒有 em dash / en dash 字元", () => {
-  const dash = new RegExp("[" + String.fromCharCode(0x2013, 0x2014) + "]");
+test("沒有破折號字元(en dash、em dash、橫線、雙倍與三倍破折號)", () => {
+  const dash = new RegExp("[" + String.fromCharCode(0x2013, 0x2014, 0x2015, 0x2E3A, 0x2E3B) + "]");
   const bad = tracked(REPO).filter(f => dash.test(fs.readFileSync(f, "utf8")));
   assert.deepEqual(bad.map(f => path.relative(REPO, f)), []);
 });
@@ -459,8 +575,38 @@ test("沒有看起來像金鑰的字串", () => {
   assert.deepEqual(bad.map(f => path.relative(REPO, f)), []);
 });
 
-test("根目錄與 docs/ 的頁面同一份", () => {
-  for (const f of ["index.html", "sw.js", "asset-data.js", "data.json", "watchlist.json", "leverage-data.js", "expense-data.js"]) {
-    assert.equal(fs.readFileSync(path.join(REPO, f), "utf8"), read(f), f);
+test("根目錄與 docs/ 的網站檔案同一份(改完根目錄要跑 npm run sync)", () => {
+  for (const f of siteFileList()) {
+    assert.ok(fs.existsSync(path.join(ROOT, f)), `docs/${f} 不存在`);
+    assert.ok(fs.readFileSync(path.join(REPO, f)).equals(fs.readFileSync(path.join(ROOT, f))), f);
   }
+  const extra = d => fs.readdirSync(path.join(ROOT, d)).filter(f => !fs.existsSync(path.join(REPO, d, f)));
+  assert.deepEqual([...extra("css"), ...extra("js")], [], "docs/ 裡有根目錄沒有的舊檔");
+});
+
+test("index.html 引用的檔案都存在,service worker 都有預先快取", () => {
+  const html = read("index.html");
+  const refs = [...html.matchAll(/(?:src|href)="([^"#:]+)"/g)].map(m => m[1]);
+  assert.ok(refs.length > 10);
+  for (const r of refs) assert.ok(fs.existsSync(path.join(ROOT, r)), `${r} 不存在`);
+  const sw = read("sw.js");
+  for (const r of refs.filter(r => /^(css|js)\//.test(r))) assert.ok(sw.includes(`"${r}"`), `sw.js 沒有預先快取 ${r}`);
+});
+
+test("每個字型設定都有系統字備援(Google Fonts 載不到時不會掉成預設襯線字)", () => {
+  const files = ["css/app.css", "css/demo.css", ...fs.readdirSync(path.join(ROOT, "js")).map(f => "js/" + f)];
+  const bad = [];
+  for (const f of files) {
+    const txt = read(f);
+    for (const m of txt.matchAll(/font(?:-family)?\s*[:=]\s*([^;}>]*)/g)) {
+      if (/(Noto|Manrope|Plex)/.test(m[1]) && !/(sans-serif|monospace|system-ui)/.test(m[1])) bad.push(`${f}: ${m[0]}`);
+    }
+  }
+  assert.deepEqual(bad, []);
+});
+
+test("README 裡連到的本機檔案都存在", () => {
+  const md = fs.readFileSync(path.join(REPO, "README.md"), "utf8");
+  const links = [...md.matchAll(/\]\(([^)\s]+)\)/g)].map(m => m[1]).filter(l => !/^(https?:|#|mailto:)/.test(l));
+  for (const l of links) assert.ok(fs.existsSync(path.join(REPO, l)), `README 連到不存在的 ${l}`);
 });

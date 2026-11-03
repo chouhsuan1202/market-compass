@@ -8,13 +8,21 @@ This is the public copy. It is called **Compass (Beta)** and the title is pink, 
 
 The sample data is a Taiwan office worker in New Taiwan dollars: a salary, a mortgage, a few dividend ETFs and eight local stocks. Swap in your own numbers and currency and it follows.
 
-![Market Compass](preview.png)
+![Compass (Beta) on a desktop: the Stocks tab with moving average dots on the left, VIX and today's signals on the right](preview.png)
 
 ## Run it
 
-Download the folder and open `index.html`. That is the whole setup. No build step, no server, no account, no database.
+No build step, no account, no database. The page does need to be served over http, because browsers block a page opened straight from disk (`file://`) from reading `data.json`. Double clicking `index.html` gives you a page that says it cannot read the data.
 
-On a phone, add it to the home screen and it runs full screen like an app.
+The quickest way, with [Node.js](https://nodejs.org) 22 or newer installed:
+
+```
+npm start
+```
+
+Then open http://localhost:8000/ . Any static file server works too, for example `python3 -m http.server 8000` in this folder.
+
+On a phone, open the live demo and add it to the home screen. It then runs full screen like an app, and still opens offline with the last data it saw.
 
 ## The tabs
 
@@ -43,6 +51,43 @@ Edit these files and the screen follows. Nothing else to change.
 `data.json` holds prices and moving averages. Refresh it daily with your own script and a quote API. This repo ships a trimmed sample so the charts have something to draw.
 
 `asset-data.js` is computed. Do not hand edit it.
+
+## Test it
+
+```
+npm install
+npx playwright install chromium   # first time only, downloads the test browser
+npm test
+```
+
+`npm test` runs two sets:
+
+| Command | What it checks | Time |
+|---|---|---|
+| `npm run test:unit` | The math in `js/core.js`: moving average signals, the leverage ladder, borrowing ratio, distance to margin call, average buy price, spending totals | about 1 second |
+| `npm run test:e2e` | Opens the real page in Chromium at phone and desktop width: smoke test of every tab, broken or missing data, slow network, HTML injection, WCAG 2.1 AA with axe, keyboard use, extreme numbers in charts | a few minutes |
+
+The same tests run on GitHub for every pull request and every push to `main` (see `.github/workflows/test.yml`).
+
+## Where things live
+
+| Path | What it is |
+|---|---|
+| `index.html` | The page skeleton: header, tab bar, empty panels, dialogs |
+| `css/app.css` | All styles. `css/demo.css` holds the few overrides for this public copy (pink title) |
+| `js/core.js` | Pure calculations with no screen code. This is what the unit tests cover |
+| `js/stocks.js` | Stocks tab, signal cards, rules dialog |
+| `js/risk.js` | Leverage tab |
+| `js/perf.js` | Return vs S&P 500 chart inside the Leverage tab |
+| `js/asset.js` | Assets tab |
+| `js/expense.js` | Spending tab |
+| `js/chart.js` | Price chart dialog |
+| `js/todo.js` | To-Do dialog |
+| `js/app.js` | Switching tabs, clicks and keyboard, loading the data. Loads last |
+| `sw.js` | Service worker, keeps the last copy for offline use |
+| `docs/` | The copy GitHub Pages serves. After changing anything above, run `npm run sync` to copy it over |
+
+The scripts are plain `<script>` files, not modules, and they load in the order listed in `index.html`. Keep that order when you add one.
 
 ## Ideas behind it
 
